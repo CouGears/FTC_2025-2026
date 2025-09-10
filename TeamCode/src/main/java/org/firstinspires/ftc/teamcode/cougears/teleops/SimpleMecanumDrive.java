@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
-@Disabled
 @TeleOp(name="Simple Mecanum Drive", group="Drive")
 public class SimpleMecanumDrive extends LinearOpMode {
     // Declare motors
