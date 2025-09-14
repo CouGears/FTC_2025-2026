@@ -21,7 +21,15 @@ public class BotBase {
     private static final double MAX_SPEED = 1.0;
     private static final double MIN_SPEED = -1.0;
 
-    public boolean botInit(HardwareMap HM, Telemetry tele) {
+    private final HardwareMap HM;
+    private final Telemetry tele;
+
+    public BotBase (HardwareMap HardwareMap, Telemetry Telemetry) {
+        HM = HardwareMap;
+        tele = Telemetry;
+    }
+
+    public boolean botInit() {
         try {
             motorFL = HM.get(DcMotor.class, "motorFL");
             motorFR = HM.get(DcMotor.class, "motorFR");
@@ -44,7 +52,7 @@ public class BotBase {
         }
     }
 
-    public void botDrive(Telemetry tele, Gamepad gamepad1){
+    public void botDrive(Gamepad gamepad1){
         // Drive controls
         double drive = gamepad1.left_stick_y; // Forward/back strafe on left stick Y
         double strafe = gamepad1.left_stick_x; // Left/right drive on left stick X

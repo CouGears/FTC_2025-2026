@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.cougears.legacy_examples.rr.autons.red.bucket;
 
-import static org.firstinspires.ftc.teamcode.cougears.autonomous.rr.actions.sequence.RBHardcoded.AutonRB1;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.rr.actions.sequence.RBHardcoded.AutonRB1;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.PinpointDrive;
-import org.firstinspires.ftc.teamcode.cougears.autonomous.rr.actions.drive.TAB;
-import org.firstinspires.ftc.teamcode.cougears.autonomous.rr.actions.sequence.ROHardcoded.*;
-import org.firstinspires.ftc.teamcode.cougears.autonomous.rr.hardware.*;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.rr.actions.drive.TAB;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.rr.actions.sequence.ROHardcoded.*;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.rr.hardware.*;
 
 
 

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.cougears.legacy_examples.rr.actions.hardw
 import com.acmerobotics.roadrunner.SequentialAction;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.cougears.autonomous.rr.actions.logic.Wait;
-import org.firstinspires.ftc.teamcode.cougears.autonomous.rr.hardware.*;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.rr.actions.logic.Wait;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.rr.hardware.*;
 
 public class SampleActions {
     private final Viper viper;
