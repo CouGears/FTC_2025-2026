@@ -1,12 +1,16 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.rowlandhall.meepmeep.MeepMeep;
 import org.rowlandhall.meepmeep.roadrunner.DefaultBotBuilder;
 import org.rowlandhall.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
+
+    private static final double PI = Math.PI;
+
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
@@ -32,3 +36,10 @@ public class MeepMeepTesting {
                 .start();
     }
 }
+
+/*
+    .setReversed(false)
+    .setTangent(Math.toRadians(90))
+    .splineToLinearHeading(new Pose2d(0.0, -34.0, Math.toRadians(0)), Math.toRadians(90))
+    .build());
+ */
