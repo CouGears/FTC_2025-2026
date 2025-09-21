@@ -2,13 +2,8 @@ package org.firstinspires.ftc.teamcode.cougears.teleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
+
 @TeleOp(name="Teleop_Drive", group="Drive")
 
 public class Teleop_Drive extends LinearOpMode {
@@ -23,16 +18,35 @@ public class Teleop_Drive extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
+        boolean aIsPressed = false;
+        boolean bIsPressed = false;
+        boolean xIsPressed = false;
+        boolean yIsPressed = false;
+        boolean spinOn = false;
+        boolean intakeIsOn = false;
 
 
         while (opModeIsActive()) {
             bot.botDrive(gamepad1);
-            if(gamepad1.x) {
-                bot.spinUp();
+            if(!xIsPressed && gamepad1.x) {
+                spinOn = !spinOn;
+                if(spinOn)
+                    bot.spinUp();
+                else
+                    bot.spinDown();
             }
-            if(gamepad1.y){
-                bot.spinDown();
+            if(!yIsPressed && gamepad1.y) {
+                intakeIsOn = !intakeIsOn;
+                if(intakeIsOn)
+                    bot.intakeOn();
+                else
+                    bot.intakeOff();
             }
+
+            aIsPressed = gamepad1.a;
+            bIsPressed = gamepad1.b;
+            xIsPressed = gamepad1.x;
+            yIsPressed = gamepad1.y;
         }
 
         bot.endTeleOp();
