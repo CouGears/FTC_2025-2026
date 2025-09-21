@@ -21,8 +21,8 @@ public class BotBase {
     private static final double MAX_SPEED = 1.0;
     private static final double MIN_SPEED = -1.0;
 
-    private final HardwareMap HM;
-    private final Telemetry tele;
+    public final HardwareMap HM;
+    public final Telemetry tele;
 
     public BotBase (HardwareMap HardwareMap, Telemetry Telemetry) {
         HM = HardwareMap;
