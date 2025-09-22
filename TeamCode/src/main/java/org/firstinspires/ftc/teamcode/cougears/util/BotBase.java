@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
+import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
 
 /*
@@ -88,6 +89,14 @@ public class BotBase {
         motorBR.setPower(Range.clip(backRightPower, MIN_SPEED, MAX_SPEED));
         tele.addData("Drive Motors", "FL:%.2f FR:%.2f BL:%.2f BR:%.2f",
                 frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+    }
+
+    // ****** GPM ******
+    public boolean isPressed (int controllerNum, GamepadManager.Button b){
+        if (controllerNum == 2)
+            return GPM_2.isPressed(b);
+        else // We are proactivily assuming if you dont mean controller 2, you mean controller 1 in all situations
+            return GPM_1.isPressed(b);
     }
 
 

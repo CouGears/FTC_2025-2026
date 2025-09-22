@@ -25,22 +25,22 @@ public class Teleop_Drive extends LinearOpMode {
 
         while (opModeIsActive()) {
             bot.botDrive(gamepad1);
-            if(bot.GPM_1.isPressed(Button.X)) {
+            if(bot.isPressed(1, Button.X)) {
                 spinOn = !spinOn;
                 if(spinOn)
                     bot.spinUp();
                 else
                     bot.spinDown();
             }
-            if(bot.GPM_1.isPressed(Button.Y)) {
+            if(bot.isPressed(1, Button.Y)) {
                 intakeIsOn = !intakeIsOn;
                 if(intakeIsOn)
                     bot.intakeOn();
                 else
                     bot.intakeOff();
             }
-            sleep(10);
             bot.update();
+            sleep(10);
         }
         bot.endTeleOp();
     }
