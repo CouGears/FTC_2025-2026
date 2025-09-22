@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
+
 
 /*
     ***NOTICE*** Untested as of Sep 10.
@@ -24,11 +26,16 @@ public class BotBase {
     public final HardwareMap HM;
     public final Telemetry tele;
 
-    public BotBase (HardwareMap HardwareMap, Telemetry Telemetry) {
+    public final GamepadManager GPM_1, GPM_2;
+
+    public BotBase (HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         HM = HardwareMap;
         tele = Telemetry;
+        GPM_1 = new GamepadManager(gamepad1);
+        GPM_2 = new GamepadManager(gamepad2);
     }
 
+    // ****** MOTORS AND DRIVING ******
     public boolean botInit() {
         try {
             motorFL = HM.get(DcMotor.class, "motorFL");
@@ -83,6 +90,18 @@ public class BotBase {
                 frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
 
+
+    // ****** MISC ******
+
+    // Anything that needs to be done every "tick"
+    // Should always be called as last line in "whileOpModeisActive()" loop
+    public void update(){
+        GPM_1.update();
+        GPM_2.update();
+        tele.update();
+    }
+
+    // Should always be called as first line after "whileOpModeisActive()" loop
     public void endTeleOp(){
         motorFL.setPower(0);
         motorFR.setPower(0);

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 @TeleOp(name="Simple Mecanum Drive Example", group="Drive")
 public class SimpleMecanumDrive_Example extends LinearOpMode {
 
-    BotBase bot = new BotBase(hardwareMap, telemetry);
+    BotBase bot = new BotBase(hardwareMap, telemetry, gamepad1, gamepad2);
 
     @Override
     public void runOpMode() {
