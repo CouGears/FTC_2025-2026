@@ -39,6 +39,13 @@ public class Teleop_Drive extends LinearOpMode {
                 else
                     bot.intakeOff();
             }
+            if(gamepad1.dpad_up){
+                bot.conveyorUp();
+            }else if(gamepad1.dpad_down){
+                bot.conveyorDown();
+            }else{
+                bot.conveyorOff();
+            }
             bot.update();
             sleep(10);
         }
