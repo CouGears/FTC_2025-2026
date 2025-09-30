@@ -24,7 +24,7 @@ public class SimpleMecanumDrive_Example extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            bot.botDrive(gamepad1);
+            bot.drive(gamepad1);
         }
 
         bot.endTeleOp();
