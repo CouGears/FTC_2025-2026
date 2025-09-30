@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.teleops;
+package org.firstinspires.ftc.teamcode.cougears.teleops.OctComp;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 public class OctoberCompTeleOpBase extends BotBase {
 
     DcMotor FW_L, FW_R;
-    Servo lever;
+    Servo BServo, FServo;
 
     public OctoberCompTeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
@@ -25,8 +25,8 @@ public class OctoberCompTeleOpBase extends BotBase {
         try {
             FW_L = HM.get(DcMotor.class, "FW_L");
             FW_R = HM.get(DcMotor.class, "FW_R");
-            lever = HM.get(Servo.class, "lever");
-
+            BServo = HM.get(Servo.class, "BServo");
+            FServo = HM.get(Servo.class, "FServo");
 
             FW_L.setDirection(DcMotorSimple.Direction.REVERSE);
             FW_R.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -34,13 +34,14 @@ public class OctoberCompTeleOpBase extends BotBase {
 
             FW_L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             FW_R.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-            return true;
         } catch (Exception e) {
             tele.addData("ERROR", e);
             return false;
         }
+
+        BServo.setPosition(0);
+        FServo.setPosition(0);
+        return true;
     }
 
     //****** FLYWHEELS ******
@@ -59,12 +60,14 @@ public class OctoberCompTeleOpBase extends BotBase {
         FW_R.setPower(0);
     }
     //****** SERVOS ******
-    public void pushBall() {
-        lever.setPosition(1);
+    public void FServoPush() {
+        FServo.setPosition(1);
     }
-    public void servoReset() {
-        lever.setPosition(.5);
+    public void FServoReset() { FServo.setPosition(0); }
+    public void BServoPush() {
+        FServo.setPosition(1);
     }
+    public void BServoReset() { FServo.setPosition(0); }
 
     public void endTeleOp(){
         super.endTeleOp();
