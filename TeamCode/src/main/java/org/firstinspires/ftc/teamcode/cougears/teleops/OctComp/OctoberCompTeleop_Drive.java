@@ -36,12 +36,12 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
                     bot.spinDown();
             }
             //****** SERVOS ******
-            if (gamepad1.left_bumper) {
+            if (bot.isHeld(1, Button.L_BUMPER)) {
                 bot.FServoPush(); }
             else {
                 bot.FServoReset();
             }
-            if (gamepad1.right_bumper) {
+            if (bot.isHeld(1, Button.R_BUMPER)) {
                 bot.BServoPush(); }
             else {
                 bot.BServoReset();

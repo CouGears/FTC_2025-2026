@@ -99,6 +99,12 @@ public class BotBase {
             return GPM_1.isPressed(b);
     }
 
+    public boolean isHeld (int controllerNum, GamepadManager.Button b){
+        if (controllerNum == 2)
+            return GPM_2.isHeld(b);
+        else // We are proactivily assuming if you dont mean controller 2, you mean controller 1 in all situations
+            return GPM_1.isHeld(b);
+    }
 
     // ****** MISC ******
 
