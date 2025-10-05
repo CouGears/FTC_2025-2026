@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.teleops;
+package org.firstinspires.ftc.teamcode.cougears.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -113,10 +113,10 @@ public class MechanicalTesting extends LinearOpMode {
 
                     // Now Y and X have a different, clear purpose.
                     if (GPM.isPressed(GamepadManager.Button.Y)) {
-                        power += 0.2;
+                        power += 0.1;
                     }
                     if (GPM.isPressed(GamepadManager.Button.X)) {
-                        power -= 0.2;
+                        power -= 0.1;
                     }
 
                     // Use Range.clip to safely keep the power between -1.0 and 1.0.
@@ -128,6 +128,7 @@ public class MechanicalTesting extends LinearOpMode {
             }
 
             telemetry.update();
+            GPM.update();
             sleep(10);
         }
     }

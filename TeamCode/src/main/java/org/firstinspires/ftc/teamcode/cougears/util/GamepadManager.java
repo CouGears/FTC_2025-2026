@@ -49,4 +49,24 @@ public class GamepadManager {
         }
         return false;
     }
+
+    public boolean isHeld(Button b){
+        switch (b){
+            case A: return linkedGamepad.a;
+            case B: return linkedGamepad.b;
+            case X: return linkedGamepad.x;
+            case Y: return linkedGamepad.y;
+            case DPAD_UP: return linkedGamepad.dpad_up;
+            case DPAD_RIGHT: return linkedGamepad.dpad_right;
+            case DPAD_DOWN: return linkedGamepad.dpad_down;
+            case DPAD_LEFT: return linkedGamepad.dpad_left;
+            case L_BUMPER: return linkedGamepad.left_bumper;
+            case L_STICKPRESS: return linkedGamepad.left_stick_button;
+            case L_TRIGGER: return linkedGamepad.left_trigger > 0;
+            case R_BUMPER: return linkedGamepad.right_bumper;
+            case R_STICKPRESS: return linkedGamepad.right_stick_button;
+            case R_TRIGGER: return linkedGamepad.right_trigger > 0;
+        }
+        return false;
+    }
 }
