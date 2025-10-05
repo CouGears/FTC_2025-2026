@@ -25,7 +25,7 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
 
 
         while (opModeIsActive()) {
-            bot.botDrive(gamepad1);
+            bot.drive(gamepad1);
 
             //****** FLYWHEEL ******
             if(bot.isPressed(1, Button.X)) {

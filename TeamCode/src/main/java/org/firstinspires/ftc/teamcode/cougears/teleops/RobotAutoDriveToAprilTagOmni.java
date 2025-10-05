@@ -116,7 +116,7 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
 
     @Override public void runOpMode()
     {
-        BotBase bot = new BotBase(hardwareMap, telemetry);
+        BotBase bot = new BotBase(hardwareMap, telemetry, gamepad1, gamepad2);
 
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
