@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 
-@TeleOp(name="MechanicalTesting", group="Testing")
-public class MechanicalTesting extends LinearOpMode {
+@TeleOp(name="MotorTest", group="Testing")
+public class MotorTest extends LinearOpMode {
 
     // Define the different states our OpMode can be in. This makes the code much clearer.
     enum SetupState {

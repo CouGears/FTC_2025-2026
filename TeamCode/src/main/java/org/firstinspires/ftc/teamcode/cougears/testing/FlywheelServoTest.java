@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "FlywheelServoTest", group = "testing")
+@TeleOp(name = "FlywheelServoTest", group = "Testing")
 public class FlywheelServoTest extends LinearOpMode {
 
     @Override
