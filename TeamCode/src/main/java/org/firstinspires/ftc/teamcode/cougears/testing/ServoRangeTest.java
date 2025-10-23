@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
-@Disabled
-@TeleOp(name="Servo Initialization Example", group="Examples")
+
+@TeleOp(name="Servo Range Test", group="Testing")
 public class ServoRangeTest extends LinearOpMode {
 
     // Declare the servo

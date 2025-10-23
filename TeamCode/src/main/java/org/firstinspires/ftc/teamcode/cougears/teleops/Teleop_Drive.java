@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-
+@Disabled
 @TeleOp(name="Teleop_Drive", group="Drive")
 
 public class Teleop_Drive extends LinearOpMode {
