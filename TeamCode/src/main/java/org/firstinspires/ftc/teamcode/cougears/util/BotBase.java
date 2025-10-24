@@ -16,10 +16,10 @@ import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
     ***NOTICE*** Untested as of Sep 10.
  */
 public class BotBase {
-    private DcMotor motorFL;
-    private DcMotor motorFR;
-    private DcMotor motorBL;
-    private DcMotor motorBR;
+    public DcMotor motorFL;
+    public DcMotor motorFR;
+    public DcMotor motorBL;
+    public DcMotor motorBR;
     // Constants for motor speed
     private static final double MAX_SPEED = 1.0;
     private static final double MIN_SPEED = -1.0;
@@ -61,10 +61,16 @@ public class BotBase {
     }
 
     public void drive(Gamepad gamepad1){
-        // Drive controls
+        // Drive controls (edited for rafi)
+        /*
+        OG CODE
         double drive = gamepad1.left_stick_y; // Forward/back strafe on left stick Y
         double strafe = gamepad1.left_stick_x; // Left/right drive on left stick X
         double rotate = gamepad1.right_stick_x; // Rotation on right stick X
+        */
+        double drive = gamepad1.right_stick_y; // Forward/back strafe on left stick Y
+        double strafe = gamepad1.right_stick_x; // Left/right drive on left stick X
+        double rotate = gamepad1.left_stick_x; // Rotation on right stick X
 
         // Calculate drive motor powers for strafe-forward configuration
         double frontLeftPower = strafe + drive + rotate;
@@ -90,6 +96,7 @@ public class BotBase {
         tele.addData("Drive Motors", "FL:%.2f FR:%.2f BL:%.2f BR:%.2f",
                 frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
+
 
     public void manualMove (double x, double y, double yaw) {
         // Calculate wheel powers.

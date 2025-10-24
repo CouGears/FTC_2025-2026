@@ -10,8 +10,6 @@ import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
 public class OctoberCompTeleop_Drive extends LinearOpMode {
 
-    boolean spinOn = false;
-    boolean intakeIsOn = false;
     @Override
     public void runOpMode() {
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
@@ -28,26 +26,25 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
             bot.drive(gamepad1);
 
             //****** FLYWHEEL ******
-            if(bot.isPressed(1, Button.X)) {
-                spinOn = !spinOn;
-                if(spinOn)
+            if (bot.isPressed(1, Button.X)) {
+                bot.FWSpinning = !bot.FWSpinning;
+                if (bot.FWSpinning)
                     bot.spinUp();
                 else
                     bot.spinDown();
             }
             //****** SERVOS ******
-            if (bot.isHeld(1, Button.L_BUMPER)) {
-                bot.FServoPush(); }
-            else {
-                bot.FServoReset();
-            }
-            if (bot.isHeld(1, Button.R_BUMPER)) {
-                bot.BServoPush(); }
-            else {
-                bot.BServoReset();
+            if (bot.isPressed(1, Button.L_BUMPER)) {
+                bot.GateServoUp = !bot.GateServoUp;
+                if (bot.GateServoUp) {
+                    bot.GateServoPush();
+                } else {
+                    bot.GateServoReset();
+                }
             }
 
             telemetry.update();
+            bot.update();
             sleep(10);
         }
         bot.endTeleOp();
