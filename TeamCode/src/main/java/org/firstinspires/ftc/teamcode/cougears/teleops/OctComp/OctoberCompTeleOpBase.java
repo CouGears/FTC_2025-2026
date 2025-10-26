@@ -41,12 +41,24 @@ public class OctoberCompTeleOpBase extends BotBase {
     }
 
     //****** FLYWHEELS ******
-    public void spinUp() { FW.setPower(FWSpeed); }
-    public void spinDown() { FW.setPower(0); }
+    public void spinUp() {
+        FW.setPower(FWSpeed);
+        tele.addData("Flywheel", "RUNNING at power %.2f", FW.getPower());
+    }
+    public void spinDown() {
+        FW.setPower(0);
+        tele.addData("Flywheel", "NOT RUNNING at power %.2f", FW.getPower());
+    }
 
     //****** SERVOS ******
-    public void GateServoPush()  { GateServo.setPosition(GateServoPos[1]); }
-    public void GateServoReset() { GateServo.setPosition(GateServoPos[0]); }
+    public void GateServoPush()  {
+        GateServo.setPosition(GateServoPos[1]);
+        tele.addData("GateServo", "at pos %.2f", GateServo.getPosition());
+    }
+    public void GateServoReset() {
+        GateServo.setPosition(GateServoPos[0]);
+        tele.addData("GateServo", "at pos %.2f", GateServo.getPosition());
+    }
 
 
     public void endTeleOp(){

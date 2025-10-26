@@ -28,10 +28,11 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
             //****** FLYWHEEL ******
             if (bot.isPressed(1, Button.X)) {
                 bot.FWSpinning = !bot.FWSpinning;
-                if (bot.FWSpinning)
+                if (bot.FWSpinning) {
                     bot.spinUp();
-                else
+                } else {
                     bot.spinDown();
+                }
             }
             //****** SERVOS ******
             if (bot.isPressed(1, Button.L_BUMPER)) {
