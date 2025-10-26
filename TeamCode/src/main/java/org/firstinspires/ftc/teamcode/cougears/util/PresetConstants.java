@@ -14,6 +14,7 @@ USE import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*
 @Config
 public class PresetConstants {
     public static double[] GateServoPos = {.5, .8};
+    public static double FWSpeed = .7;
     public static String[] motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW"};
     public static String[] servoNames = {"GateServo"};
 

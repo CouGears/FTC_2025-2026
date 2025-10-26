@@ -41,7 +41,7 @@ public class OctoberCompTeleOpBase extends BotBase {
     }
 
     //****** FLYWHEELS ******
-    public void spinUp() { FW.setPower(1); }
+    public void spinUp() { FW.setPower(FWSpeed); }
     public void spinDown() { FW.setPower(0); }
 
     //****** SERVOS ******
@@ -52,5 +52,41 @@ public class OctoberCompTeleOpBase extends BotBase {
     public void endTeleOp(){
         super.endTeleOp();
         FW.setPower(0);
+    }
+
+    public void RafiDrive(Gamepad gamepad1) {
+        tele.addData(">", "RUNNING RAFI DRIVE");
+        double forward =  gamepad1.right_stick_y;
+        double strafe  =  gamepad1.right_stick_x;
+        double turn    =  gamepad1.left_stick_x;
+
+        // Mecanum drive calculations for a LEFT-side motor reversal configuration.
+        // These formulas are different from the standard right-side reversal.
+        double frontLeftPower  = forward - strafe - turn;
+        double frontRightPower = forward + strafe + turn;
+        double backLeftPower   = forward + strafe - turn;
+        double backRightPower  = forward - strafe + turn;
+
+        // Normalize the motor powers to ensure no value exceeds 1.0
+        double maxPower = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
+        maxPower = Math.max(maxPower, Math.abs(backLeftPower));
+        maxPower = Math.max(maxPower, Math.abs(backRightPower));
+
+        if (maxPower > 1.0) {
+            frontLeftPower  /= maxPower;
+            frontRightPower /= maxPower;
+            backLeftPower   /= maxPower;
+            backRightPower  /= maxPower;
+        }
+
+        // Set the power for each motor
+        motorFL.setPower(frontLeftPower);
+        motorFR.setPower(frontRightPower);
+        motorBL.setPower(backLeftPower);
+        motorBR.setPower(backRightPower);
+
+        // Optional: Add telemetry to see motor powers on the Driver Hub
+        // tele.addData("Drive Motors", "FL:%.2f FR:%.2f BL:%.2f BR:%.2f",
+        //         frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
 }
