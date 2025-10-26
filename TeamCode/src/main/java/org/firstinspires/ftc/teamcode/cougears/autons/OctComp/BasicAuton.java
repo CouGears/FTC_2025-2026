@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 public class BasicAuton extends LinearOpMode {
 
     private ElapsedTime timer = new ElapsedTime();
-    private final double TIME_RUNNING = 3.0;
+    private final double TIME_RUNNING = 2.0;
 
     @Override
     public void runOpMode() {
@@ -26,10 +26,10 @@ public class BasicAuton extends LinearOpMode {
         double backLeftPower = strafe - drive + rotate;
         double backRightPower = strafe + drive - rotate;
          */
-        bot.motorFL.setPower(0.5);
-        bot.motorFR.setPower(-0.5);
-        bot.motorBL.setPower(-0.5);
-        bot.motorBR.setPower(0.5);
+        bot.motorFL.setPower(-0.2);
+        bot.motorFR.setPower(-0.2);
+        bot.motorBL.setPower(-0.2);
+        bot.motorBR.setPower(-0.2);
 
         timer.reset();
 

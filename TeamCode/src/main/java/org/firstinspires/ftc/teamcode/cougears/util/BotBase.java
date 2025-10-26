@@ -44,8 +44,8 @@ public class BotBase {
             motorBL = HM.get(DcMotor.class, "motorBL");
             motorBR = HM.get(DcMotor.class, "motorBR");
 
-            motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
 

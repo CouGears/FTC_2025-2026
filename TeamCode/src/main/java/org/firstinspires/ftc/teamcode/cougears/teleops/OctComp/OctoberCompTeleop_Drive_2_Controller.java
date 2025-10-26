@@ -1,19 +1,18 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops.OctComp;
 
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVel;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
+
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
-@TeleOp(name="OctoberCompTeleop_Drive", group="Drive")
-
-public class OctoberCompTeleop_Drive extends LinearOpMode {
+@TeleOp(name="OctoberCompTeleop_Drive 2", group="Drive")
+public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
 
     @Override
     public void runOpMode() {
         boolean slowed = false;
-
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         // Initialize motors
         bot.botInit();
@@ -36,8 +35,9 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
             }
             telemetry.addData("Slowed", "%b", slowed);
 
+
             //****** FLYWHEEL ******
-            if (bot.isPressed(1, Button.X)) {
+            if (bot.isPressed(2, Button.X)) {
                 bot.FWSpinning = !bot.FWSpinning;
                 if (bot.FWSpinning) {
                     bot.spinUp();
@@ -49,7 +49,7 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
             telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVel);
 
             //****** SERVOS ******
-            if (bot.isPressed(1, Button.L_BUMPER)) {
+            if (bot.isPressed(2, Button.L_BUMPER)) {
                 bot.GateServoUp = !bot.GateServoUp;
                 if (bot.GateServoUp) {
                     bot.GateServoPush();
@@ -58,6 +58,7 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
                 }
             }
 
+            telemetry.update();
             bot.update();
             sleep(10);
         }
