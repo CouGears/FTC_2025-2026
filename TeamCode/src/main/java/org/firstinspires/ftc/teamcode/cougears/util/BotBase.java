@@ -61,16 +61,9 @@ public class BotBase {
     }
 
     public void drive(Gamepad gamepad1){
-        // Drive controls (edited for rafi)
-        /*
-        OG CODE
         double drive = gamepad1.left_stick_y; // Forward/back strafe on left stick Y
         double strafe = gamepad1.left_stick_x; // Left/right drive on left stick X
         double rotate = gamepad1.right_stick_x; // Rotation on right stick X
-        */
-        double drive = gamepad1.right_stick_y; // Forward/back strafe on left stick Y
-        double strafe = gamepad1.right_stick_x; // Left/right drive on left stick X
-        double rotate = gamepad1.left_stick_x; // Rotation on right stick X
 
         // Calculate drive motor powers for strafe-forward configuration
         double frontLeftPower = strafe + drive + rotate;
