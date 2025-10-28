@@ -37,24 +37,39 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
             telemetry.addData("Slowed", "%b", slowed);
 
             //****** FLYWHEEL ******
-            if (bot.isPressed(1, Button.X)) {
-                bot.FWSpinning = !bot.FWSpinning;
+            /* Toggle FW. May cause loss of points
+            if (bot.isPressed(1, Button.L_TRIGGER)) {
                 if (bot.FWSpinning) {
                     bot.spinUp();
                 } else {
                     bot.spinDown();
                 }
             }
+            */
+            if (bot.isHeld(1, Button.L_TRIGGER))
+                bot.spinUp();
+            else
+                bot.spinDown();
+
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
             telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVel);
 
             //****** SERVOS ******
-            if (bot.isPressed(1, Button.L_BUMPER)) {
+            if (bot.isPressed(1, Button.R_TRIGGER)) {
                 bot.GateServoUp = !bot.GateServoUp;
                 if (bot.GateServoUp) {
                     bot.GateServoPush();
                 } else {
                     bot.GateServoReset();
+                }
+            }
+
+            if (bot.isPressed(1, Button.X)) {
+                bot.PushServoUp = !bot.PushServoUp;
+                if (bot.PushServoUp) {
+                    bot.PushServoPush();
+                } else {
+                    bot.PushServoReset();
                 }
             }
 

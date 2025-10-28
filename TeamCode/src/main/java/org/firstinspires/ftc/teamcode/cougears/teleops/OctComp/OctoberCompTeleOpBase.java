@@ -16,8 +16,8 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 public class OctoberCompTeleOpBase extends BotBase {
 
     public DcMotorEx FW;
-    private Servo GateServo;
-    public boolean FWSpinning, GateServoUp;
+    public Servo GateServo, PushServo;
+    public boolean FWSpinning, GateServoUp, PushServoUp;
 
     public OctoberCompTeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
@@ -27,6 +27,7 @@ public class OctoberCompTeleOpBase extends BotBase {
         super.botInit();
         try {
             GateServo = HM.get(Servo.class, "GateServo");
+            PushServo = HM.get(Servo.class, "PushServo");
 
             FW = HM.get(DcMotorEx.class, "FW");
             FW.setDirection(DcMotor.Direction.REVERSE);
@@ -40,6 +41,7 @@ public class OctoberCompTeleOpBase extends BotBase {
         }
 
         GateServo.setPosition(GateServoPos[0]);
+        PushServo.setPosition(PushServoPos[0]);
         return true;
     }
 
@@ -56,12 +58,17 @@ public class OctoberCompTeleOpBase extends BotBase {
     //****** SERVOS ******
     public void GateServoPush()  {
         GateServo.setPosition(GateServoPos[1]);
-        tele.addData("GateServo", "at pos %.2f", GateServo.getPosition());
     }
     public void GateServoReset() {
         GateServo.setPosition(GateServoPos[0]);
-        tele.addData("GateServo", "at pos %.2f", GateServo.getPosition());
     }
+    public void PushServoPush()  {
+        PushServo.setPosition(PushServoPos[1]);
+    }
+    public void PushServoReset() {
+        PushServo.setPosition(PushServoPos[0]);
+    }
+
 
 
     public void endTeleOp(){

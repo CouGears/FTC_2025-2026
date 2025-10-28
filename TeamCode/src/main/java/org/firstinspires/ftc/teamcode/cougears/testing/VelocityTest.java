@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 @TeleOp(name = "Velocity Test", group = "Testing")
 public class VelocityTest extends LinearOpMode {
@@ -50,7 +51,7 @@ public class VelocityTest extends LinearOpMode {
         // You will need to TUNE these for your specific motor and flywheel setup.
         // A good starting point is a small P and an F calculated from the motor's max speed.
         // This is just a safe default for testing.
-        motor.setVelocityPIDFCoefficients(5.0, 0, 0, 6.0);
+        motor.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
 
 
         telemetry.addData("Status", "Initialized");
@@ -62,6 +63,7 @@ public class VelocityTest extends LinearOpMode {
         debounceTimer.reset();
 
         while (opModeIsActive()) {
+            motor.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
             // --- Gamepad Controls to Adjust Target Velocity ---
             if (gamepad1.dpad_up && debounceTimer.milliseconds() > 200) {
                 targetVelocity += VELOCITY_STEP;
