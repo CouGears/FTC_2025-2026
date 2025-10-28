@@ -16,6 +16,7 @@ public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         // Initialize motors
         bot.botInit();
+        APM AP = new APM(bot);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -61,7 +62,6 @@ public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
 
             telemetry.update();
             bot.update();
-            bot.telemetryAprilTag();
             sleep(10);
         }
         bot.endTeleOp();

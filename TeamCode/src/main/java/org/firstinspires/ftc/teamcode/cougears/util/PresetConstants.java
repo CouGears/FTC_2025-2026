@@ -17,5 +17,7 @@ public class PresetConstants {
     public static double shootVel = 1350;
     public static String[] motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW"};
     public static String[] servoNames = {"GateServo"};
-
+    public static int redTag = 24;
+    public static int blueTag = 20;
+    public static double desiredDist = 67.0;
 }
