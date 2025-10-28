@@ -58,8 +58,10 @@ public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
                 }
             }
 
+
             telemetry.update();
             bot.update();
+            bot.telemetryAprilTag();
             sleep(10);
         }
         bot.endTeleOp();
