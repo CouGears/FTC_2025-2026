@@ -1,0 +1,64 @@
+package org.firstinspires.ftc.teamcode.cougears.teleops;
+
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import org.firstinspires.ftc.teamcode.cougears.util.AprilTagBase;
+import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+/*
+WHAT THIS FILE SHOULD BE ABLE TO DO:
+- Take the bot from teleop and move it
+- Know what team we are on
+ */
+
+
+public class DC_ATM extends AprilTagBase{
+
+    public OctoberCompTeleOpBase bot;
+    public int wallTag = -1;
+    
+    public DC_ATM(HardwareMap HardwareMap, Telemetry Telemetry, OctoberCompTeleOpBase Bot) {
+        super(HardwareMap, Telemetry);
+        bot = Bot;
+    }
+
+
+    public void alignToAT(int tagID) {
+        AprilTagDetection tag = scanForAT(tagID);
+        org.openftc.apriltag.AprilTagDetection
+        if (tag == null) // BE CAREFUL
+            return;
+
+        double ATbearing = tag.ftcPose.bearing;
+
+        if (Math.abs(ATbearing) <= ATBearingTolerance) {
+            return 0; // aligned
+        }
+        double rotatePower = Range.clip(ATbearing * 0.02, -0.5, 0.5);
+        bot.manualMove(0, 0, rotatePower);
+        return rotatePower;
+    }
+
+    public double moveToATDist(int tagID, double desiredDistance) {
+        ATval(tagID, false);
+        if (ATdist == 0) return 0;
+
+        double drivePower = Range.clip((ATdist - desiredDistance) * 0.01, -0.5, 0.5);
+        bot.manualMove(0, drivePower, 0);
+        return drivePower;
+    }
+
+    public void aprilLock(int tagID, double desiredDistance) {
+        double rotatePower = alignToTag(tagID);
+        double drivePower = moveToATDist(tagID, desiredDistance);
+
+        tele.addData("Rotate", rotatePower);
+        tele.addData("Drive", drivePower);
+        tele.update();
+    }
+}
+
+}
