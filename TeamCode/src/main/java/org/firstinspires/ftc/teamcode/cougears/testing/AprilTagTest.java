@@ -38,19 +38,19 @@ public class AprilTagTest extends LinearOpMode {
             // --- Auto control ---
             // <<< CHANGED: use isHeld(...) so alignToTag runs continuously while RB is held >>>
             if (bot.isHeld(1, GamepadManager.Button.R_BUMPER)) {
-                double rotatePower = bot.alignToTag(targetTagID);
+//                double rotatePower = bot.alignToTag(targetTagID);
                 telemetry.addData("Mode", "Align to Tag (RB held)");
-                telemetry.addData("Rotate", String.format("%.2f", rotatePower));
+//                telemetry.addData("Rotate", String.format("%.2f", rotatePower));
             } else if (bot.isPressed(1, GamepadManager.Button.L_BUMPER)) {
-                double drivePower = bot.moveToATDist(targetTagID, desiredDist);
+//                double drivePower = bot.moveToATDist(targetTagID, desiredDist);
                 telemetry.addData("Mode", "Move to Distance (LB)");
-                telemetry.addData("Drive", String.format("%.2f", drivePower));
+//                telemetry.addData("Drive", String.format("%.2f", drivePower));
             } else {
                 bot.drive(gamepad1);
                 telemetry.addData("Mode", "Manual Drive");
             }
 
-            bot.ATval(targetTagID, true);
+//            bot.ATval(targetTagID, true);
             telemetry.update();
 
             sleep(20);

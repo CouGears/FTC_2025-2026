@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shoot
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import org.firstinspires.ftc.teamcode.cougears.util.DC_ATM;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
 @TeleOp(name="OctoberCompTeleop_Drive 2", group="Drive")
@@ -16,7 +16,7 @@ public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         // Initialize motors
         bot.botInit();
-        APM AP = new APM(bot);
+        DC_ATM AT = new DC_ATM(hardwareMap,telemetry, bot);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");

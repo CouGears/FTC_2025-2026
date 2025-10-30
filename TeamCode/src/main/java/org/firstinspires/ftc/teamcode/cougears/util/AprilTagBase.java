@@ -35,7 +35,7 @@ public class AprilTagBase {
         tele = Telemetry;
     }
 
-    private void initAprilTag() {
+    public void initAprilTag() {
         aprilTag = new AprilTagProcessor.Builder().build();
         visionPortal = new VisionPortal.Builder()
                 .setCamera(HM.get(WebcamName.class, "Webcam 1"))

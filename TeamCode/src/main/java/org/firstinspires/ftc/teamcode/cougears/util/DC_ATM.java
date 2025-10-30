@@ -1,11 +1,9 @@
-package org.firstinspires.ftc.teamcode.cougears.teleops;
+package org.firstinspires.ftc.teamcode.cougears.util;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import org.firstinspires.ftc.teamcode.cougears.util.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 /*
@@ -19,6 +17,7 @@ public class DC_ATM extends AprilTagBase{
 
     public OctoberCompTeleOpBase bot;
     public int wallTag = -1;
+    public int ATBearingTolerance = 1;
     
     public DC_ATM(HardwareMap HardwareMap, Telemetry Telemetry, OctoberCompTeleOpBase Bot) {
         super(HardwareMap, Telemetry);
@@ -28,21 +27,20 @@ public class DC_ATM extends AprilTagBase{
 
     public void alignToAT(int tagID) {
         AprilTagDetection tag = scanForAT(tagID);
-        org.openftc.apriltag.AprilTagDetection
         if (tag == null) // BE CAREFUL
             return;
 
         double ATbearing = tag.ftcPose.bearing;
 
         if (Math.abs(ATbearing) <= ATBearingTolerance) {
-            return 0; // aligned
+            return;
         }
-        double rotatePower = Range.clip(ATbearing * 0.02, -0.5, 0.5);
+        double rotatePower = ATbearing*0.05;
         bot.manualMove(0, 0, rotatePower);
-        return rotatePower;
+        tele.addData("Bearing", "%f", ATbearing);
     }
 
-    public double moveToATDist(int tagID, double desiredDistance) {
+    /*public double moveToATDist(int tagID, double desiredDistance) {
         ATval(tagID, false);
         if (ATdist == 0) return 0;
 
@@ -58,7 +56,5 @@ public class DC_ATM extends AprilTagBase{
         tele.addData("Rotate", rotatePower);
         tele.addData("Drive", drivePower);
         tele.update();
-    }
-}
-
+    }*/
 }

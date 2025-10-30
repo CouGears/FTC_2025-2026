@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.cougears.teleops.OctComp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-
+import org.firstinspires.ftc.teamcode.cougears.util.DC_ATM;
 @TeleOp(name="OctoberCompTeleop_Drive", group="Drive")
 
 public class OctoberCompTeleop_Drive extends LinearOpMode {
@@ -15,8 +17,10 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
         boolean slowed = false;
 
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
+        DC_ATM ATM = new DC_ATM(hardwareMap, telemetry, bot);
         // Initialize motors
         bot.botInit();
+        ATM.initAprilTag();
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -56,6 +60,11 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
                 } else {
                     bot.GateServoReset();
                 }
+            }
+
+            //****** ATM ******
+            if (bot.isHeld(1, Button.Y)){
+                ATM.alignToAT(redTag);
             }
 
             bot.update();

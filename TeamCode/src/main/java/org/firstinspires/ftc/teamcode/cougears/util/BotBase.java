@@ -91,30 +91,28 @@ public class BotBase {
     }
 
 
-    public void manualMove (double x, double y, double yaw) {
-        // Calculate wheel powers.
-        double frontLeftPower    =  x - y - yaw;
-        double frontRightPower   =  x + y + yaw;
-        double backLeftPower     =  x + y - yaw;
-        double backRightPower    =  x - y + yaw;
+    public void manualMove (double drive, double strafe, double rotate) {
+        // Calculate drive motor powers for strafe-forward configuration
+        double frontLeftPower = strafe + drive + rotate;
+        double frontRightPower = strafe - drive - rotate;
+        double backLeftPower = strafe - drive + rotate;
+        double backRightPower = strafe + drive - rotate;
 
-        // Normalize wheel powers to be less than 1.0
-        double max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
-        max = Math.max(max, Math.abs(backLeftPower));
-        max = Math.max(max, Math.abs(backRightPower));
+        // Normalize drive motor powers
+        double maxPower = Math.max(Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower)),
+                Math.max(Math.abs(backLeftPower), Math.abs(backRightPower)));
 
-        if (max > 1.0) {
-            frontLeftPower /= max;
-            frontRightPower /= max;
-            backLeftPower /= max;
-            backRightPower /= max;
+        if (maxPower > 1.0) {
+            frontLeftPower /= maxPower;
+            frontRightPower /= maxPower;
+            backLeftPower /= maxPower;
+            backRightPower /= maxPower;
         }
 
-        // Send powers to the wheels.
-        motorFL.setPower(frontLeftPower);
-        motorFR.setPower(frontRightPower);
-        motorBL.setPower(backLeftPower);
-        motorBR.setPower(backRightPower);
+        motorFL.setPower(Range.clip(frontLeftPower, MIN_SPEED, MAX_SPEED));
+        motorFR.setPower(Range.clip(frontRightPower, MIN_SPEED, MAX_SPEED));
+        motorBL.setPower(Range.clip(backLeftPower, MIN_SPEED, MAX_SPEED));
+        motorBR.setPower(Range.clip(backRightPower, MIN_SPEED, MAX_SPEED));
     }
 
     // ****** GPM ******
