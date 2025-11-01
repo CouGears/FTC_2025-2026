@@ -30,10 +30,10 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
 
         while (opModeIsActive()) {
             //****** DRIVE ******
-            if(bot.isPressed(1, Button.B)){
+            if (bot.isPressed(1, Button.B)) {
                 slowed = !slowed;
             }
-            if (!slowed){
+            if (!slowed) {
                 bot.RafiDrive(gamepad1);
             } else {
                 bot.SlowRafiDrive(gamepad1);
@@ -77,13 +77,14 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
             }
 
             //****** ATM ******
-            if (bot.isHeld(1, Button.Y)){
+            if (bot.isHeld(1, Button.Y)) {
                 ATM.alignToAT(redTag);
 
 
-            bot.update();
-            sleep(10);
+                bot.update();
+                sleep(10);
+            }
+            bot.endTeleOp();
         }
-        bot.endTeleOp();
     }
 }
