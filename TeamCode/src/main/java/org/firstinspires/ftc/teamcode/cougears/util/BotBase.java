@@ -7,9 +7,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
+
+import java.util.HashMap;
 
 
 /*
@@ -28,6 +31,8 @@ public class BotBase {
     public final Telemetry tele;
 
     public final GamepadManager GPM_1, GPM_2;
+
+    public HashMap<String, ElapsedTime> timers;
 
     public BotBase (HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         HM = HardwareMap;
@@ -128,6 +133,37 @@ public class BotBase {
             return GPM_2.isHeld(b);
         else // We are proactivily assuming if you dont mean controller 2, you mean controller 1 in all situations
             return GPM_1.isHeld(b);
+    }
+
+
+    // ****** TIMERS ******
+    // Only using try-catch if there is ever a problem later -E
+    public boolean createTimer(String title){
+        try {
+            timers.put(title, new ElapsedTime());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Need to check if timer exists or nullptr err -E
+    public boolean resetTime(String title){
+        if (timers.get(title) != null) {
+            timers.get(title).reset();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public boolean timerExpired_Seconds(String title, double seconds){
+        ElapsedTime timer = timers.get(title);
+        return timer != null && timer.seconds() >= seconds; // fancy ik :) -E
+    }
+    public boolean timerExpired_MSeconds(String title, double mseconds){
+        ElapsedTime timer = timers.get(title);
+        return timer != null && timer.milliseconds() >= mseconds;
     }
 
     // ****** MISC ******
