@@ -2,103 +2,132 @@ package org.firstinspires.ftc.teamcode.cougears.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "FlywheelServoTest", group = "Testing")
 public class FlywheelServoTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // --- TUNABLE VARIABLES ---
-        int speedMin = 10;                // minimum flywheel speed percent
-        int speedMax = 100;               // maximum flywheel speed percent
-        double flywheelStep = 2;          // how much speed changes per loop (right stick)
-        double servoStep = 0.02;          // how much servo max changes per loop (left stick)
+        // === DRIVE MOTORS ===
+        DcMotorEx motorFL = hardwareMap.get(DcMotorEx.class, "motorFL");
+        DcMotorEx motorFR = hardwareMap.get(DcMotorEx.class, "motorFR");
+        DcMotorEx motorBL = hardwareMap.get(DcMotorEx.class, "motorBL");
+        DcMotorEx motorBR = hardwareMap.get(DcMotorEx.class, "motorBR");
 
-        // --- Hardware mapping ---
-        DcMotor motor1 = hardwareMap.get(DcMotor.class, "motor1");
-        DcMotor motor2 = hardwareMap.get(DcMotor.class, "motor2");
-        Servo servo1 = hardwareMap.get(Servo.class, "servo1");
-        Servo servo2 = hardwareMap.get(Servo.class, "servo2");
+        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        // --- Initial states ---
-        double flywheelPower = 0.0;
-        boolean flywheelsOn = false;
+        motorFL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        motorFR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        motorBL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        motorBR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        // === FLYWHEEL + SERVO ===
+        DcMotorEx flywheel = hardwareMap.get(DcMotorEx.class, "motor1");
+        Servo gateServo = hardwareMap.get(Servo.class, "servo1");
+
+        flywheel.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        flywheel.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        boolean motorOn = false;
         boolean directionReversed = false;
-        int speedPercent = 50; // start at 50%
-        double servo2Min = 0.0;
-        double servo2Max = 0.2; // initial max open position
-        double servo2Pos = servo2Min;
+        double powerPercent = 50;
+        double powerStep = 3;
 
-        // Servo1 positions (gate)
-        double servo1OpenPos = 0.5;
-        double servo1ClosedPos = 1.0;
+        double gateServoMinDeg = 120;
+        double gateServoMaxDeg = 160;
+        double gateServoMin = gateServoMinDeg / 180.0;
+        double gateServoMax = gateServoMaxDeg / 180.0;
+        double gateServoPos = gateServoMin;
+        gateServo.setPosition(gateServoPos);
 
-        servo1.setPosition(servo1OpenPos);
-        servo2.setPosition(servo2Pos);
-
-        telemetry.addLine("Ready to start: FlywheelServoTest");
+        telemetry.addLine("Ready to start: Drive + Flywheel + Servo");
         telemetry.update();
-
         waitForStart();
 
         while (opModeIsActive()) {
-            // --- Flywheel toggle ---
+
+            // === DRIVE CONTROL ===
+            double x = gamepad1.right_stick_x;   // strafe (X direction)
+            double y = -gamepad1.right_stick_y;  // forward/back (Y direction)
+            double yaw = gamepad1.left_stick_x;  // rotation (left stick X)
+
+            // Mecanum drive formula
+            double frontLeftPower  = y + x + yaw;
+            double frontRightPower = y - x - yaw;
+            double backLeftPower   = y - x + yaw;
+            double backRightPower  = y + x - yaw;
+
+            // Normalize to keep all powers <= 1.0
+            double max = Math.max(Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower)),
+                    Math.max(Math.abs(backLeftPower), Math.abs(backRightPower)));
+            if (max > 1.0) {
+                frontLeftPower /= max;
+                frontRightPower /= max;
+                backLeftPower /= max;
+                backRightPower /= max;
+            }
+
+            // Apply motor power
+            motorFL.setPower(Range.clip(frontLeftPower, -1.0, 1.0));
+            motorFR.setPower(Range.clip(frontRightPower, -1.0, 1.0));
+            motorBL.setPower(Range.clip(backLeftPower, -1.0, 1.0));
+            motorBR.setPower(Range.clip(backRightPower, -1.0, 1.0));
+
+            // === FLYWHEEL LOGIC ===
             if (gamepad1.a) {
-                flywheelsOn = !flywheelsOn;
-                sleep(250); // debounce
+                motorOn = !motorOn;
+                sleep(250);
             }
             if (gamepad1.b) {
                 directionReversed = !directionReversed;
                 sleep(250);
             }
-
-            // --- Right stick controls flywheel speed ---
-            double stickYRight = -gamepad1.right_stick_y; // up is positive
-            if (Math.abs(stickYRight) > 0.1) {           // deadzone
-                speedPercent += stickYRight * flywheelStep;
-                speedPercent = (int) Math.max(speedMin, Math.min(speedPercent, speedMax));
+            if (gamepad1.x) {
+                powerPercent += powerStep;
+                sleep(200);
+            }
+            if (gamepad1.y) {
+                powerPercent -= powerStep;
+                sleep(200);
             }
 
-            // Compute flywheel power
-            flywheelPower = flywheelsOn ? (speedPercent / 100.0) : 0.0;
-            double power1 = directionReversed ? -flywheelPower : flywheelPower;
-            double power2 = -power1;
-            motor1.setPower(power1);
-            motor2.setPower(power2);
+            powerPercent = Math.max(0, Math.min(powerPercent, 100));
+            double power = powerPercent / 100.0;
+            if (directionReversed) power *= -1;
+            flywheel.setPower(motorOn ? power : 0);
 
-            // --- Servo1 (gate) ---
-            if (gamepad1.right_bumper) {
-                servo1.setPosition(servo1ClosedPos);
-            } else if (gamepad1.right_trigger > 0.5) {
-                servo1.setPosition(servo1OpenPos);
-            }
-
-            // --- Left stick Y modifies servo2 max position ---
-            double stickYLeft = -gamepad1.left_stick_y; // up is positive
-            if (Math.abs(stickYLeft) > 0.1) {          // deadzone
-                servo2Max += stickYLeft * servoStep;
-                servo2Max = Math.max(0.0, Math.min(servo2Max, 1.0)); // clamp 0..1
-            }
-
-            // --- Left bumper/trigger sets servo2 open/close ---
+            // === SERVO LOGIC ===
             if (gamepad1.left_bumper) {
-                servo2Pos = servo2Min; // closed
-            } else if (gamepad1.left_trigger > 0.5) {
-                servo2Pos = servo2Max; // open
+                gateServoPos = gateServoMin;
+            } else if (gamepad1.right_bumper) {
+                gateServoPos = gateServoMax;
             }
-            servo2.setPosition(servo2Pos);
+            gateServo.setPosition(gateServoPos);
 
-            // --- Telemetry ---
-            telemetry.addLine("Flywheel + Servo Test");
-            telemetry.addData("Flywheels On", flywheelsOn);
+            // === TELEMETRY ===
+            telemetry.addLine("Drive + Flywheel + Servo Active");
+            telemetry.addData("Drive", "X: %.2f  Y: %.2f  Yaw: %.2f", x, y, yaw);
+            telemetry.addData("Motor On", motorOn);
             telemetry.addData("Direction Reversed", directionReversed);
-            telemetry.addData("Speed (%)", speedPercent);
-            telemetry.addData("Servo1 Pos", servo1.getPosition());
-            telemetry.addData("Servo2 Pos", servo2Pos);
-            telemetry.addData("Servo2 Max", servo2Max);
+            telemetry.addData("Power (%)", powerPercent);
+            telemetry.addData("Applied Power", motorOn ? power : 0);
+            telemetry.addData("Gate Servo Pos", gateServoPos);
+            telemetry.addData("Gate Servo Degrees", gateServoPos * 180);
             telemetry.update();
         }
+
+        // Stop everything when done
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorBL.setPower(0);
+        motorBR.setPower(0);
+        flywheel.setPower(0);
     }
 }

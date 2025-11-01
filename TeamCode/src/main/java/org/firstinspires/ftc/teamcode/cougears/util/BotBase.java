@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
 
 /*
-    ***NOTICE*** Untested as of Sep 10.
+ ***NOTICE*** Untested as of Sep 10.
  */
 public class BotBase {
     public DcMotor motorFL;
@@ -91,37 +91,7 @@ public class BotBase {
     }
 
 
-    public void manualMove (double x, double y, double yaw) {
-        // Calculate wheel powers.
-        double frontLeftPower    =  x - y - yaw;
-        double frontRightPower   =  x + y + yaw;
-        double backLeftPower     =  x + y - yaw;
-        double backRightPower    =  x - y + yaw;
-
-        // Normalize wheel powers to be less than 1.0
-        double max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
-        max = Math.max(max, Math.abs(backLeftPower));
-        max = Math.max(max, Math.abs(backRightPower));
-
-        if (max > 1.0) {
-            frontLeftPower /= max;
-            frontRightPower /= max;
-            backLeftPower /= max;
-            backRightPower /= max;
-        }
-
-        // Send powers to the wheels.
-        motorFL.setPower(frontLeftPower);
-        motorFR.setPower(frontRightPower);
-        motorBL.setPower(backLeftPower);
-        motorBR.setPower(backRightPower);
-    }
-
-    public void lockToApriltag(Gamepad gamepad1, double yaw){
-        double drive = gamepad1.left_stick_y; // Forward/back strafe on left stick Y
-        double strafe = gamepad1.left_stick_x; // Left/right drive on left stick X
-        double rotate = yaw;
-
+    public void manualMove (double drive, double strafe, double rotate) {
         // Calculate drive motor powers for strafe-forward configuration
         double frontLeftPower = strafe + drive + rotate;
         double frontRightPower = strafe - drive - rotate;
@@ -143,8 +113,6 @@ public class BotBase {
         motorFR.setPower(Range.clip(frontRightPower, MIN_SPEED, MAX_SPEED));
         motorBL.setPower(Range.clip(backLeftPower, MIN_SPEED, MAX_SPEED));
         motorBR.setPower(Range.clip(backRightPower, MIN_SPEED, MAX_SPEED));
-        tele.addData("Drive Motors", "FL:%.2f FR:%.2f BL:%.2f BR:%.2f",
-                frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
 
     // ****** GPM ******
