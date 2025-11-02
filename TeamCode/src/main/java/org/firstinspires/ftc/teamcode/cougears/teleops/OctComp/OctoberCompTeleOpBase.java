@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.cougears.teleops.OctComp;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -9,13 +10,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import org.firstinspires.ftc.teamcode.cougears.util.DC_ATM;
+
 // First line after runOpMode should be:
 // OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
 public class OctoberCompTeleOpBase extends BotBase {
 
     public DcMotorEx FW;
-    public DC_ATM ATM = null;
     public Servo GateServo, PushServo;
     public boolean FWSpinning, GateServoUp, PushServoUp;
 
@@ -31,6 +31,7 @@ public class OctoberCompTeleOpBase extends BotBase {
 
             FW = HM.get(DcMotorEx.class, "FW");
             FW.setDirection(DcMotor.Direction.REVERSE);
+            FW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             FW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             FW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             FW.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
@@ -151,4 +152,3 @@ public class OctoberCompTeleOpBase extends BotBase {
         //         frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
 }
-

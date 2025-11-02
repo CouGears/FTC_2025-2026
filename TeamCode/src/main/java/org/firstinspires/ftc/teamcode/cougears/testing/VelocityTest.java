@@ -57,12 +57,15 @@ public class VelocityTest extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.addData(">", "Press Play to begin.");
         telemetry.addData(">", "Use D-Pad Up/Down to change target velocity.");
+        telemetry.addData("PIDF", "%.2f, %.2f, %.2f, %.2f", FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
+
         telemetry.update();
 
         waitForStart();
         debounceTimer.reset();
 
         while (opModeIsActive()) {
+            telemetry.addData("PIDF", "%.2f, %.2f, %.2f, %.2f", FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
             motor.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
             // --- Gamepad Controls to Adjust Target Velocity ---
             if (gamepad1.dpad_up && debounceTimer.milliseconds() > 200) {
@@ -71,9 +74,6 @@ public class VelocityTest extends LinearOpMode {
             }
             if (gamepad1.dpad_down && debounceTimer.milliseconds() > 200) {
                 targetVelocity -= VELOCITY_STEP;
-                if (targetVelocity < 0) {
-                    targetVelocity = 0; // Prevent negative velocity
-                }
                 debounceTimer.reset();
             }
 
