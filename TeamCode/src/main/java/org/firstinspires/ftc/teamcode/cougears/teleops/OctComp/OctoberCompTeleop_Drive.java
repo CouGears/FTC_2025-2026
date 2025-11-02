@@ -72,13 +72,14 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
                     bot.GateServoReset();
                 }
             }
+
             if (bot.isPressed(1, Button.X)) {
-                bot.PushServoUp = !bot.PushServoUp;
-                if (bot.PushServoUp) {
-                    bot.PushServoPush();
-                } else {
-                    bot.PushServoReset();
-                }
+                bot.PushServoPush();
+                bot.createTimer("PushServo");
+            }
+            if (bot.timerExpired_MSeconds("PushServo", 250)){
+                bot.PushServoReset();
+                bot.deleteTimer("PushServo");
             }
 
             //****** ATM ******
@@ -90,6 +91,5 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
             bot.update();
             sleep(10);
         }
-        bot.endTeleOp();
     }
 }
