@@ -32,7 +32,7 @@ public class BotBase {
 
     public final GamepadManager GPM_1, GPM_2;
 
-    public HashMap<String, ElapsedTime> timers;
+    public HashMap<String, ElapsedTime> timers = new HashMap<>();
 
     public BotBase (HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         HM = HardwareMap;

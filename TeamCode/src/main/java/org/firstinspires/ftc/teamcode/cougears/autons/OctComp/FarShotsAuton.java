@@ -24,30 +24,31 @@ public class FarShotsAuton extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        while (opModeIsActive()) {
-            bot.createTimer("AutonInit");
-            while (!bot.timerExpired_Seconds("AutonInit", 3)){
-                bot.spinUpFar();
-                ATM.alignToAT(redTag);
-                ATM.alignToAT(blueTag);
-            }
+        bot.createTimer("AutonInit");
+        while (!bot.timerExpired_Seconds("AutonInit", 7) && opModeIsActive()){
+            bot.spinUpFar();
+            ATM.alignToAT(redTag);
+            ATM.alignToAT(blueTag);
+        }
 
-            for (int i = 0; i < 5; i++){
-                bot.GateServoPush();
-                sleep(500);
-                bot.GateServoReset();
-                sleep(500);
-                bot.PushServoPush();
-                sleep(500);
-                bot.PushServoReset();
-                sleep(500);
-            }
-            bot.spinDown();
+        for (int i = 0; i < 5 && opModeIsActive(); i++){
+            bot.GateServoPush();
+            sleep(1000);
+            bot.GateServoReset();
+            sleep(500);
+            bot.PushServoPush();
+            sleep(500);
+            bot.PushServoReset();
+            sleep(500);
+        }
+        bot.spinDown();
 
-            bot.createTimer("MoveForward");
-            while(!bot.timerExpired_Seconds("MoveForward", 2)){
-                bot.manualMove(.2,0,0);
-            }
+        bot.createTimer("MoveForward");
+        while(!bot.timerExpired_Seconds("MoveForward", 2) && opModeIsActive()){
+            bot.motorFR.setPower(-.2);
+            bot.motorBR.setPower(-.2);
+            bot.motorFL.setPower(-.2);
+            bot.motorBL.setPower(-.2);
         }
         bot.endTeleOp();
     }

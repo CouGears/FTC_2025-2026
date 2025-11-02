@@ -23,6 +23,7 @@ public class PresetConstants {
     //FW
     public static double[] FW_PIDF = {31.4, 1, 0, 6};
     public static double shootVel = -1500;
+    public static double shootVelFar = -1800;
     //AprilTag
     public static int redTag = 24;
     public static int blueTag = 20;

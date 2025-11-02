@@ -51,6 +51,10 @@ public class OctoberCompTeleOpBase extends BotBase {
 //        FW.setPower(.7);
         FW.setVelocity(shootVel);
     }
+    public void spinUpFar() {
+//        FW.setPower(.7);
+        FW.setVelocity(shootVelFar);
+    }
     public void spinDown() {
         FW.setPower(0);
         tele.addData("Flywheel", "NOT RUNNING at power %.2f", FW.getPower());
