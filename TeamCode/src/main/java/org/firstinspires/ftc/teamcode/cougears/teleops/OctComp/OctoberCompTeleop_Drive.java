@@ -50,13 +50,18 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
                 }
             }
             */
-            if (bot.isHeld(1, Button.L_TRIGGER))
+            if (bot.isHeld(1, Button.L_TRIGGER)) {
                 bot.spinUp();
+                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVel);
+            }
+            else if (bot.isHeld(1, Button.L_BUMPER)) {
+                bot.spinUpFar();
+                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVelFar);
+            }
             else
                 bot.spinDown();
 
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
-            telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVel);
 
             //****** SERVOS ******
             if (bot.isPressed(1, Button.R_TRIGGER)) {
