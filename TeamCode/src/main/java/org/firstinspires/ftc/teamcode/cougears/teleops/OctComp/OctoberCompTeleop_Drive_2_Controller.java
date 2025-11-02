@@ -39,6 +39,9 @@ public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
                 bot.SlowRafiDrive(gamepad1);
             }
             telemetry.addData("Slowed", "%b", slowed);
+            telemetry.addData("Distance - blue", "%.2f", ATM.ATDist(blueTag));
+            telemetry.addData("Distance - red", "%.2f", ATM.ATDist(redTag));
+
 
             //****** ATM ******
             if (bot.isHeld(1, Button.Y)) {

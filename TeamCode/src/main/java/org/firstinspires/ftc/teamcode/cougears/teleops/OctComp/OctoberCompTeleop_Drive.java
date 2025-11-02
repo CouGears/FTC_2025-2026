@@ -39,6 +39,9 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
                 bot.SlowRafiDrive(gamepad1);
             }
             telemetry.addData("Slowed", "%b", slowed);
+            telemetry.addData("Distance - blue", "%.2f", ATM.ATDist(blueTag));
+            telemetry.addData("Distance - red", "%.2f", ATM.ATDist(redTag));
+
 
             //****** FLYWHEEL ******
             /* Toggle FW. May cause loss of points
