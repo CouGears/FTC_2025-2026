@@ -28,6 +28,17 @@ public class PresetConstants {
     public static int redTag = 24;
     public static int blueTag = 20;
     public static double desiredDist = 67.0;
+    //AUTON
+    public static long gateUpTimeMS = 500;
+    public static long generalCycleTime = 500;
+    public static double spinUpTime = 8;
+    //FAR AUTON
+    public static double timeFwd = 1.20;
+    public static double autonFarShot = 1850;
+    //CLOSE AUTON
+    public static double timeBack = 3;
+    public static double autonCloseShot = 1500;
+
 
 
 }

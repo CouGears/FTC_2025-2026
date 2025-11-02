@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOp
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import org.firstinspires.ftc.teamcode.cougears.util.DC_ATM;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-@Autonomous(name="FarShotsAuton", group="Autonomous")
-public class FarShotsAuton extends LinearOpMode {
+@Autonomous(name="CloseShotsAuton", group="Autonomous")
+public class CloseShotsAuton extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -24,12 +24,12 @@ public class FarShotsAuton extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        bot.createTimer("MoveForward");
-        while(!bot.timerExpired_Seconds("MoveForward", timeFwd) && opModeIsActive()){
-            bot.motorFR.setPower(-.2);
-            bot.motorBR.setPower(-.2);
-            bot.motorFL.setPower(-.2);
-            bot.motorBL.setPower(-.2);
+        bot.createTimer("MoveBack");
+        while(!bot.timerExpired_Seconds("MoveBack", timeFwd) && opModeIsActive()){
+            bot.motorFR.setPower(.5);
+            bot.motorBR.setPower(.5);
+            bot.motorFL.setPower(.5);
+            bot.motorBL.setPower(.5);
         }
         bot.motorFR.setPower(0);
         bot.motorBR.setPower(0);
@@ -38,7 +38,7 @@ public class FarShotsAuton extends LinearOpMode {
 
         bot.createTimer("AutonInit");
         while (!bot.timerExpired_Seconds("AutonInit", spinUpTime) && opModeIsActive()){
-            bot.FW.setVelocity(autonFarShot);
+            bot.FW.setVelocity(autonCloseShot);
         }
 
         for (int i = 0; i < 5 && opModeIsActive(); i++){
@@ -52,12 +52,9 @@ public class FarShotsAuton extends LinearOpMode {
         }
         bot.spinDown();
 
-        bot.createTimer("MoveForward");
-        while(!bot.timerExpired_Seconds("MoveForward", 2) && opModeIsActive()){
-            bot.motorFR.setPower(-.2);
-            bot.motorBR.setPower(-.2);
-            bot.motorFL.setPower(-.2);
-            bot.motorBL.setPower(-.2);
+        bot.createTimer("MoveSideways");
+        while(!bot.timerExpired_Seconds("MoveSideways", 2) && opModeIsActive()){
+            bot.manualMove(0,.2,0);
         }
         bot.endTeleOp();
     }

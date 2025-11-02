@@ -33,7 +33,7 @@ public class OctoberCompTeleOpBase extends BotBase {
             FW.setDirection(DcMotor.Direction.REVERSE);
             FW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             FW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            FW.setVelocityPIDFCoefficients(5.0, 0, 0, 6.16);
+            FW.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
 
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
