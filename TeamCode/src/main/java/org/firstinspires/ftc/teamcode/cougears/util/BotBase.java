@@ -137,33 +137,43 @@ public class BotBase {
 
 
     // ****** TIMERS ******
-    // Only using try-catch if there is ever a problem later -E
-    public boolean createTimer(String title){
-        try {
-            timers.put(title, new ElapsedTime());
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void createTimer(String key){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null)
+            timer.reset();
+        else
+            timers.put(key, new ElapsedTime());
     }
 
     // Need to check if timer exists or nullptr err -E
-    public boolean resetTime(String title){
-        if (timers.get(title) != null) {
-            timers.get(title).reset();
-            return true;
+    public void resetTimer(String key){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null) {
+            timer.reset();
         }
-        else
-            return false;
+    }
+    public void deleteTimer(String key){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null) {
+            timers.remove(key);
+        }
     }
 
-    public boolean timerExpired_Seconds(String title, double seconds){
-        ElapsedTime timer = timers.get(title);
-        return timer != null && timer.seconds() >= seconds; // fancy ik :) -E
+    public boolean timerExpired_Seconds(String key, double seconds){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null && timer.seconds() >= seconds){
+            return true;
+        } else {
+            return false;
+        }
     }
-    public boolean timerExpired_MSeconds(String title, double mseconds){
-        ElapsedTime timer = timers.get(title);
-        return timer != null && timer.milliseconds() >= mseconds;
+    public boolean timerExpired_MSeconds(String key, double mseconds){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null && timer.milliseconds() >= mseconds){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // ****** MISC ******
