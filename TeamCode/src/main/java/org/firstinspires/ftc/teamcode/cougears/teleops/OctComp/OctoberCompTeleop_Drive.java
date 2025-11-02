@@ -84,12 +84,12 @@ public class OctoberCompTeleop_Drive extends LinearOpMode {
             //****** ATM ******
             if (bot.isHeld(1, Button.Y)) {
                 ATM.alignToAT(redTag);
-
-
-                bot.update();
-                sleep(10);
+                ATM.alignToAT(blueTag);
             }
-            bot.endTeleOp();
+
+            bot.update();
+            sleep(10);
         }
+        bot.endTeleOp();
     }
 }
