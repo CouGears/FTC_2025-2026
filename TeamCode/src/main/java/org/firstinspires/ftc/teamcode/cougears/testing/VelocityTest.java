@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 @TeleOp(name = "Velocity Test", group = "Testing")
 public class VelocityTest extends LinearOpMode {
@@ -50,18 +51,22 @@ public class VelocityTest extends LinearOpMode {
         // You will need to TUNE these for your specific motor and flywheel setup.
         // A good starting point is a small P and an F calculated from the motor's max speed.
         // This is just a safe default for testing.
-        motor.setVelocityPIDFCoefficients(5.0, 0, 0, 6.0);
+        motor.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
 
 
         telemetry.addData("Status", "Initialized");
         telemetry.addData(">", "Press Play to begin.");
         telemetry.addData(">", "Use D-Pad Up/Down to change target velocity.");
+        telemetry.addData("PIDF", "%.2f, %.2f, %.2f, %.2f", FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
+
         telemetry.update();
 
         waitForStart();
         debounceTimer.reset();
 
         while (opModeIsActive()) {
+            telemetry.addData("PIDF", "%.2f, %.2f, %.2f, %.2f", FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
+            motor.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
             // --- Gamepad Controls to Adjust Target Velocity ---
             if (gamepad1.dpad_up && debounceTimer.milliseconds() > 200) {
                 targetVelocity += VELOCITY_STEP;
@@ -69,9 +74,6 @@ public class VelocityTest extends LinearOpMode {
             }
             if (gamepad1.dpad_down && debounceTimer.milliseconds() > 200) {
                 targetVelocity -= VELOCITY_STEP;
-                if (targetVelocity < 0) {
-                    targetVelocity = 0; // Prevent negative velocity
-                }
                 debounceTimer.reset();
             }
 
