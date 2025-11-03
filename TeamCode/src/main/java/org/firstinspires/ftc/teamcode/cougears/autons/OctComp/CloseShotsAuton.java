@@ -25,7 +25,7 @@ public class CloseShotsAuton extends LinearOpMode {
         waitForStart();
 
         bot.createTimer("MoveBack");
-        while(!bot.timerExpired_Seconds("MoveBack", timeFwd) && opModeIsActive()){
+        while(!bot.timerExpired_Seconds("MoveBack", timeBack) && opModeIsActive()){
             bot.motorFR.setPower(.5);
             bot.motorBR.setPower(.5);
             bot.motorFL.setPower(.5);
@@ -51,11 +51,6 @@ public class CloseShotsAuton extends LinearOpMode {
             sleep(generalCycleTime);
         }
         bot.spinDown();
-
-        bot.createTimer("MoveSideways");
-        while(!bot.timerExpired_Seconds("MoveSideways", 2) && opModeIsActive()){
-            bot.manualMove(0,.2,0);
-        }
         bot.endTeleOp();
     }
 }

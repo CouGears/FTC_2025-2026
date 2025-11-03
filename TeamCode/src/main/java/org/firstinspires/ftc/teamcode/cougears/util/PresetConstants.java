@@ -18,7 +18,7 @@ public class PresetConstants {
     public static String[] servoNames = {"GateServo", "PushServo"};
     // SERVOS
     public static double[] GateServoPos = {.5, .8};
-    public static double[] PushServoPos = {.4, .65};
+    public static double[] PushServoPos = {1, .6};
 
     //FW
     public static double[] FW_PIDF = {31.4, 1, 0, 6};
@@ -29,15 +29,15 @@ public class PresetConstants {
     public static int blueTag = 20;
     public static double desiredDist = 67.0;
     //AUTON
-    public static long gateUpTimeMS = 500;
+    public static long gateUpTimeMS = 200;
     public static long generalCycleTime = 500;
     public static double spinUpTime = 8;
     //FAR AUTON
     public static double timeFwd = 1.20;
-    public static double autonFarShot = 1850;
+    public static double autonFarShot = -1850;
     //CLOSE AUTON
-    public static double timeBack = 3;
-    public static double autonCloseShot = 1500;
+    public static double timeBack = 1.4;
+    public static double autonCloseShot = -1400;
 
 
 

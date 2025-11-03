@@ -25,7 +25,7 @@ public class FarShotsAuton extends LinearOpMode {
         waitForStart();
 
         bot.createTimer("MoveForward");
-        while(!bot.timerExpired_Seconds("MoveForward", timeFwd) && opModeIsActive()){
+        while(!bot.timerExpired_Seconds("MoveForward", timeFwd) ){
             bot.motorFR.setPower(-.2);
             bot.motorBR.setPower(-.2);
             bot.motorFL.setPower(-.2);
@@ -37,14 +37,17 @@ public class FarShotsAuton extends LinearOpMode {
         bot.motorBL.setPower(0);
 
         bot.createTimer("AutonInit");
-        while (!bot.timerExpired_Seconds("AutonInit", spinUpTime) && opModeIsActive()){
+        while (!bot.timerExpired_Seconds("AutonInit", spinUpTime)){
+            ATM.alignToAT(redTag);
+            ATM.alignToAT(blueTag);
             bot.FW.setVelocity(autonFarShot);
         }
 
-        for (int i = 0; i < 5 && opModeIsActive(); i++){
+        for (int i = 0; i < 5; i++){
             bot.GateServoPush();
             sleep(gateUpTimeMS);
-            bot.PushServoPush();
+            if (i < 3)
+                bot.PushServoPush();
             sleep(generalCycleTime);
             bot.PushServoReset();
             bot.GateServoReset();
@@ -53,12 +56,13 @@ public class FarShotsAuton extends LinearOpMode {
         bot.spinDown();
 
         bot.createTimer("MoveForward");
-        while(!bot.timerExpired_Seconds("MoveForward", 2) && opModeIsActive()){
+        while(!bot.timerExpired_Seconds("MoveForward", 2)){
             bot.motorFR.setPower(-.2);
             bot.motorBR.setPower(-.2);
             bot.motorFL.setPower(-.2);
             bot.motorBL.setPower(-.2);
         }
         bot.endTeleOp();
+        terminateOpModeNow();
     }
 }

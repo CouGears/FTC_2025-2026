@@ -8,7 +8,7 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.DC_ATM;
-@TeleOp(name="OctoberCompTeleop_Drive", group="Drive")
+@TeleOp(name="OctoberCompTeleop_Drive_2_Controller", group="Drive")
 
 public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
 
@@ -63,28 +63,48 @@ public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
             else if (bot.isHeld(2, Button.L_BUMPER)) {
                 bot.spinUpFar();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVelFar);
-            }
-            else
+            } else if (bot.isHeld(2, Button.R_BUMPER)) {
+                bot.FW.setVelocity(1000);
+                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVelFar);
+            } else {
                 bot.spinDown();
+            }
+
 
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
 
             //****** SERVOS ******
+//            if (bot.isPressed(2, Button.R_TRIGGER)) {
+//                bot.GateServoUp = !bot.GateServoUp;
+//                if (bot.GateServoUp) {
+//                    bot.GateServoPush();
+//                } else {
+//                    bot.GateServoReset();
+//                }
+//            }
             if (bot.isPressed(2, Button.R_TRIGGER)) {
-                bot.GateServoUp = !bot.GateServoUp;
-                if (bot.GateServoUp) {
-                    bot.GateServoPush();
-                } else {
-                    bot.GateServoReset();
-                }
+                bot.GateServoPush();
+                bot.createTimer("GateServo");
             }
+            if (bot.timerExpired_MSeconds("GateServo", 750)){
+                bot.GateServoReset();
+                bot.deleteTimer("GateServo");
+            }
+//            if (bot.isPressed(2, Button.X)) {
+//                bot.PushServoUp = !bot.PushServoUp;
+//                if (bot.PushServoUp) {
+//                    bot.PushServoPush();
+//                } else {
+//                    bot.PushServoReset();
+//                }
+//            }
             if (bot.isPressed(2, Button.X)) {
-                bot.PushServoUp = !bot.PushServoUp;
-                if (bot.PushServoUp) {
-                    bot.PushServoPush();
-                } else {
-                    bot.PushServoReset();
-                }
+                bot.PushServoPush();
+                bot.createTimer("PushServo");
+            }
+            if (bot.timerExpired_MSeconds("PushServo", 250)){
+                bot.PushServoReset();
+                bot.deleteTimer("PushServo");
             }
 
 
