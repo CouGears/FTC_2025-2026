@@ -2,22 +2,21 @@ package org.firstinspires.ftc.teamcode.cougears.teleops.OctComp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
+
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-import org.firstinspires.ftc.teamcode.cougears.util.DC_ATM;
+import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
 @TeleOp(name="OctoberCompTeleop_Drive_2_Controller", group="Drive")
 
-public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
+public class OctoberCompTeleopDrive extends LinearOpMode {
 
     @Override
     public void runOpMode() {
         boolean slowed = false;
 
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
-        DC_ATM ATM = new DC_ATM(hardwareMap, telemetry, bot);
+        AprilTagManager ATM = new AprilTagManager(hardwareMap, telemetry, bot);
         // Initialize motors
         bot.botInit();
         ATM.initAprilTag();
@@ -34,9 +33,9 @@ public class OctoberCompTeleop_Drive_2_Controller extends LinearOpMode {
                 slowed = !slowed;
             }
             if (!slowed) {
-                bot.RafiDrive(gamepad1);
+                bot.RafiDrive(gamepad1, 1);
             } else {
-                bot.SlowRafiDrive(gamepad1);
+                bot.RafiDrive(gamepad1, slowMultiplier);
             }
             telemetry.addData("Slowed", "%b", slowed);
 

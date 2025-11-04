@@ -16,10 +16,11 @@ public class PresetConstants {
     // NAMES
     public static String[] motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW"};
     public static String[] servoNames = {"GateServo", "PushServo"};
+    // DRIVE
+    public static double slowMultiplier = .25;
     // SERVOS
     public static double[] GateServoPos = {.5, .8};
     public static double[] PushServoPos = {1, .6};
-
     //FW
     public static double[] FW_PIDF = {31.4, 1, 0, 6};
     public static double shootVel = -1500;

@@ -2,12 +2,9 @@ package org.firstinspires.ftc.teamcode.cougears.autons.OctComp;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.cougears.teleops.DC_Teleopbase;
 import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
-import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
-import org.firstinspires.ftc.teamcode.cougears.util.DC_ATM;
+import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 @Autonomous(name="CloseShotsAuton", group="Autonomous")
 public class CloseShotsAuton extends LinearOpMode {
@@ -15,7 +12,7 @@ public class CloseShotsAuton extends LinearOpMode {
     @Override
     public void runOpMode() {
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
-        DC_ATM ATM = new DC_ATM(hardwareMap, telemetry, bot);
+        AprilTagManager ATM = new AprilTagManager(hardwareMap, telemetry, bot);
         bot.botInit();
         ATM.initAprilTag();
 

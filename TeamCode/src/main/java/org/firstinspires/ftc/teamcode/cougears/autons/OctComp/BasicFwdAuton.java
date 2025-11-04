@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 
 @Autonomous(name="Simple Fwd Autn", group="Autonomous")
-public class BasicAuton extends LinearOpMode {
+public class BasicFwdAuton extends LinearOpMode {
 
     private ElapsedTime timer = new ElapsedTime();
     private final double TIME_RUNNING = 2.0;

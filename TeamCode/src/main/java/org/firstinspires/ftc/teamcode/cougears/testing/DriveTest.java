@@ -1,16 +1,13 @@
-package org.firstinspires.ftc.teamcode.cougears.teleops;
+package org.firstinspires.ftc.teamcode.cougears.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 @Disabled
-@TeleOp(name="Simple Mecanum Drive Example", group="Drive")
-public class SimpleMecanumDrive_Example extends LinearOpMode {
+@TeleOp(name="DriveTest", group="Testing")
+public class DriveTest extends LinearOpMode {
 
 
     @Override

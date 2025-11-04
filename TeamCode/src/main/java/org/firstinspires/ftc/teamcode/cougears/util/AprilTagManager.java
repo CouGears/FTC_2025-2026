@@ -13,13 +13,13 @@ WHAT THIS FILE SHOULD BE ABLE TO DO:
  */
 
 
-public class DC_ATM extends AprilTagBase{
+public class AprilTagManager extends AprilTagBase{
 
     public OctoberCompTeleOpBase bot;
     public int wallTag = -1;
     public int ATBearingTolerance = 1;
     
-    public DC_ATM(HardwareMap HardwareMap, Telemetry Telemetry, OctoberCompTeleOpBase Bot) {
+    public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, OctoberCompTeleOpBase Bot) {
         super(HardwareMap, Telemetry);
         bot = Bot;
     }
