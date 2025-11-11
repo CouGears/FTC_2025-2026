@@ -1,14 +1,15 @@
-package org.firstinspires.ftc.teamcode.cougears.teleops.OctComp;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.teleops;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.OldPresetConstants.*;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
-@TeleOp(name="OctoberCompTeleop_Drive_2_Controller", group="Drive")
-
+@TeleOp(name="OctoberCompTeleop", group="Drive")
+@Disabled
 public class OctoberCompTeleopDrive extends LinearOpMode {
 
     @Override

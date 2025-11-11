@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.teleops.OctoberCompTeleOpBase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 /*
 WHAT THIS FILE SHOULD BE ABLE TO DO:
@@ -15,11 +15,11 @@ WHAT THIS FILE SHOULD BE ABLE TO DO:
 
 public class AprilTagManager extends AprilTagBase{
 
-    public OctoberCompTeleOpBase bot;
+    public BotBase bot;
     public int wallTag = -1;
     public int ATBearingTolerance = 1;
     
-    public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, OctoberCompTeleOpBase Bot) {
+    public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, BotBase Bot) {
         super(HardwareMap, Telemetry);
         bot = Bot;
     }

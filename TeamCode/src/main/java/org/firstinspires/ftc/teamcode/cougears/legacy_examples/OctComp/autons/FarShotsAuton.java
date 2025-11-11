@@ -1,11 +1,14 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.OctComp;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.autons;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.cougears.teleops.OctComp.OctoberCompTeleOpBase;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.teleops.OctoberCompTeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.OldPresetConstants.*;
+@Disabled
+
 @Autonomous(name="FarShotsAuton", group="Autonomous")
 public class FarShotsAuton extends LinearOpMode {
 
