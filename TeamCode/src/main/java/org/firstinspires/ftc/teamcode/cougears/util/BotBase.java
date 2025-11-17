@@ -7,9 +7,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
+
+import java.util.HashMap;
 
 
 /*
@@ -28,6 +31,8 @@ public class BotBase {
     public final Telemetry tele;
 
     public final GamepadManager GPM_1, GPM_2;
+
+    public HashMap<String, ElapsedTime> timers = new HashMap<>();
 
     public BotBase (HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         HM = HardwareMap;
@@ -117,17 +122,58 @@ public class BotBase {
 
     // ****** GPM ******
     public boolean isPressed (int controllerNum, GamepadManager.Button b){
-        if (controllerNum == 2)
+        if (controllerNum == 2 && GPM_2.linkedGamepad != null)
             return GPM_2.isPressed(b);
         else // We are proactivily assuming if you dont mean controller 2, you mean controller 1 in all situations
             return GPM_1.isPressed(b);
     }
 
     public boolean isHeld (int controllerNum, GamepadManager.Button b){
-        if (controllerNum == 2)
+        if (controllerNum == 2 && GPM_2.linkedGamepad != null)
             return GPM_2.isHeld(b);
         else // We are proactivily assuming if you dont mean controller 2, you mean controller 1 in all situations
             return GPM_1.isHeld(b);
+    }
+
+
+    // ****** TIMERS ******
+    public void createTimer(String key){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null)
+            timer.reset();
+        else
+            timers.put(key, new ElapsedTime());
+    }
+
+    // Need to check if timer exists or nullptr err -E
+    public void resetTimer(String key){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null) {
+            timer.reset();
+        }
+    }
+    public void deleteTimer(String key){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null) {
+            timers.remove(key);
+        }
+    }
+
+    public boolean timerExpired_Seconds(String key, double seconds){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null && timer.seconds() >= seconds){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean timerExpired_MSeconds(String key, double mseconds){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null && timer.milliseconds() >= mseconds){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // ****** MISC ******
