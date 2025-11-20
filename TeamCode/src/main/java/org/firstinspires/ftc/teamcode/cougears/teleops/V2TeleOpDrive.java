@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.teleops.OctoberCompTeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
@@ -41,6 +40,11 @@ public class V2TeleOpDrive extends LinearOpMode {
                 ATM.alignToAT(blueTag);
             }
 
+            //****** Intake ******
+            if (bot.isPressed(1, Button.X)) {
+                bot.toggleIntake();
+            }
+
             //****** FLYWHEEL ******
             if (bot.isHeld(2, Button.L_TRIGGER)) {
                 bot.spinUpClose();
@@ -50,7 +54,7 @@ public class V2TeleOpDrive extends LinearOpMode {
                 bot.spinUpFar();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVelFar);
             } else if (bot.isHeld(2, Button.R_BUMPER)) {
-                bot.spinback();
+                bot.spinBack();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", ejectionVel);
             } else {
                 bot.spinDown();

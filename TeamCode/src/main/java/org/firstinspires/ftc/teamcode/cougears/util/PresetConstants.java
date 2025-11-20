@@ -27,7 +27,8 @@ public class PresetConstants {
     //AprilTag
     public static int redTag = 24;
     public static int blueTag = 20;
-    public static double desiredDist = 67.0;
+    public static double desiredDistClose = 67.0;
+    public static double desiredDistFar = 0; // Need to find
     // NAMES
     public static String[] motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};
     public static String[] servoNames = {"FeedServo"};

@@ -17,9 +17,9 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 
 public class V2TeleOpBase extends BotBase {
 
-    public DcMotorEx FW, Intake, TurretRotator, HoodController;
+    public DcMotorEx FW, Intake, TurretRotator, Hood;
     public Servo FeedServo;
-    public boolean FWSpinning, IntakeSpinning, FeedServoUp, slowed;
+    public boolean IntakeSpinning, slowed;
     public int currTurretPos = 0;
 
     public V2TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
@@ -38,11 +38,11 @@ public class V2TeleOpBase extends BotBase {
             FW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             FW.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
 
-            HoodController = HM.get(DcMotorEx.class, "HoodController");
-            HoodController.setDirection(DcMotor.Direction.REVERSE);
-            HoodController.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            HoodController.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            HoodController.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            Hood = HM.get(DcMotorEx.class, "HoodController");
+            Hood.setDirection(DcMotor.Direction.REVERSE);
+            Hood.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            Hood.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            Hood.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             TurretRotator = HM.get(DcMotorEx.class, "TurretRotator");
             TurretRotator.setDirection(DcMotor.Direction.REVERSE);
@@ -74,14 +74,22 @@ public class V2TeleOpBase extends BotBase {
     public void spinDown() {
         FW.setPower(0);
     }
-    public void spinback() {
+    public void spinBack() {
         FW.setPower(ejectionVel);
     }
 
     //****** TURRET ******
     public void setTurretPos(int posNumber){
+        posNumber = Range.clip(posNumber, 0, 3);
         TurretRotator.setTargetPosition(TurretPos[posNumber]);
         currTurretPos = posNumber;
+    }
+    public void nextTurretPos(){
+        if (currTurretPos == 3)
+            currTurretPos = 0;
+        else
+            currTurretPos++;
+        TurretRotator.setTargetPosition(TurretPos[currTurretPos]);
     }
 
     //****** SERVOS ******
@@ -92,6 +100,14 @@ public class V2TeleOpBase extends BotBase {
         FeedServo.setPosition(FeedServoPos[0]);
     }
 
+    //****** Intake ******
+    public void toggleIntake() {
+        IntakeSpinning = !IntakeSpinning;
+        if (IntakeSpinning)
+            Intake.setPower(1);
+        else
+            Intake.setPower(0);
+    }
 
     //****** OTHER ******
     public void endTeleOp(){
