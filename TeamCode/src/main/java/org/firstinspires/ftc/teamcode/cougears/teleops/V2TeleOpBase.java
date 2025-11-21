@@ -17,9 +17,8 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 
 public class V2TeleOpBase extends BotBase {
 
-    public DcMotorEx FW, Intake, TurretRotator, Hood;
-    public Servo FeedServo;
-    public boolean IntakeSpinning, slowed;
+    public DcMotorEx FW, Intake, TurretRotator, Hood, FeedMotor;
+    public boolean IntakeSpinning, FeedMotorSpinning, slowed;
     public int currTurretPos = 0;
 
     public V2TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
@@ -29,8 +28,6 @@ public class V2TeleOpBase extends BotBase {
     public boolean botInit() {
         super.botInit();
         try {
-            FeedServo = HM.get(Servo.class, "FeedServo");
-
             FW = HM.get(DcMotorEx.class, "FW");
             FW.setDirection(DcMotor.Direction.FORWARD);
             FW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -51,8 +48,12 @@ public class V2TeleOpBase extends BotBase {
             TurretRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             Intake = HM.get(DcMotorEx.class, "Intake");
-            FW.setDirection(DcMotor.Direction.REVERSE);
-            FW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            Intake.setDirection(DcMotor.Direction.REVERSE);
+            Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            FeedMotor = HM.get(DcMotorEx.class, "FeedMotor");
+            FeedMotor.setDirection(DcMotor.Direction.REVERSE);
+            FeedMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
@@ -92,12 +93,13 @@ public class V2TeleOpBase extends BotBase {
         TurretRotator.setTargetPosition(TurretPos[currTurretPos]);
     }
 
-    //****** SERVOS ******
-    public void FeedServoUp()  {
-        FeedServo.setPosition(FeedServoPos[1]);
-    }
-    public void FeedServoReset() {
-        FeedServo.setPosition(FeedServoPos[0]);
+    //****** FEED MOTOR ******
+    public void toggleFeedMotor() {
+        FeedMotorSpinning = !FeedMotorSpinning;
+        if (FeedMotorSpinning)
+            FeedMotor.setPower(1);
+        else
+            FeedMotor.setPower(0);
     }
 
     //****** Intake ******
@@ -127,7 +129,7 @@ public class V2TeleOpBase extends BotBase {
             RafiDrive(gamepad1, slowMultiplier);
     }
     public void RafiDrive(Gamepad gamepad1, double speedMultiplier) {
-        speedMultiplier = Range.clip(speedMultiplier,0, 1);
+        speedMultiplier = -1*Range.clip(speedMultiplier,0, 1);
 
         tele.addData(">", "RUNNING RAFI DRIVE");
         double forward =  gamepad1.right_stick_y * speedMultiplier;

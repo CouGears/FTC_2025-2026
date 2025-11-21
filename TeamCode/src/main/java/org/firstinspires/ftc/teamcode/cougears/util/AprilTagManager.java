@@ -76,6 +76,12 @@ public class AprilTagManager extends AprilTagBase{
         bot.manualMove(drive, strafe, turn);
     }
 
+    public double ATDist(int tagID){
+        AprilTagDetection tag = scanForAT(tagID);
+        if (tag == null) // BE CAREFUL
+            return -1;
+        return tag.ftcPose.range;
+    }
     /*public double moveToATDist(int tagID, double desiredDistance) {
         ATval(tagID, false);
         if (ATdist == 0) return 0;
