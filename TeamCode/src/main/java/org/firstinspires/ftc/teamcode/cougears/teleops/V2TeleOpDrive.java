@@ -62,8 +62,13 @@ public class V2TeleOpDrive extends LinearOpMode {
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
 
             //****** SERVOS ******
-            if (bot.isPressed(1, Button.R_TRIGGER)) {
-                bot.toggleFeedMotor();
+            if (bot.isPressed(2, Button.R_TRIGGER)) {
+                bot.FeedServoUp();
+                bot.createTimer("FeedServo");
+            }
+            if (bot.timerExpired_MSeconds("FeedServo", 750)){
+                bot.FeedServoReset();
+                bot.deleteTimer("FeedServo");
             }
 
             bot.update();

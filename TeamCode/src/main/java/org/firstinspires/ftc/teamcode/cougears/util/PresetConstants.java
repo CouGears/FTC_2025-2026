@@ -21,9 +21,11 @@ public class PresetConstants {
     public static double shootVelFar = 1800;
     public static double ejectionVel = -1000;
     // Turret
-    public static int[] TurretPos = {0, 0, 0, 0};
+    public static int[] turretPos = {0, 0, 0, 0};
+    public static int[] turretLimits = {0,0};
     //Servos
-    public static double[] FeedServoPos = {0, 0};
+    public static double[] feedServoPos = {0, 0};
+    public static double[] hoodServoLimits = {0, 0};
     //AprilTag
     public static int redTag = 24;
     public static int blueTag = 20;

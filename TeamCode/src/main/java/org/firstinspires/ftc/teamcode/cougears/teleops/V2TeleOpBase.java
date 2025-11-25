@@ -17,7 +17,8 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 
 public class V2TeleOpBase extends BotBase {
 
-    public DcMotorEx FW, Intake, TurretRotator, Hood, FeedMotor;
+    public DcMotorEx FW, Intake, TurretRotator, Hood;
+    public Servo FeedServo;
     public boolean IntakeSpinning, FeedMotorSpinning, slowed;
     public int currTurretPos = 0;
 
@@ -51,17 +52,13 @@ public class V2TeleOpBase extends BotBase {
             Intake.setDirection(DcMotor.Direction.REVERSE);
             Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            FeedMotor = HM.get(DcMotorEx.class, "FeedMotor");
-            FeedMotor.setDirection(DcMotor.Direction.REVERSE);
-            FeedMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+            FeedServo = HM.get(Servo.class, "FeedServo");
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
             tele.addData("ERROR MSG:", e);
             return false;
         }
-
-
+        FeedServo.setPosition(feedServoPos[0]);
         return true;
     }
 
@@ -82,7 +79,7 @@ public class V2TeleOpBase extends BotBase {
     //****** TURRET ******
     public void setTurretPos(int posNumber){
         posNumber = Range.clip(posNumber, 0, 3);
-        TurretRotator.setTargetPosition(TurretPos[posNumber]);
+        TurretRotator.setTargetPosition(turretPos[posNumber]);
         currTurretPos = posNumber;
     }
     public void nextTurretPos(){
@@ -90,16 +87,15 @@ public class V2TeleOpBase extends BotBase {
             currTurretPos = 0;
         else
             currTurretPos++;
-        TurretRotator.setTargetPosition(TurretPos[currTurretPos]);
+        TurretRotator.setTargetPosition(turretPos[currTurretPos]);
     }
 
-    //****** FEED MOTOR ******
-    public void toggleFeedMotor() {
-        FeedMotorSpinning = !FeedMotorSpinning;
-        if (FeedMotorSpinning)
-            FeedMotor.setPower(1);
-        else
-            FeedMotor.setPower(0);
+    //****** SERVOS ******
+    public void FeedServoUp()  {
+        FeedServo.setPosition(feedServoPos[1]);
+    }
+    public void FeedServoReset() {
+        FeedServo.setPosition(feedServoPos[0]);
     }
 
     //****** Intake ******
