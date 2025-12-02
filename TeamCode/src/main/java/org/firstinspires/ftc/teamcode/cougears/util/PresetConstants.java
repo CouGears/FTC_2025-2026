@@ -34,4 +34,25 @@ public class PresetConstants {
     // NAMES
     public static String[] motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};
     public static String[] servoNames = {"FeedServo"};
+
+    /* Config
+   Control hub:
+       Motors: motorFL, motorBL, TurretRotator, FW
+       Servos:
+   Expansion hub:
+       Motors: motorFR, motorFL, Intake, __
+       Servos:
+
+    BUTTONS
+        Y -> Align to april tag
+        X -> Toggles intake
+        Lt -> Close shot
+        Lb -> Far shot
+        Rb -> Reject
+        Rt -> Transfer (needs to be added maybe timer?)
+        Right joystick -> Cardinal directions
+        Left joystick -> Turning
+    */
+
+
 }
