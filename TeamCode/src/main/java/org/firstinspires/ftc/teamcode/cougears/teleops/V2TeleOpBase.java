@@ -5,11 +5,14 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVel;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVelFar;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
+
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -18,9 +21,11 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 public class V2TeleOpBase extends BotBase {
 
     public DcMotorEx FW, Intake, TurretRotator, Hood;
-    public Servo FeedServo;
-    public boolean IntakeSpinning, FeedMotorSpinning, slowed;
+    public CRServo Transfer1, Transfer2;
+    public boolean IntakeSpinning, FeedServoSpinning, slowed;
     public int currTurretPos = 0;
+
+    public double speedMultiplier = 1;
 
     public V2TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
@@ -52,13 +57,14 @@ public class V2TeleOpBase extends BotBase {
             Intake.setDirection(DcMotor.Direction.REVERSE);
             Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            FeedServo = HM.get(Servo.class, "FeedServo");
+            Transfer1 = HM.get(CRServo.class, "Transfer1");
+            Transfer1.setDirection(CRServo.Direction.REVERSE);
+            Transfer2 = HM.get(CRServo.class, "Transfer2");
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
             tele.addData("ERROR MSG:", e);
             return false;
         }
-        FeedServo.setPosition(feedServoPos[0]);
         return true;
     }
 
@@ -91,12 +97,18 @@ public class V2TeleOpBase extends BotBase {
     }
 
     //****** SERVOS ******
-    public void FeedServoUp()  {
-        FeedServo.setPosition(feedServoPos[1]);
+    public void toggleFeedServo()  {
+        FeedServoSpinning = !FeedServoSpinning;
+        if (FeedServoSpinning){
+            Transfer1.setPower(1);
+            Transfer2.setPower(1);
+        } else {
+            Transfer1.setPower(0);
+            Transfer1.setPower(0);
+
+        }
     }
-    public void FeedServoReset() {
-        FeedServo.setPosition(feedServoPos[0]);
-    }
+
 
     //****** Intake ******
     public void toggleIntake() {
@@ -119,12 +131,11 @@ public class V2TeleOpBase extends BotBase {
     }
 
     public void RafiDrive(Gamepad gamepad1) {
-        if (!slowed)
-            RafiDrive(gamepad1, 1);
-        else
-            RafiDrive(gamepad1, slowMultiplier);
-    }
-    public void RafiDrive(Gamepad gamepad1, double speedMultiplier) {
+        if (!slowed){
+            speedMultiplier = 1;
+        } else {
+            speedMultiplier = slowMultiplier;
+        }
         speedMultiplier = -1*Range.clip(speedMultiplier,0, 1);
 
         tele.addData(">", "RUNNING RAFI DRIVE");
