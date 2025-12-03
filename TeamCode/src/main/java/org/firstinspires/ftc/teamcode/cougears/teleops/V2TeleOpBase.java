@@ -83,6 +83,11 @@ public class V2TeleOpBase extends BotBase {
     }
 
     //****** TURRET ******
+    public void setTurretPosManual(int pos){
+        pos = Range.clip(pos, turretLimits[0], turretLimits[1]);
+        TurretRotator.setTargetPosition(pos);
+        currTurretPos = -1;
+    }
     public void setTurretPos(int posNumber){
         posNumber = Range.clip(posNumber, 0, 3);
         TurretRotator.setTargetPosition(turretPos[posNumber]);
@@ -97,6 +102,15 @@ public class V2TeleOpBase extends BotBase {
     }
 
     //****** SERVOS ******
+    public void spinFeeder(){
+        Transfer1.setPower(1);
+        Transfer2.setPower(1);
+    }
+    public void killFeeder(){
+        Transfer1.setPower(0);
+        Transfer1.setPower(0);
+    }
+
     public void toggleFeedServo()  {
         FeedServoSpinning = !FeedServoSpinning;
         if (FeedServoSpinning){
@@ -105,7 +119,6 @@ public class V2TeleOpBase extends BotBase {
         } else {
             Transfer1.setPower(0);
             Transfer1.setPower(0);
-
         }
     }
 

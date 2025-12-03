@@ -63,11 +63,11 @@ public class V2TeleOpDrive extends LinearOpMode {
 
             //****** SERVOS ******
             if (bot.isPressed(2, Button.R_TRIGGER)) {
-                bot.FeedServoUp();
+                bot.spinFeeder();
                 bot.createTimer("FeedServo");
             }
             if (bot.timerExpired_MSeconds("FeedServo", 750)){
-                bot.FeedServoReset();
+                bot.killFeeder();
                 bot.deleteTimer("FeedServo");
             }
 

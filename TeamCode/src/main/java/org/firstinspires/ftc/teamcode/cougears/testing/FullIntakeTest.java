@@ -6,9 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
+import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
-@TeleOp(name="FullIntakeTestServo", group="Testing")
-public class FullIntakeTestServo extends LinearOpMode {
+
+@TeleOp(name="FullIntakeTest", group="Testing")
+public class FullIntakeTest extends LinearOpMode {
 
 
     private DcMotorEx fw;
@@ -26,7 +29,7 @@ public class FullIntakeTestServo extends LinearOpMode {
         intake = hardwareMap.get(DcMotorEx.class, "Intake");
         transfer1 = hardwareMap.get(CRServo.class, "Transfer1");
         transfer2 = hardwareMap.get(CRServo.class, "Transfer2");
-
+        GamepadManager GPM = new GamepadManager(gamepad1);
 
 
         // Reverse one servo
@@ -50,7 +53,7 @@ public class FullIntakeTestServo extends LinearOpMode {
 
 
             // Toggle logic
-            if (a && !aPrev) {
+            if (GPM.isPressed(Button.A)) {
                 motorsOn = !motorsOn;
 
 
@@ -72,7 +75,6 @@ public class FullIntakeTestServo extends LinearOpMode {
 
                 }
             }
-            aPrev = a;
 
 
             telemetry.addData("Motors On?", motorsOn);
@@ -81,6 +83,7 @@ public class FullIntakeTestServo extends LinearOpMode {
             telemetry.addData("Transfer1 Power", transfer1.getPower());
             telemetry.addData("Transfer2 Power", transfer2.getPower());
             telemetry.update();
+            GPM.update();
         }
 
 

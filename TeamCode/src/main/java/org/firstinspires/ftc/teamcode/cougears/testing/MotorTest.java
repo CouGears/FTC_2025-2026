@@ -1,135 +1,136 @@
 package org.firstinspires.ftc.teamcode.cougears.testing;
 
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;
+
+
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
+import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @TeleOp(name="MotorTest", group="Testing")
 public class MotorTest extends LinearOpMode {
-
-    // Define the different states our OpMode can be in. This makes the code much clearer.
-    enum SetupState {
-        MOTOR1_DIR,
-        MOTOR2_DIR,
-        RUNNING
+    enum State {
+        SELECT_MOTOR,
+        CONTROL_MOTOR
     }
 
-    // Start in the first setup state.
-    private SetupState currentState = SetupState.MOTOR1_DIR;
+    private State state = State.SELECT_MOTOR;
 
-    DcMotor m1 = null;
-    DcMotor m2 = null;
+    private final ArrayList<String> motorNames = new ArrayList<>();
+    private final ArrayList<DcMotorEx> motors = new ArrayList<>();
+
+    private int selectedIndex = 0;
 
     @Override
     public void runOpMode() {
         GamepadManager GPM = new GamepadManager(gamepad1);
-        telemetry.addData("Status", "Initializing...");
-        try {
-            m1 = hardwareMap.get(DcMotor.class, "motor1");
-            m1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            telemetry.addData("Motor 1", "Initialized");
-        } catch (Exception e) {
-            telemetry.addData("Motor 1", "NOT FOUND");
+        // ---- Scan for all DcMotorEx motors ----
+        for (String name : hardwareMap.getAllNames(DcMotorEx.class)) {
+            try {
+                DcMotorEx m = hardwareMap.get(DcMotorEx.class, name);
+                motors.add(m);
+                motorNames.add(name);
+            } catch (Exception ignored) {
+            }
         }
 
-        try {
-            m2 = hardwareMap.get(DcMotor.class, "motor2");
-            m2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            telemetry.addData("Motor 2", "Initialized");
-        } catch (Exception e) {
-            telemetry.addData("Motor 2", "NOT FOUND");
-        }
-
-        telemetry.addData(">", "Ready to start.");
+        telemetry.addData("Motors Found", motorNames.size());
+        for (String s : motorNames) telemetry.addLine(" - " + s);
+        telemetry.addLine("Press START when ready.");
         telemetry.update();
-
-        double power = 0.0;
-
-        // If no motors are configured, just end the OpMode.
-        if (m1 == null && m2 == null) {
-            telemetry.addData("ERROR", "No motors were found. Exiting.");
-            telemetry.update();
-            sleep(2000);
-            return;
-        }
 
         waitForStart();
 
-        while (opModeIsActive()) {
-
-            // We use a switch statement to handle the logic for each state separately.
-            switch (currentState) {
-
-                case MOTOR1_DIR:
-                    telemetry.addData("CURRENT STATE", "Setup Motor 1 Direction");
-                    telemetry.addData("A Button", "Forward");
-                    telemetry.addData("B Button", "Reverse");
-                    telemetry.addData("X Button", "Go to Next Step");
-
-                    if (m1 != null) {
-                        if (GPM.isPressed(GamepadManager.Button.A)) {
-                            m1.setDirection(DcMotorSimple.Direction.FORWARD);
-                        }
-                        if (GPM.isPressed(GamepadManager.Button.B)) {
-                            m1.setDirection(DcMotorSimple.Direction.REVERSE);
-                        }
-                    }
-
-                    // When X is pressed, transition to the next state.
-                    if (GPM.isPressed(GamepadManager.Button.X)) {
-                        currentState = SetupState.MOTOR2_DIR;
-                    }
-                    break;
-
-                case MOTOR2_DIR:
-                    telemetry.addData("CURRENT STATE", "Setup Motor 2 Direction");
-                    telemetry.addData("A Button", "Forward");
-                    telemetry.addData("B Button", "Reverse");
-                    telemetry.addData("X Button", "Confirm and Start Running");
-
-                    if (m2 != null) {
-                        if (GPM.isPressed(GamepadManager.Button.A)) {
-                            m2.setDirection(DcMotorSimple.Direction.FORWARD);
-                        }
-                        if (GPM.isPressed(GamepadManager.Button.B)) {
-                            m2.setDirection(DcMotorSimple.Direction.REVERSE);
-                        }
-                    }
-
-                    // When X is pressed again, transition to the final running state.
-                    if (GPM.isPressed(GamepadManager.Button.X)) {
-                        currentState = SetupState.RUNNING;
-                    }
-                    break;
-
-                case RUNNING:
-                    telemetry.addData("CURRENT STATE", "Running Motors");
-                    telemetry.addData("Y Button", "Increase Power");
-                    telemetry.addData("X Button", "Decrease Power");
-                    telemetry.addData("Current Power", power);
-
-                    // Now Y and X have a different, clear purpose.
-                    if (GPM.isPressed(GamepadManager.Button.Y)) {
-                        power += 0.1;
-                    }
-                    if (GPM.isPressed(GamepadManager.Button.X)) {
-                        power -= 0.1;
-                    }
-
-                    // Use Range.clip to safely keep the power between -1.0 and 1.0.
-                    power = Range.clip(power, -1.0, 1.0);
-
-                    if (m1 != null) m1.setPower(power);
-                    if (m2 != null) m2.setPower(power);
-                    break;
-            }
-
+        if (motors.isEmpty()) {
+            telemetry.addData("ERROR", "No motors found!");
             telemetry.update();
-            GPM.update();
-            sleep(10);
+            sleep(3000);
+            return;
         }
+
+        while (opModeIsActive()) {
+            if (state == State.SELECT_MOTOR) {
+                telemetry.addLine("=== SELECT A MOTOR ===");
+                telemetry.addLine("Use D-Pad Up/Down to scroll");
+                telemetry.addLine("Press A to select");
+                telemetry.addLine("Press B to turn off this Motor");
+                telemetry.addLine("Press X to turn off all Motors");
+                telemetry.addLine("Selected Index: " + selectedIndex % motors.size());
+
+                // scroll down
+                if (GPM.isPressed(Button.DPAD_DOWN) || GPM.isPressed(Button.DPAD_RIGHT)) {
+                    selectedIndex = Math.abs((selectedIndex + 1) % motors.size());
+                }
+                // scroll up
+                else if (GPM.isPressed(Button.DPAD_UP) || GPM.isPressed(Button.DPAD_LEFT)) {
+                    selectedIndex = Math.abs((selectedIndex - 1) % motors.size());
+                }
+
+                // Print motor name
+                for (int i = 0; i < motorNames.size(); i++) {
+                    if (i == selectedIndex) {
+                        telemetry.addData(">", motorNames.get(i));
+                    } else {
+                        telemetry.addData(" ", motorNames.get(i));
+                    }
+                }
+
+                //Allow control
+                if (GPM.isPressed(Button.A)) {
+                    state = State.CONTROL_MOTOR;
+                }
+                if (GPM.isPressed(Button.B)) {
+                    motors.get(selectedIndex).setPower(0);
+                }
+                if (GPM.isPressed(Button.X)) {
+                    for(DcMotorEx motor : motors)
+                        motor.setPower(0);
+                }
+
+            } else if (state == State.CONTROL_MOTOR) {
+                DcMotorEx selectedMotor = motors.get(selectedIndex);
+
+                telemetry.addLine("=== MOTOR CONTROL ===");
+                telemetry.addData("Motor", motorNames.get(selectedIndex));
+                telemetry.addData("Power", "%.2f", selectedMotor.getPower());
+                telemetry.addData("Velocity", "%.2f", selectedMotor.getVelocity());
+                telemetry.addData("Note:", "Only use velocity if there is an encoder");
+                telemetry.addData("Direction", "%s", selectedMotor.getDirection().toString());
+                telemetry.addLine("D-Pad Up: Increase Power");
+                telemetry.addLine("D-Pad Down: Decrease Power");
+                telemetry.addLine("Y: Change Dir");
+                telemetry.addLine("B: Return to selection");
+
+                double currPower = selectedMotor.getPower();
+                if (GPM.isPressed(Button.DPAD_UP)) currPower += .1;
+                if (GPM.isPressed(Button.DPAD_DOWN)) currPower -= .1;
+                selectedMotor.setPower(currPower);
+
+                if (GPM.isPressed(Button.Y)) {
+                    DcMotorSimple.Direction currDir = selectedMotor.getDirection();
+                    if (currDir == DcMotorSimple.Direction.FORWARD)
+                        selectedMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+                    else
+                        selectedMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+                }
+
+                if (GPM.isPressed(Button.B)) {
+                    state = State.SELECT_MOTOR;
+                }
+
+            }
+            GPM.update();
+            telemetry.update();
+            sleep(40);
+            // stop motors on exit
+        }
+        for (DcMotorEx m : motors) m.setPower(0);
     }
 }
