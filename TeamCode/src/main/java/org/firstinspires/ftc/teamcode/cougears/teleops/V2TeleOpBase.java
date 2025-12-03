@@ -10,8 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.CRServo;
 
 import com.qualcomm.robotcore.util.Range;
 
@@ -50,7 +48,7 @@ public class V2TeleOpBase extends BotBase {
             TurretRotator = HM.get(DcMotorEx.class, "TurretRotator");
             TurretRotator.setDirection(DcMotor.Direction.REVERSE);
             TurretRotator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            TurretRotator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            TurretRotator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             TurretRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             Intake = HM.get(DcMotorEx.class, "Intake");
@@ -75,7 +73,7 @@ public class V2TeleOpBase extends BotBase {
     public void spinUpFar() {
         FW.setVelocity(shootVelFar);
     }
-    public void spinDown() {
+    public void killFW() {
         FW.setPower(0);
     }
     public void spinBack() {
@@ -108,7 +106,7 @@ public class V2TeleOpBase extends BotBase {
     }
     public void killFeeder(){
         Transfer1.setPower(0);
-        Transfer1.setPower(0);
+        Transfer2.setPower(0);
     }
 
     public void toggleFeedServo()  {
@@ -118,7 +116,7 @@ public class V2TeleOpBase extends BotBase {
             Transfer2.setPower(1);
         } else {
             Transfer1.setPower(0);
-            Transfer1.setPower(0);
+            Transfer2.setPower(0);
         }
     }
 
@@ -130,6 +128,10 @@ public class V2TeleOpBase extends BotBase {
             Intake.setPower(1);
         else
             Intake.setPower(0);
+    }
+    public void rejectIntake() {
+        IntakeSpinning = true;
+        Intake.setPower(-1);
     }
 
     //****** OTHER ******

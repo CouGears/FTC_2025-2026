@@ -23,6 +23,9 @@ public class PresetConstants {
     // Turret
     public static int[] turretPos = {0, 0, 0, 0};
     public static int[] turretLimits = {0,0};
+    public static int ticksPerDeg = 0;
+    //Hood
+    public static int[] hoodLimits = {0,0};
     //Servos
     public static double[] feedServoPos = {0, 0};
     public static double[] hoodServoLimits = {0, 0};

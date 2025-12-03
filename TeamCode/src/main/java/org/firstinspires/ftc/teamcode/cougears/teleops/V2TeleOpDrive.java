@@ -44,6 +44,9 @@ public class V2TeleOpDrive extends LinearOpMode {
             if (bot.isPressed(1, Button.X)) {
                 bot.toggleIntake();
             }
+            if (bot.isPressed(1, Button.R_STICKPRESS)) {
+                bot.rejectIntake();
+            }
 
             //****** FLYWHEEL ******
             if (bot.isHeld(2, Button.L_TRIGGER)) {
@@ -53,11 +56,11 @@ public class V2TeleOpDrive extends LinearOpMode {
             else if (bot.isHeld(2, Button.L_BUMPER)) {
                 bot.spinUpFar();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVelFar);
-            } else if (bot.isHeld(2, Button.R_BUMPER)) {
+            } else if (bot.isHeld(2, Button.L_STICKPRESS)) {
                 bot.spinBack();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", ejectionVel);
             } else {
-                bot.spinDown();
+                bot.killFW();
             }
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
 
