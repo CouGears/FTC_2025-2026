@@ -86,16 +86,26 @@ public class V2TeleOpBase extends BotBase {
         TurretRotator.setTargetPosition(pos);
         currTurretPos = -1;
     }
+
+    public void moveTurretL(){
+        int newPos = TurretRotator.getCurrentPosition() + turretStep;
+        TurretRotator.setTargetPosition(newPos);
+        currTurretPos = -1;
+    }
+    public void moveTurretR(){
+        int newPos = TurretRotator.getCurrentPosition() - turretStep;
+        TurretRotator.setTargetPosition(newPos);
+        currTurretPos = -1;
+    }
+
     public void setTurretPos(int posNumber){
         posNumber = Range.clip(posNumber, 0, 3);
         TurretRotator.setTargetPosition(turretPos[posNumber]);
         currTurretPos = posNumber;
     }
-    public void nextTurretPos(){
-        if (currTurretPos == 3)
-            currTurretPos = 0;
-        else
-            currTurretPos++;
+
+    public void resetTurret(){
+        currTurretPos = 0;
         TurretRotator.setTargetPosition(turretPos[currTurretPos]);
     }
 

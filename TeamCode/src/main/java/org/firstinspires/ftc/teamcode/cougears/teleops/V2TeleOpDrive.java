@@ -64,6 +64,14 @@ public class V2TeleOpDrive extends LinearOpMode {
             }
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
 
+            //****** TURRET and HOOD ******
+            if (bot.isPressed(2, Button.A))
+                bot.resetTurret();
+            else if (bot.isHeld(2, Button.DPAD_RIGHT))
+                bot.moveTurretR();
+            else if (bot.isHeld(2, Button.DPAD_LEFT))
+                bot.moveTurretL();
+
             //****** SERVOS ******
             if (bot.isPressed(2, Button.R_TRIGGER)) {
                 bot.spinFeeder();
