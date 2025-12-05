@@ -39,15 +39,16 @@ public class V2TeleOpBase extends BotBase {
             FW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             FW.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
 
-            Hood = HM.get(DcMotorEx.class, "HoodController");
-            Hood.setDirection(DcMotor.Direction.REVERSE);
-            Hood.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            Hood.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            Hood.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            Hood = HM.get(DcMotorEx.class, "HoodController");
+//            Hood.setDirection(DcMotor.Direction.REVERSE);
+//            Hood.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            Hood.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            Hood.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             TurretRotator = HM.get(DcMotorEx.class, "TurretRotator");
             TurretRotator.setDirection(DcMotor.Direction.REVERSE);
             TurretRotator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            TurretRotator.setTargetPosition(0);
             TurretRotator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             TurretRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -149,6 +150,10 @@ public class V2TeleOpBase extends BotBase {
         super.endTeleOp();
         FW.setPower(0);
         Intake.setPower(0);
+        Transfer1.setPower(0);
+        Transfer2.setPower(0);
+        TurretRotator.setPower(0);
+//        Hood.setPower(0);
     }
 
     public void toggleSlow(){
