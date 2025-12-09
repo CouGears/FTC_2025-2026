@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import java.util.ArrayList;
 
 
-@TeleOp(name="MotorTest", group="Testing")
+@TeleOp(name="ComponentTest", group="Testing")
 public class ComponentTest extends LinearOpMode {
     enum State {
         SELECT_MOTOR,

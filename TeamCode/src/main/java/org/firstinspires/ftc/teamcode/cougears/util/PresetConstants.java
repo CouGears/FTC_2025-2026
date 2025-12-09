@@ -24,8 +24,8 @@ public class PresetConstants {
     public static double ticksPerDeg = 751.8/360;
     public static int[] turretPos = {0, (int) Math.round(ticksPerDeg * 90),
             (int) Math.round(ticksPerDeg * 180), (int) Math.round(ticksPerDeg * 270)};
-    public static int[] turretLimits = {0,0};
-    public static int turretStep = 10;
+    public static int[] turretLimits = {-1000,2300}; // CW, CCW
+    public static int turretStep = 100;
     //Hood
     public static int[] hoodLimits = {0,0};
     //Servos
