@@ -40,11 +40,11 @@ public class V2TeleOpDrive extends LinearOpMode {
                 ATM.alignToAT(blueTag);
             }
 
-            //****** Intake ******
+            //****** INTAKE ******
             if (bot.isPressed(1, Button.X)) {
                 bot.toggleIntake();
             }
-            if (bot.isPressed(1, Button.R_STICKPRESS)) {
+            if (bot.isPressed(1, Button.R_STICKPRESS)) { // TODO: Make into a timer
                 bot.rejectIntake();
             }
 
@@ -77,7 +77,7 @@ public class V2TeleOpDrive extends LinearOpMode {
                 bot.spinFeeder();
                 bot.createTimer("FeedServo");
             }
-            if (bot.timerExpired_MSeconds("FeedServo", 750)){
+            if (bot.timerExpired_MSeconds("FeedServo", 1500)){
                 bot.killFeeder();
                 bot.deleteTimer("FeedServo");
             }

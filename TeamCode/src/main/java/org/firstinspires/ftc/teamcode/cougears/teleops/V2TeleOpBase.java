@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shoot
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -57,7 +58,7 @@ public class V2TeleOpBase extends BotBase {
             Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             Transfer = HM.get(CRServo.class, "Transfer");
-            Transfer.setDirection(CRServo.Direction.REVERSE);
+            Transfer.setDirection(CRServo.Direction.FORWARD);
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
             tele.addData("ERROR MSG:", e);
