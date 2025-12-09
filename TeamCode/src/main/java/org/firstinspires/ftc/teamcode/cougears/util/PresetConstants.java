@@ -21,15 +21,17 @@ public class PresetConstants {
     public static double shootVelFar = 1800;
     public static double ejectionVel = -1000;
     // Turret
-    public static int[] turretPos = {0, 0, 0, 0};
+    public static double ticksPerDeg = 751.8/360;
+    public static int[] turretPos = {0, (int) Math.round(ticksPerDeg * 90),
+            (int) Math.round(ticksPerDeg * 180), (int) Math.round(ticksPerDeg * 270)};
     public static int[] turretLimits = {0,0};
-    public static int ticksPerDeg = 0;
     public static int turretStep = 10;
     //Hood
     public static int[] hoodLimits = {0,0};
     //Servos
     public static double[] feedServoPos = {0, 0};
     public static double[] hoodServoLimits = {0, 0};
+
     //AprilTag
     public static int redTag = 24;
     public static int blueTag = 20;
