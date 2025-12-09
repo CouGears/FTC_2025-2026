@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.teleops.OctoberCompTeleOpBase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import org.firstinspires.ftc.teamcode.cougears.teleops.V2TeleOpBase;
 /*
 WHAT THIS FILE SHOULD BE ABLE TO DO:
 - Take the bot from teleop and move it
@@ -18,6 +19,7 @@ WHAT THIS FILE SHOULD BE ABLE TO DO:
 public class AprilTagManager extends AprilTagBase{
 
     public BotBase bot;
+    public V2TeleOpBase v2bot = null;
     public int ATBearingTolerance = 1;
 
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
@@ -34,6 +36,20 @@ public class AprilTagManager extends AprilTagBase{
     public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, BotBase Bot) {
         super(HardwareMap, Telemetry);
         bot = Bot;
+    }
+    public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, V2TeleOpBase Bot) {
+        super(HardwareMap, Telemetry);
+        v2bot = Bot;
+    }
+
+    public void alignTurretToAT(int tagID) {
+        if (v2bot == null) return;
+
+        AprilTagDetection tag = scanForAT(tagID);
+        if (tag == null) return;
+
+        double bearing = tag.ftcPose.bearing;   // degrees offset of tag from robot
+        v2bot.adjustTurret(bearing);   // <-- let TeleOpBase handle conversion
     }
 
 

@@ -104,6 +104,17 @@ public class V2TeleOpBase extends BotBase {
         currTurretPos = posNumber;
     }
 
+    public void adjustTurret(double targetDeg) {
+        targetDeg = Range.clip(targetDeg, 0, 360);  // Or your physical limits
+
+        double targetTicks = targetDeg * ticksPerDeg;
+        targetTicks = Range.clip(targetTicks, turretLimits[0], turretLimits[1]);
+
+        TurretRotator.setTargetPosition((int) targetTicks);
+        currTurretPos = -1;
+    }
+
+
     public void resetTurret(){
         currTurretPos = 0;
         TurretRotator.setTargetPosition(turretPos[currTurretPos]);
