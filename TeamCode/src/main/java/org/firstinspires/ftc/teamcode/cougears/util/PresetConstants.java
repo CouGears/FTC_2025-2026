@@ -45,7 +45,7 @@ public class PresetConstants {
        Servos:
    Expansion hub:
        Motors: motorFR, motorFL, Intake, __
-       Servos:
+       Servos:__, Transfer
 
     BUTTONS
         Y -> Align to april tag

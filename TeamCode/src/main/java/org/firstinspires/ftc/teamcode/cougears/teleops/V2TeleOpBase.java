@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 public class V2TeleOpBase extends BotBase {
 
     public DcMotorEx FW, Intake, TurretRotator, Hood;
-    public CRServo Transfer1, Transfer2;
+    public CRServo Transfer;
     public boolean IntakeSpinning, FeedServoSpinning, slowed;
     public int currTurretPos = 0;
 
@@ -56,9 +56,8 @@ public class V2TeleOpBase extends BotBase {
             Intake.setDirection(DcMotor.Direction.REVERSE);
             Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            Transfer1 = HM.get(CRServo.class, "Transfer1");
-            Transfer1.setDirection(CRServo.Direction.REVERSE);
-            Transfer2 = HM.get(CRServo.class, "Transfer2");
+            Transfer = HM.get(CRServo.class, "Transfer");
+            Transfer.setDirection(CRServo.Direction.REVERSE);
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
             tele.addData("ERROR MSG:", e);
@@ -112,22 +111,18 @@ public class V2TeleOpBase extends BotBase {
 
     //****** SERVOS ******
     public void spinFeeder(){
-        Transfer1.setPower(1);
-        Transfer2.setPower(1);
+        Transfer.setPower(1);
     }
     public void killFeeder(){
-        Transfer1.setPower(0);
-        Transfer2.setPower(0);
+        Transfer.setPower(0);
     }
 
     public void toggleFeedServo()  {
         FeedServoSpinning = !FeedServoSpinning;
         if (FeedServoSpinning){
-            Transfer1.setPower(1);
-            Transfer2.setPower(1);
+            Transfer.setPower(1);
         } else {
-            Transfer1.setPower(0);
-            Transfer2.setPower(0);
+            Transfer.setPower(0);
         }
     }
 
@@ -150,8 +145,7 @@ public class V2TeleOpBase extends BotBase {
         super.endTeleOp();
         FW.setPower(0);
         Intake.setPower(0);
-        Transfer1.setPower(0);
-        Transfer2.setPower(0);
+        Transfer.setPower(0);
         TurretRotator.setPower(0);
 //        Hood.setPower(0);
     }
