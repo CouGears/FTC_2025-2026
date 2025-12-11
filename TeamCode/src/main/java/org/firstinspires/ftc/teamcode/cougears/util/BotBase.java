@@ -144,6 +144,14 @@ public class BotBase {
         else
             timers.put(key, new ElapsedTime());
     }
+    public void createTimer(String key, long startTime){
+        ElapsedTime timer = timers.get(key);
+        if (timer != null)
+            timer.reset();
+        else
+            timers.put(key, new ElapsedTime(startTime));
+    }
+
 
     // Need to check if timer exists or nullptr err -E
     public void resetTimer(String key){

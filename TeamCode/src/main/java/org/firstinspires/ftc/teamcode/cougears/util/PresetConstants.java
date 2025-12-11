@@ -20,6 +20,7 @@ public class PresetConstants {
     public static double shootVel = 1600;
     public static double shootVelFar = 1800;
     public static double ejectionVel = -1000;
+    public static double gateWait = 250;
     // Turret
     public static double ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
     public static int[] turretPos = {0, -(int) Math.round(ticksPerDeg * 45),

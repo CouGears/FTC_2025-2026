@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
@@ -94,19 +95,24 @@ public class V2TeleOpDrive extends LinearOpMode {
 
             //****** SERVOS ******
             if (bot.isPressed(2, Button.R_TRIGGER)) {
-                bot.blockerOpen();
-                bot.createTimer("ShootSequence");
+                if (bot.timers.get("ShootSequence") == null) { // Not in the middle of a sequence
+                    bot.blockerOpen();
+                    bot.createTimer("ShootSequence");
+                }
+                else {
+                    bot.createTimer("ShootSequence", (long) gateWait);
+                }
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", 2000)){
+            if (bot.timerExpired_MSeconds("ShootSequence", gateWait+1000)){
                 bot.killFeeder();
                 bot.transferArmDown(); // Start moving arm down
                 bot.blockerClose();
-            } else if (bot.timerExpired_MSeconds("ShootSequence", 1000)){
+            } else if (bot.timerExpired_MSeconds("ShootSequence", gateWait)){
                 bot.spinFeeder();
                 bot.transferArmUp();
                 bot.killIntake(); // Dont was ball to move below the arm while its up
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", 2500)){
+            if (bot.timerExpired_MSeconds("ShootSequence", gateWait+1250)){
                 bot.startIntake(); // Turn intake back on
                 bot.deleteTimer("ShootSequence");
             }
