@@ -26,12 +26,8 @@ public class PresetConstants {
             (int) Math.round(ticksPerDeg * 45)};
     public static int[] turretLimits = {-400,400}; // CW, CCW
     public static int turretStep = 100;
-    //Hood
-    public static int[] hoodLimits = {0,0};
     //Servos
-    public static double[] feedServoPos = {0, 0};
-    public static double[] hoodServoLimits = {0, 0};
-
+    public static double[] transferArmPos = {.8,.4};
     //AprilTag
     public static int redTag = 24;
     public static int blueTag = 20;

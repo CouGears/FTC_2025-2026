@@ -93,11 +93,17 @@ public class V2TeleOpDrive extends LinearOpMode {
             //****** SERVOS ******
             if (bot.isPressed(2, Button.R_TRIGGER)) {
                 bot.spinFeeder();
-                bot.createTimer("FeedServo");
+                bot.transferArmUp();
+                bot.killIntake(); // Dont was ball to move below the arm while its up
+                bot.createTimer("ShootSequence");
             }
-            if (bot.timerExpired_MSeconds("FeedServo", 1500)){
+            if (bot.timerExpired_MSeconds("ShootSequence", 1500)){
                 bot.killFeeder();
-                bot.deleteTimer("FeedServo");
+                bot.transferArmDown(); // Start moving arm down
+            }
+            if (bot.timerExpired_MSeconds("ShootSequence", 2000)){
+                bot.startIntake(); // Turn intake back on
+                bot.deleteTimer("ShootSequence");
             }
 
             if (bot.isPressed(2, Button.R_BUMPER)) {

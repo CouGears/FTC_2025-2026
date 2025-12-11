@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,6 +22,7 @@ public class V2TeleOpBase extends BotBase {
 
     public DcMotorEx FW, Intake, TurretRotator, Hood;
     public CRServo Transfer;
+    public Servo TransferArm;
     public boolean IntakeSpinning, FeedServoSpinning, slowed;
     public int currTurretPos = 0;
 
@@ -54,6 +56,10 @@ public class V2TeleOpBase extends BotBase {
 
             Transfer = HM.get(CRServo.class, "Transfer");
             Transfer.setDirection(CRServo.Direction.FORWARD);
+
+            TransferArm = HM.get(Servo.class, "TransferArm");
+            TransferArm.setPosition(transferArmPos[0]);
+
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
             tele.addData("ERROR MSG:", e);
@@ -116,6 +122,13 @@ public class V2TeleOpBase extends BotBase {
     }
     public void killFeeder(){
         Transfer.setPower(0);
+    }
+
+    public void transferArmUp(){
+        TransferArm.setPosition(transferArmPos[1]);
+    }
+    public void transferArmDown(){
+        TransferArm.setPosition(transferArmPos[0]);
     }
 
     public void toggleFeedServo()  {
