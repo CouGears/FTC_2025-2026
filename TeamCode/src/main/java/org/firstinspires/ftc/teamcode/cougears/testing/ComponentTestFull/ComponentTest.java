@@ -37,7 +37,6 @@ public class ComponentTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         GPM = new GamepadManager(gamepad1);
-        // ---- Scan for all DcMotorEx motors ----
         telemetry.addLine(MTU.loadMotors(hardwareMap));
         telemetry.addLine(STU.loadServos(hardwareMap));
         telemetry.addLine(CRSTU.loadCRServos(hardwareMap));
@@ -58,7 +57,7 @@ public class ComponentTest extends LinearOpMode {
 
         while (opModeIsActive()) {
             try {
-                GUIControl(); //L&R Dpad, A and B
+                GUIControl();
                 printStateData(telemetry);
                 switch (state) {
                     case SELECT_MOTOR:
@@ -86,7 +85,7 @@ public class ComponentTest extends LinearOpMode {
             }
             GPM.update();
             telemetry.update();
-            sleep(10);
+            sleep(1);
         }
         for (DcMotorEx m : MTU.motors) m.setPower(0);
         for (CRServo CRs : CRSTU.CRServos) CRs.setPower(0);
@@ -95,7 +94,6 @@ public class ComponentTest extends LinearOpMode {
 
 
     public void printStateData(Telemetry telemetry){
-        // print controls for each tab
         switch (state){
             case SELECT_MOTOR:
                 telemetry.addLine("=== SELECT A MOTOR ===");
@@ -163,7 +161,6 @@ public class ComponentTest extends LinearOpMode {
     }
 
     public void listComponents(){
-        // General func to list the devices of the selected type
         ArrayList<String> deviceNames = new ArrayList<>();
         switch (state){
             case SELECT_MOTOR:
@@ -189,8 +186,6 @@ public class ComponentTest extends LinearOpMode {
     }
 
     public void GUIControl(){
-        // Depending on the state we are in we are dealing w/ diff size arr lists
-        // To make sure we dont go out of bounds, we need to find out what arr we are using so we can % by the right #
         int arraySize = 0;
         switch (state){
             case SELECT_MOTOR:
@@ -207,22 +202,13 @@ public class ComponentTest extends LinearOpMode {
                 break;
         }
 
-        // Now we deal if the user wants to change the selected index
         if (GPM.isPressed(Button.DPAD_DOWN) && arraySize > 0){
-            if (selectedIndex == arraySize - 1)
-                selectedIndex = 0;
-            else
-                selectedIndex++;
+            selectedIndex = (selectedIndex + 1) % arraySize;
         }
         if (GPM.isPressed(Button.DPAD_UP) && arraySize > 0){
-            if (selectedIndex == 0)
-                selectedIndex = arraySize - 1;
-            else
-                selectedIndex--;
+            selectedIndex = (selectedIndex - 1 + arraySize) % arraySize;
         }
 
-        // Changing tabs (from selecting a motor -> servo -> CRServo)
-        // Need to set selectedIndex to 0 so we start at top of the list
         if (GPM.isPressed(Button.DPAD_RIGHT)){
             if (state == State.SELECT_MOTOR){
                 state = State.SELECT_SERVO;
@@ -244,7 +230,6 @@ public class ComponentTest extends LinearOpMode {
             selectedIndex = 0;
         }
 
-        // Going from controlling a component to the corrosponding selection screen
         if (GPM.isPressed(Button.B)) {
             if (state == State.CONTROL_MOTOR){
                 state = State.SELECT_MOTOR;
@@ -254,7 +239,6 @@ public class ComponentTest extends LinearOpMode {
                 state = State.SELECT_CRSERVO;
             }
         }
-        // Going from selecting a component to the corrosponding controlling screen
         if (GPM.isPressed(Button.A)) {
             if (state == State.SELECT_MOTOR){
                 state = State.CONTROL_MOTOR;
@@ -267,4 +251,3 @@ public class ComponentTest extends LinearOpMode {
 
     }
 }
-

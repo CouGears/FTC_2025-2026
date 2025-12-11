@@ -7,11 +7,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MotorTestUtil {
-    public  ArrayList<String> motorNames = new ArrayList<>();
-    public  ArrayList<DcMotorEx> motors = new ArrayList<>();
+    public ArrayList<String> motorNames = new ArrayList<>();
+    public ArrayList<DcMotorEx> motors = new ArrayList<>();
+
+    private long lastStepTime = 0;
+    private static final long STEP_INTERVAL_MS = 300;
 
     public String loadMotors(HardwareMap HM){
         for (String name : HM.getAllNames(DcMotorEx.class)) {
@@ -25,32 +27,40 @@ public class MotorTestUtil {
         }
         return "Motors Loaded";
     }
+
     public void selectMotorControl(int selectedIndex, GamepadManager GPM){
-        if (GPM.isPressed(GamepadManager.Button.B)) {
+        if (GPM.isPressed(GamepadManager.Button.B))
             motors.get(selectedIndex).setPower(0);
-        }
-        if (GPM.isPressed(GamepadManager.Button.X)) {
-            for(DcMotorEx motor : motors)
-                motor.setPower(0);
-        }
+
+        if (GPM.isPressed(GamepadManager.Button.X))
+            for(DcMotorEx m : motors) m.setPower(0);
     }
 
     public void controlMotor(int selectedIndex, GamepadManager GPM){
-        DcMotorEx selectedMotor = motors.get(selectedIndex);
+        DcMotorEx m = motors.get(selectedIndex);
+        long t = System.currentTimeMillis();
 
-        double currPower = selectedMotor.getPower();
-        if (GPM.isPressed(GamepadManager.Button.R_TRIGGER)) currPower += .1;
-        if (GPM.isPressed(GamepadManager.Button.L_TRIGGER)) currPower -= .1;
-        if (GPM.isPressed(GamepadManager.Button.R_BUMPER)) currPower += .05;
-        if (GPM.isPressed(GamepadManager.Button.L_BUMPER)) currPower -= .05;
-        selectedMotor.setPower(currPower);
+        if (t - lastStepTime >= STEP_INTERVAL_MS) {
+            double p = m.getPower();
+            boolean act = false;
+
+            if (GPM.isHeld(GamepadManager.Button.R_TRIGGER)) { p += 0.1; act = true; }
+            if (GPM.isHeld(GamepadManager.Button.L_TRIGGER)) { p -= 0.1; act = true; }
+            if (GPM.isHeld(GamepadManager.Button.R_BUMPER))  { p += 0.05; act = true; }
+            if (GPM.isHeld(GamepadManager.Button.L_BUMPER))  { p -= 0.05; act = true; }
+
+            if (act) {
+                m.setPower(p);
+                lastStepTime = t;
+            }
+        }
 
         if (GPM.isPressed(GamepadManager.Button.Y)) {
-            DcMotorSimple.Direction currDir = selectedMotor.getDirection();
-            if (currDir == DcMotorSimple.Direction.FORWARD)
-                selectedMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-            else
-                selectedMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            m.setDirection(
+                    m.getDirection() == DcMotorSimple.Direction.FORWARD ?
+                            DcMotorSimple.Direction.REVERSE :
+                            DcMotorSimple.Direction.FORWARD
+            );
         }
     }
 }
