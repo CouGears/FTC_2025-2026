@@ -1,0 +1,49 @@
+package org.firstinspires.ftc.teamcode.cougears.testing;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.cougears.teleops.V2TeleOpBase;
+import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
+import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
+import org.firstinspires.ftc.teamcode.cougears.util.PresetConstants;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+
+import java.io.BufferedReader;
+
+@TeleOp (name = "ATTurretMoveTest", group = "Testing")
+public class ATTurretMoveTest extends LinearOpMode {
+
+    @Override
+    public void runOpMode(){
+        V2TeleOpBase bot = new V2TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
+        AprilTagManager ATM = new AprilTagManager(hardwareMap, telemetry, bot);
+        bot.botInit();
+        ATM.initAprilTag();
+        telemetry.addLine("Initlized");
+        waitForStart();
+        while (opModeIsActive()){
+            AprilTagDetection blueTagDetection = ATM.scanForAT(blueTag);
+            if (blueTagDetection != null)
+            {
+                telemetry.addLine("blueTagID = " + blueTagDetection.id);
+                telemetry.addLine("blueTagBearing = " + blueTagDetection.ftcPose.bearing);
+            }
+
+            AprilTagDetection redTagDetection = ATM.scanForAT(redTag);
+            if (redTagDetection != null)
+            {
+                telemetry.addLine("redTagID = " + redTagDetection.id);
+                telemetry.addLine("redTagBearing = " + redTagDetection.ftcPose.bearing);
+            }
+            if (bot.isPressed(1, GamepadManager.Button.Y)) {
+                ATM.alignTurretToAT(blueTag);
+                ATM.alignTurretToAT(redTag);
+            }
+            bot.update();
+            sleep(10);
+        }
+    }
+}

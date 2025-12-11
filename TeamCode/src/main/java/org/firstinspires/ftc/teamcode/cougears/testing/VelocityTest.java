@@ -66,7 +66,6 @@ public class VelocityTest extends LinearOpMode {
 
         while (opModeIsActive()) {
             telemetry.addData("PIDF", "%.2f, %.2f, %.2f, %.2f", FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
-            motor.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
             // --- Gamepad Controls to Adjust Target Velocity ---
             if (gamepad1.dpad_up && debounceTimer.milliseconds() > 200) {
                 targetVelocity += VELOCITY_STEP;

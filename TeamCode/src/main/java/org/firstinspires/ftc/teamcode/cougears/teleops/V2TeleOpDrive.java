@@ -39,13 +39,31 @@ public class V2TeleOpDrive extends LinearOpMode {
                 ATM.alignToAT(redTag);
                 ATM.alignToAT(blueTag);
             }
+            if (bot.isHeld(1, Button.DPAD_DOWN)) {
+                ATM.FullAutoMove(redTag);
+                ATM.FullAutoMove(blueTag);
+            }
+            if (bot.isHeld(1, Button.DPAD_UP)) {
+                ATM.alignTurretToAT(redTag);
+                ATM.alignTurretToAT(blueTag);
+            }
 
             //****** INTAKE ******
             if (bot.isPressed(1, Button.X)) {
-                bot.toggleIntake();
+                bot.deleteTimer("RejectIntake");
+                if (!bot.IntakeSpinning)
+                    bot.startIntake();
+                else
+                    bot.killIntake();
             }
-            if (bot.isPressed(1, Button.R_STICKPRESS)) { // TODO: Make into a timer
+
+            if (bot.isPressed(1, Button.R_STICKPRESS)) {
                 bot.rejectIntake();
+                bot.createTimer("RejectIntake");
+            }
+            if (bot.timerExpired_MSeconds("RejectIntake", 1500)){
+                bot.startIntake();
+                bot.deleteTimer("RejectIntake");
             }
 
             //****** FLYWHEEL ******
@@ -67,9 +85,9 @@ public class V2TeleOpDrive extends LinearOpMode {
             //****** TURRET and HOOD ******
             if (bot.isPressed(2, Button.A))
                 bot.resetTurret();
-            else if (bot.isHeld(2, Button.DPAD_RIGHT))
+            else if (bot.isPressed(2, Button.DPAD_RIGHT))
                 bot.moveTurretR();
-            else if (bot.isHeld(2, Button.DPAD_LEFT))
+            else if (bot.isPressed(2, Button.DPAD_LEFT))
                 bot.moveTurretL();
 
             //****** SERVOS ******
@@ -80,6 +98,15 @@ public class V2TeleOpDrive extends LinearOpMode {
             if (bot.timerExpired_MSeconds("FeedServo", 1500)){
                 bot.killFeeder();
                 bot.deleteTimer("FeedServo");
+            }
+
+            if (bot.isPressed(2, Button.R_BUMPER)) {
+                bot.ejectFeeder();
+                bot.createTimer("FeedServoEject");
+            }
+            if (bot.timerExpired_MSeconds("FeedServoEject", 1500)){
+                bot.killFeeder();
+                bot.deleteTimer("FeedServoEject");
             }
 
             bot.update();

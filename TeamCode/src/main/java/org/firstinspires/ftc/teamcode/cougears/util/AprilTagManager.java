@@ -29,9 +29,9 @@ public class AprilTagManager extends AprilTagBase{
     final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  e.g. Ramp up to 37% power at a 25 degree Yaw error.   (0.375 / 25.0)
     final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  e.g. Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
-    final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_STRAFE= 0.5;   //  Clip the strafing speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+    final double MAX_AUTO_SPEED = 1;   //  Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_STRAFE= 1;   //  Clip the strafing speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN  = 1;   //  Clip the turn speed to this max value (adjust for your robot)
 
     public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, BotBase Bot) {
         super(HardwareMap, Telemetry);
@@ -40,6 +40,7 @@ public class AprilTagManager extends AprilTagBase{
     public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, V2TeleOpBase Bot) {
         super(HardwareMap, Telemetry);
         v2bot = Bot;
+        bot = Bot;
     }
 
     public void alignTurretToAT(int tagID) {
@@ -49,6 +50,8 @@ public class AprilTagManager extends AprilTagBase{
         if (tag == null) return;
 
         double bearing = tag.ftcPose.bearing;   // degrees offset of tag from robot
+        tele.addLine("--- alignTurretToAT ---");
+        tele.addData("Bearing", "%.2f", tag.ftcPose.bearing);
         v2bot.adjustTurret(bearing);   // <-- let TeleOpBase handle conversion
     }
 
@@ -64,8 +67,12 @@ public class AprilTagManager extends AprilTagBase{
             return;
         }
         double rotatePower = ATbearing*0.05;
-        bot.manualMove(0, 0, rotatePower);
-        tele.addData("Bearing", "%f", ATbearing);
+
+        tele.addLine("--- alignToAT ---");
+        tele.addData("Bearing", "%.2f", tag.ftcPose.bearing);
+        tele.addData("rotatePower", "%.2f", rotatePower);
+
+        bot.manualMove(0, 0, -rotatePower);
     }
 
     public void FullAutoMove(int tagID){
@@ -89,6 +96,12 @@ public class AprilTagManager extends AprilTagBase{
         double drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
         double turn   = -Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
         double strafe = -Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+        tele.addLine("--- FullAutoMove ---");
+        tele.addData("Bearing", "%.2f", tag.ftcPose.bearing);
+        tele.addData("drive", "%.2f", drive);
+        tele.addData("turn", "%.2f", turn);
+        tele.addData("strafe", "%.2f", strafe);
+
         bot.manualMove(drive, strafe, turn);
     }
 

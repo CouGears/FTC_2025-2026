@@ -16,15 +16,15 @@ public class PresetConstants {
     // DRIVE
     public static double slowMultiplier = .25;
     //FW
-    public static double[] FW_PIDF = {31.4, 1, 0, 6};
-    public static double shootVel = 1500;
+    public static double[] FW_PIDF = {5.5, 0, 4, 6.9}; // Nice
+    public static double shootVel = 1600;
     public static double shootVelFar = 1800;
     public static double ejectionVel = -1000;
     // Turret
-    public static double ticksPerDeg = 751.8/360;
-    public static int[] turretPos = {0, (int) Math.round(ticksPerDeg * 90),
-            (int) Math.round(ticksPerDeg * 180), (int) Math.round(ticksPerDeg * 270)};
-    public static int[] turretLimits = {-1000,2300}; // CW, CCW
+    public static double ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
+    public static int[] turretPos = {0, -(int) Math.round(ticksPerDeg * 45),
+            (int) Math.round(ticksPerDeg * 45)};
+    public static int[] turretLimits = {-400,400}; // CW, CCW
     public static int turretStep = 100;
     //Hood
     public static int[] hoodLimits = {0,0};
@@ -52,12 +52,16 @@ public class PresetConstants {
     BUTTONS
         Y -> Align to april tag
         X -> Toggles intake
+        A -> Reset Turret
         Lt -> Close shot
         Lb -> Far shot
         Rb -> Reject
         Rt -> Transfer (needs to be added maybe timer?)
         Right joystick -> Cardinal directions
         Left joystick -> Turning
+        L/R Dpad -> Manual control of turret
+        Up Dpad -> Align turret to AT
+        Down Dpad -> Full Auto to AT
     */
 
 

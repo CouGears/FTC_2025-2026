@@ -34,17 +34,11 @@ public class V2TeleOpBase extends BotBase {
         super.botInit();
         try {
             FW = HM.get(DcMotorEx.class, "FW");
-            FW.setDirection(DcMotor.Direction.FORWARD);
+            FW.setDirection(DcMotor.Direction.REVERSE);
             FW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             FW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             FW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             FW.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
-
-//            Hood = HM.get(DcMotorEx.class, "HoodController");
-//            Hood.setDirection(DcMotor.Direction.REVERSE);
-//            Hood.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            Hood.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            Hood.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             TurretRotator = HM.get(DcMotorEx.class, "TurretRotator");
             TurretRotator.setDirection(DcMotor.Direction.REVERSE);
@@ -52,6 +46,7 @@ public class V2TeleOpBase extends BotBase {
             TurretRotator.setTargetPosition(0);
             TurretRotator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             TurretRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            TurretRotator.setPower(1);
 
             Intake = HM.get(DcMotorEx.class, "Intake");
             Intake.setDirection(DcMotor.Direction.REVERSE);
@@ -85,45 +80,39 @@ public class V2TeleOpBase extends BotBase {
     public void setTurretPosManual(int pos){
         pos = Range.clip(pos, turretLimits[0], turretLimits[1]);
         TurretRotator.setTargetPosition(pos);
-        currTurretPos = -1;
     }
 
     public void moveTurretL(){
         int newPos = TurretRotator.getCurrentPosition() + turretStep;
+        newPos = Math.min(newPos, turretLimits[1]);
         TurretRotator.setTargetPosition(newPos);
-        currTurretPos = -1;
     }
     public void moveTurretR(){
         int newPos = TurretRotator.getCurrentPosition() - turretStep;
+        newPos = Math.max(newPos, turretLimits[0]);
         TurretRotator.setTargetPosition(newPos);
-        currTurretPos = -1;
     }
 
-    public void setTurretPos(int posNumber){
-        posNumber = Range.clip(posNumber, 0, 3);
-        TurretRotator.setTargetPosition(turretPos[posNumber]);
-        currTurretPos = posNumber;
-    }
-
-    public void adjustTurret(double targetDeg) {
+    public void adjustTurret(double targetDeg) { // TODO: Mkae sure bot dosent break itself going too far
         targetDeg = Range.clip(targetDeg, 0, 360);  // Or your physical limits
 
         double targetTicks = targetDeg * ticksPerDeg;
         targetTicks = Range.clip(targetTicks, turretLimits[0], turretLimits[1]);
 
         TurretRotator.setTargetPosition((int) targetTicks);
-        currTurretPos = -1;
     }
 
 
     public void resetTurret(){
-        currTurretPos = 0;
-        TurretRotator.setTargetPosition(turretPos[currTurretPos]);
+        TurretRotator.setTargetPosition(0);
     }
 
     //****** SERVOS ******
     public void spinFeeder(){
         Transfer.setPower(1);
+    }
+    public void ejectFeeder(){
+        Transfer.setPower(-1);
     }
     public void killFeeder(){
         Transfer.setPower(0);
@@ -139,7 +128,7 @@ public class V2TeleOpBase extends BotBase {
     }
 
 
-    //****** Intake ******
+    //****** INTAKE ******
     public void toggleIntake() {
         IntakeSpinning = !IntakeSpinning;
         if (IntakeSpinning)
@@ -147,9 +136,18 @@ public class V2TeleOpBase extends BotBase {
         else
             Intake.setPower(0);
     }
-    public void rejectIntake() {
+    public void startIntake() {
+        Intake.setPower(1);
         IntakeSpinning = true;
+    }
+    public void killIntake() {
+        Intake.setPower(0);
+        IntakeSpinning = false;
+    }
+
+    public void rejectIntake() {
         Intake.setPower(-1);
+        IntakeSpinning = false; // So next time you press X it starts spinning in
     }
 
     //****** OTHER ******
