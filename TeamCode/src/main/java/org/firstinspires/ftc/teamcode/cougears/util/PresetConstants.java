@@ -28,7 +28,7 @@ public class PresetConstants {
     public static int turretStep = 100;
     //Servos
     public static double[] transferArmPos = {.8,.4};
-    public static double[] blockerPos = {.8,.4};
+    public static double[] blockerPos = {.38,.6};
     //AprilTag
     public static int redTag = 24;
     public static int blueTag = 20;

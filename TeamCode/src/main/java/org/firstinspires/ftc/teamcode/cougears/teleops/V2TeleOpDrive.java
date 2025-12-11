@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
+import java.util.concurrent.TimeUnit;
+
 @TeleOp(name="V2Teleop", group="Drive")
 
 public class V2TeleOpDrive extends LinearOpMode {
@@ -92,18 +94,19 @@ public class V2TeleOpDrive extends LinearOpMode {
 
             //****** SERVOS ******
             if (bot.isPressed(2, Button.R_TRIGGER)) {
-                bot.spinFeeder();
-                bot.transferArmUp();
-                bot.killIntake(); // Dont was ball to move below the arm while its up
                 bot.blockerOpen();
                 bot.createTimer("ShootSequence");
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", 1500)){
+            if (bot.timerExpired_MSeconds("ShootSequence", 2000)){
                 bot.killFeeder();
                 bot.transferArmDown(); // Start moving arm down
                 bot.blockerClose();
+            } else if (bot.timerExpired_MSeconds("ShootSequence", 1000)){
+                bot.spinFeeder();
+                bot.transferArmUp();
+                bot.killIntake(); // Dont was ball to move below the arm while its up
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", 2000)){
+            if (bot.timerExpired_MSeconds("ShootSequence", 2500)){
                 bot.startIntake(); // Turn intake back on
                 bot.deleteTimer("ShootSequence");
             }

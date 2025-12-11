@@ -135,10 +135,10 @@ public class V2TeleOpBase extends BotBase {
     }
 
     public void blockerOpen(){
-        TransferArm.setPosition(blockerPos[1]);
+        Blocker.setPosition(blockerPos[1]);
     }
     public void blockerClose(){
-        TransferArm.setPosition(blockerPos[0]);
+        Blocker.setPosition(blockerPos[0]);
     }
 
     public void toggleFeedServo()  {
