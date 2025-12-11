@@ -22,7 +22,7 @@ public class V2TeleOpBase extends BotBase {
 
     public DcMotorEx FW, Intake, TurretRotator, Hood;
     public CRServo Transfer;
-    public Servo TransferArm;
+    public Servo TransferArm, Blocker;
     public boolean IntakeSpinning, FeedServoSpinning, slowed;
     public int currTurretPos = 0;
 
@@ -59,6 +59,9 @@ public class V2TeleOpBase extends BotBase {
 
             TransferArm = HM.get(Servo.class, "TransferArm");
             TransferArm.setPosition(transferArmPos[0]);
+
+            Blocker = HM.get(Servo.class, "Blocker");
+            Blocker.setPosition(blockerPos[0]);
 
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
@@ -129,6 +132,13 @@ public class V2TeleOpBase extends BotBase {
     }
     public void transferArmDown(){
         TransferArm.setPosition(transferArmPos[0]);
+    }
+
+    public void blockerOpen(){
+        TransferArm.setPosition(blockerPos[1]);
+    }
+    public void blockerClose(){
+        TransferArm.setPosition(blockerPos[0]);
     }
 
     public void toggleFeedServo()  {

@@ -28,14 +28,21 @@ public class PresetConstants {
     public static int turretStep = 100;
     //Servos
     public static double[] transferArmPos = {.8,.4};
+    public static double[] blockerPos = {.8,.4};
     //AprilTag
     public static int redTag = 24;
     public static int blueTag = 20;
     public static double desiredDistClose = 67.0;
     public static double desiredDistFar = 0; // Need to find
+    //Autons
+    public static double spinUpTime = 0;
+    public static double timeBackwardsClose = 3;
+    public static double speedBackwardsClose = -.7;
+    public static int repeatShots = 5;
+
     // NAMES
     public static String[] motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};
-    public static String[] servoNames = {"FeedServo"};
+    public static String[] servoNames = {"Transfer", "TransferArm"};
 
     /* Config
    Control hub:
