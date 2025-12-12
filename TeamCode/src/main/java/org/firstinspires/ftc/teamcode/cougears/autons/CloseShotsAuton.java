@@ -12,41 +12,28 @@ public class CloseShotsAuton extends LinearOpMode {
         bot.botInit();
         telemetry.addLine("Ready");
         waitForStart();
-        while (opModeIsActive()){
-            bot.createTimer("MoveBackAndInit");
-            while(!bot.timerExpired_Seconds("MoveBackAndInit", timeBackwardsClose)) {
-                bot.spinUpClose();
-                bot.manualMove(speedBackwardsClose, 0 ,0);
-            }
-            bot.manualMove(0, 0 ,0);
 
-            boolean doneShooting = false;
-            int numberOfShots = 0;
-            bot.createTimer("ShootSequenceStep1");
-            bot.createTimer("ShootSequenceStep2");
-            bot.createTimer("ShootSequenceStep3");
-            while (!doneShooting) {
-                bot.spinUpClose();
-                if (bot.timerExpired_Seconds("ShootSequenceStep1", 1)){
-                    bot.transferArmUp();
-                    bot.killIntake();
-                    bot.deleteTimer("ShootSequenceStep1");
-                }
-                if (bot.timerExpired_Seconds("ShootSequenceStep2", 2)){
-                    bot.transferArmDown();
-                    bot.deleteTimer("ShootSequenceStep2");
-                }
-                if (bot.timerExpired_Seconds("ShootSequenceStep3", 2.5)){
-                    bot.startIntake();
+        bot.createTimer("MoveBackAndInit");
+        while(!bot.timerExpired_Seconds("MoveBackAndInit", timeBackwardsClose)) {
+            bot.spinUpClose();
+            bot.manualMove(speedBackwardsClose, 0 ,0);
+        }
+        bot.manualMove(0, 0 ,0);
 
-                    bot.createTimer("ShootSequenceStep1");
-                    bot.createTimer("ShootSequenceStep2");
-                    bot.createTimer("ShootSequenceStep3");
-                    numberOfShots++;
-                }
-                if (numberOfShots == repeatShots) doneShooting = true;
-            }
-            terminateOpModeNow();
+        for (int i = 0; i < repeatShots; i++) {
+            if (!opModeIsActive()) break; // Allow stopping mid-sequence
+            telemetry.addData("Shooting Shot", i + 1);
+            telemetry.update();
+            bot.blockerOpen();
+            sleep((long) gateWait);
+            // Sequence for one shot
+            bot.transferArmUp();
+            bot.spinFeeder();
+            sleep(1000);
+            bot.killFeeder();
+            bot.transferArmDown();
+            bot.blockerClose();
+            sleep(500);
         }
         bot.endTeleOp();
     }
