@@ -1,13 +1,11 @@
-package org.firstinspires.ftc.teamcode.cougears.testing;
+package org.firstinspires.ftc.teamcode.cougears.testing.AprilTags;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
-import org.firstinspires.ftc.teamcode.cougears.util.PresetConstants;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 @TeleOp(name="ATMTest", group="Testing")

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.testing;
+package org.firstinspires.ftc.teamcode.cougears.testing.Turret;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,12 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.cougears.teleops.V2TeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
-import org.firstinspires.ftc.teamcode.cougears.util.PresetConstants;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-
-import java.io.BufferedReader;
 
 @TeleOp (name = "ATTurretMoveTest", group = "Testing")
 public class ATTurretMoveTest extends LinearOpMode {

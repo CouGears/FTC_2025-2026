@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.cougears.testing;
+package org.firstinspires.ftc.teamcode.cougears.testing.AprilTags;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
-import org.firstinspires.ftc.teamcode.cougears.util.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 
 @TeleOp(name = "AprilTagTest", group = "Testing")

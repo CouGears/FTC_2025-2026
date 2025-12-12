@@ -1,7 +1,5 @@
-package org.firstinspires.ftc.teamcode.cougears.testing.ComponentTestFull;
+package org.firstinspires.ftc.teamcode.cougears.testing.Components.ComponentUtils;
 
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
