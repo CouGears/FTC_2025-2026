@@ -103,7 +103,7 @@ public class V2TeleOpDrive extends LinearOpMode {
                     bot.createTimer("ShootSequence", (long) gateWait);
                 }
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", gateWait+1000)){
+            if (bot.timerExpired_MSeconds("ShootSequence", gateWait+shootSequenceWait)){
                 bot.killFeeder();
                 bot.transferArmDown(); // Start moving arm down
                 bot.blockerClose();
@@ -117,7 +117,7 @@ public class V2TeleOpDrive extends LinearOpMode {
                 bot.deleteTimer("ShootSequence");
             }
 
-            if (bot.isPressed(2, Button.R_BUMPER)) {
+            if (bot.isPressed(2, Button.R_STICKPRESS)) {
                 bot.ejectFeeder();
                 bot.createTimer("FeedServoEject");
             }

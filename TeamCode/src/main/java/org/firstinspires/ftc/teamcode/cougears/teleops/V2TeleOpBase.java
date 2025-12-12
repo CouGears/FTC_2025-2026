@@ -155,12 +155,12 @@ public class V2TeleOpBase extends BotBase {
     public void toggleIntake() {
         IntakeSpinning = !IntakeSpinning;
         if (IntakeSpinning)
-            Intake.setPower(1);
+            Intake.setPower(intakePower);
         else
             Intake.setPower(0);
     }
     public void startIntake() {
-        Intake.setPower(1);
+        Intake.setPower(intakePower);
         IntakeSpinning = true;
     }
     public void killIntake() {

@@ -15,12 +15,14 @@ USE import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*
 public class PresetConstants {
     // DRIVE
     public static double slowMultiplier = .25;
+    public static double intakePower = .8;
     //FW
     public static double[] FW_PIDF = {5.5, 0, 4, 6.9}; // Nice
     public static double shootVel = 1600;
     public static double shootVelFar = 1800;
     public static double ejectionVel = -1000;
     public static double gateWait = 750;
+    public static double shootSequenceWait = 750;
     // Turret
     public static double ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
     public static int[] turretPos = {0, -(int) Math.round(ticksPerDeg * 45),
@@ -29,7 +31,7 @@ public class PresetConstants {
     public static int turretStep = 100;
     //Servos
     public static double[] transferArmPos = {.8,.4};
-    public static double[] blockerPos = {.34,.6};
+    public static double[] blockerPos = {.21,1};
     //AprilTag
     public static int redTag = 24;
     public static int blueTag = 20;
