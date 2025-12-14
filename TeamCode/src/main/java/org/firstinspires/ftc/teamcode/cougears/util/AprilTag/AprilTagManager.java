@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.cougears.util;
+package org.firstinspires.ftc.teamcode.cougears.util.AprilTag;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.teleops.OctoberCompTeleOpBase;
+import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import org.firstinspires.ftc.teamcode.cougears.teleops.V2TeleOpBase;

@@ -98,10 +98,10 @@ public class BotBase {
 
     public void manualMove (double drive, double strafe, double rotate) {
         // Calculate drive motor powers for strafe-forward configuration
-        double frontLeftPower = strafe + drive + rotate;
-        double frontRightPower = strafe - drive - rotate;
-        double backLeftPower = strafe - drive + rotate;
-        double backRightPower = strafe + drive - rotate;
+        double frontLeftPower  = drive - strafe - rotate;
+        double frontRightPower = drive + strafe + rotate;
+        double backLeftPower   = drive + strafe - rotate;
+        double backRightPower  = drive - strafe + rotate;
 
         // Normalize drive motor powers
         double maxPower = Math.max(Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower)),
@@ -144,6 +144,7 @@ public class BotBase {
         else
             timers.put(key, new ElapsedTime());
     }
+    // Create a timer with some time already passesd.
     public void createTimer(String key, long startTime){
         ElapsedTime timer = timers.get(key);
         if (timer != null)

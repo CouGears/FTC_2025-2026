@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVel;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVelFar;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -20,11 +16,10 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 
 public class V2TeleOpBase extends BotBase {
 
-    public DcMotorEx FW, Intake, TurretRotator, Hood;
+    public DcMotorEx FW, Intake, Turret;
     public CRServo Transfer;
     public Servo TransferArm, Blocker;
     public boolean IntakeSpinning, FeedServoSpinning, slowed;
-    public int currTurretPos = 0;
 
     public double speedMultiplier = 1;
 
@@ -42,13 +37,13 @@ public class V2TeleOpBase extends BotBase {
             FW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             FW.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
 
-            TurretRotator = HM.get(DcMotorEx.class, "TurretRotator");
-            TurretRotator.setDirection(DcMotor.Direction.REVERSE);
-            TurretRotator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            TurretRotator.setTargetPosition(0);
-            TurretRotator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            TurretRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            TurretRotator.setPower(1);
+            Turret = HM.get(DcMotorEx.class, "TurretRotator");
+            Turret.setDirection(DcMotor.Direction.REVERSE);
+            Turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            Turret.setTargetPosition(0);
+            Turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            Turret.setPower(1);
 
             Intake = HM.get(DcMotorEx.class, "Intake");
             Intake.setDirection(DcMotor.Direction.REVERSE);
@@ -81,25 +76,29 @@ public class V2TeleOpBase extends BotBase {
     public void killFW() {
         FW.setPower(0);
     }
-    public void spinBack() {
+    public void ejectFW() {
         FW.setPower(ejectionVel);
     }
 
     //****** TURRET ******
     public void setTurretPosManual(int pos){
         pos = Range.clip(pos, turretLimits[0], turretLimits[1]);
-        TurretRotator.setTargetPosition(pos);
+        Turret.setTargetPosition(pos);
+    }
+
+    public void resetTurret(){
+        Turret.setTargetPosition(0);
     }
 
     public void moveTurretL(){
-        int newPos = TurretRotator.getCurrentPosition() + turretStep;
+        int newPos = Turret.getCurrentPosition() + turretStep;
         newPos = Math.min(newPos, turretLimits[1]);
-        TurretRotator.setTargetPosition(newPos);
+        Turret.setTargetPosition(newPos);
     }
     public void moveTurretR(){
-        int newPos = TurretRotator.getCurrentPosition() - turretStep;
+        int newPos = Turret.getCurrentPosition() - turretStep;
         newPos = Math.max(newPos, turretLimits[0]);
-        TurretRotator.setTargetPosition(newPos);
+        Turret.setTargetPosition(newPos);
     }
 
     public void adjustTurret(double targetDeg) { // TODO: Mkae sure bot dosent break itself going too far
@@ -108,13 +107,9 @@ public class V2TeleOpBase extends BotBase {
         double targetTicks = targetDeg * ticksPerDeg;
         targetTicks = Range.clip(targetTicks, turretLimits[0], turretLimits[1]);
 
-        TurretRotator.setTargetPosition((int) targetTicks);
+        Turret.setTargetPosition((int) targetTicks);
     }
 
-
-    public void resetTurret(){
-        TurretRotator.setTargetPosition(0);
-    }
 
     //****** SERVOS ******
     public void spinFeeder(){
@@ -141,24 +136,8 @@ public class V2TeleOpBase extends BotBase {
         Blocker.setPosition(blockerPos[0]);
     }
 
-    public void toggleFeedServo()  {
-        FeedServoSpinning = !FeedServoSpinning;
-        if (FeedServoSpinning){
-            Transfer.setPower(1);
-        } else {
-            Transfer.setPower(0);
-        }
-    }
-
 
     //****** INTAKE ******
-    public void toggleIntake() {
-        IntakeSpinning = !IntakeSpinning;
-        if (IntakeSpinning)
-            Intake.setPower(intakePower);
-        else
-            Intake.setPower(0);
-    }
     public void startIntake() {
         Intake.setPower(intakePower);
         IntakeSpinning = true;
@@ -168,7 +147,7 @@ public class V2TeleOpBase extends BotBase {
         IntakeSpinning = false;
     }
 
-    public void rejectIntake() {
+    public void ejectIntake() {
         Intake.setPower(-1);
         IntakeSpinning = false; // So next time you press X it starts spinning in
     }
@@ -179,8 +158,7 @@ public class V2TeleOpBase extends BotBase {
         FW.setPower(0);
         Intake.setPower(0);
         Transfer.setPower(0);
-        TurretRotator.setPower(0);
-//        Hood.setPower(0);
+        Turret.setPower(0);
     }
 
     public void toggleSlow(){
@@ -193,7 +171,7 @@ public class V2TeleOpBase extends BotBase {
         } else {
             speedMultiplier = slowMultiplier;
         }
-        speedMultiplier = -1*Range.clip(speedMultiplier,0, 1);
+        speedMultiplier = -1 * Range.clip(speedMultiplier,0, 1);
 
         tele.addData(">", "RUNNING RAFI DRIVE");
         double forward =  gamepad1.right_stick_y * speedMultiplier;
