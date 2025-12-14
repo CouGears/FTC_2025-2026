@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.OldPresetConstants.*;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagManager;
+import org.firstinspires.ftc.teamcode.cougears.teleops.V2AprilTagManager;
 @TeleOp(name="OctoberCompTeleop", group="Drive")
 @Disabled
 public class OctoberCompTeleopDrive extends LinearOpMode {
@@ -17,7 +17,7 @@ public class OctoberCompTeleopDrive extends LinearOpMode {
         boolean slowed = false;
 
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
-        AprilTagManager ATM = new AprilTagManager(hardwareMap, telemetry, bot);
+        V2AprilTagManager ATM = new V2AprilTagManager(hardwareMap, telemetry, bot);
         // Initialize motors
         bot.botInit();
         ATM.initAprilTag();
