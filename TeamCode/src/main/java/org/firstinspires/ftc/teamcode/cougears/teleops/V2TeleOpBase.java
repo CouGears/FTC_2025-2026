@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVel;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVelFar;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -101,13 +105,13 @@ public class V2TeleOpBase extends BotBase {
         Turret.setTargetPosition(newPos);
     }
 
-    public void adjustTurret(double targetDeg) { // TODO: Mkae sure bot dosent break itself going too far
-        targetDeg = Range.clip(targetDeg, 0, 360);  // Or your physical limits
+    public void adjustTurret(double degAdjust) {
+        int currentTicks = Turret.getCurrentPosition();
+        int deltaTicks   = (int)(degAdjust * ticksPerDeg);
+        int targetTicks  = currentTicks + deltaTicks;
 
-        double targetTicks = targetDeg * ticksPerDeg;
         targetTicks = Range.clip(targetTicks, turretLimits[0], turretLimits[1]);
-
-        Turret.setTargetPosition((int) targetTicks);
+        Turret.setTargetPosition(targetTicks);
     }
 
 

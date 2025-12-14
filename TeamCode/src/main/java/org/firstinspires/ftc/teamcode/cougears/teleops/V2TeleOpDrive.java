@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 
 @TeleOp(name="V2Teleop", group="Drive")
@@ -15,7 +14,7 @@ public class V2TeleOpDrive extends LinearOpMode {
     @Override
     public void runOpMode() {
         V2TeleOpBase bot = new V2TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
-        AprilTagManager ATM = new AprilTagManager(hardwareMap, telemetry, bot);
+        V2AprilTagManager ATM = new V2AprilTagManager(hardwareMap, telemetry, bot);
         // Initialize motors
         bot.botInit();
         ATM.initAprilTag();
@@ -35,25 +34,28 @@ public class V2TeleOpDrive extends LinearOpMode {
             bot.RafiDrive(gamepad1);
             telemetry.addData("Slowed", "%b", bot.slowed);
 
-            //****** ATM (Controller 1)******
-            // BUTTONS: Y, DPAD_UP, DPAD_DOWN
-            if (bot.isHeld(1, Button.Y)) {
-                ATM.alignToAT(redTag);
-                ATM.alignToAT(blueTag);
-            }
-            if (bot.isHeld(1, Button.DPAD_DOWN)) {
+            //****** ATM ******
+            if (bot.isPressed(1, Button.DPAD_DOWN)) {
                 ATM.FullAutoMove(redTag);
                 ATM.FullAutoMove(blueTag);
             }
-            if (bot.isHeld(1, Button.DPAD_UP)) {
-                ATM.alignTurretToAT(redTag);
-                ATM.alignTurretToAT(blueTag);
+
+            if (bot.isPressed(1, Button.DPAD_UP)) {
+                ATM.enableTagLock();
             }
 
-            //****** INTAKE (Controller 1 & 2)******
-            // BUTTONS: X
-            if (bot.isPressed(1, Button.X) || bot.isPressed(2, Button.X)) {
-                bot.deleteTimer("RejectIntake"); // If we rejecting, stop it
+            if (bot.isPressed(1, Button.Y)) {
+                ATM.switchLockedTag();
+            }
+            ATM.displayLockedTag();
+
+            if (ATM.isTagLocked()){
+                ATM.alignTurretToAT();
+            }
+
+            //****** INTAKE ******
+            if (bot.isPressed(1, Button.X)) {
+                bot.deleteTimer("RejectIntake");
                 if (!bot.IntakeSpinning)
                     bot.startIntake();
                 else

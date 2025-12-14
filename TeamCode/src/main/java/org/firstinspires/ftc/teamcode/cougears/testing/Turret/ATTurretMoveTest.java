@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.teleops.V2TeleOpBase;
-import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
+import org.firstinspires.ftc.teamcode.cougears.teleops.V2AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -16,7 +16,7 @@ public class ATTurretMoveTest extends LinearOpMode {
     @Override
     public void runOpMode(){
         V2TeleOpBase bot = new V2TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
-        AprilTagManager ATM = new AprilTagManager(hardwareMap, telemetry, bot);
+        V2AprilTagManager ATM = new V2AprilTagManager(hardwareMap, telemetry, bot);
         bot.botInit();
         ATM.initAprilTag();
         telemetry.addLine("Initlized");
@@ -36,8 +36,7 @@ public class ATTurretMoveTest extends LinearOpMode {
                 telemetry.addLine("redTagBearing = " + redTagDetection.ftcPose.bearing);
             }
             if (bot.isPressed(1, GamepadManager.Button.Y)) {
-                ATM.alignTurretToAT(blueTag);
-                ATM.alignTurretToAT(redTag);
+
             }
             bot.update();
             sleep(10);

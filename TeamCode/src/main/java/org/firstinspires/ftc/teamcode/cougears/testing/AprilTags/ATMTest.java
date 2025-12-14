@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.cougears.testing.AprilTags;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import org.firstinspires.ftc.teamcode.cougears.util.AprilTagManager;
+import org.firstinspires.ftc.teamcode.cougears.teleops.V2AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -14,7 +14,7 @@ public class ATMTest extends LinearOpMode {
     @Override
     public void runOpMode(){
         BotBase bot = new BotBase(hardwareMap, telemetry, gamepad1, gamepad2);
-        AprilTagManager ATM = new AprilTagManager(hardwareMap, telemetry, bot);
+        V2AprilTagManager ATM = new V2AprilTagManager(hardwareMap, telemetry, bot);
         while (opModeIsActive()){
             bot.drive(gamepad1);
             telemetry.addData("ALIGN:", "L_Bumper");

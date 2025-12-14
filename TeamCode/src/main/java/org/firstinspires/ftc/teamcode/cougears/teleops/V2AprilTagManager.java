@@ -1,14 +1,13 @@
-package org.firstinspires.ftc.teamcode.cougears.util.AprilTag;
+package org.firstinspires.ftc.teamcode.cougears.teleops;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
+import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import org.firstinspires.ftc.teamcode.cougears.teleops.V2TeleOpBase;
 /*
 WHAT THIS FILE SHOULD BE ABLE TO DO:
 - Take the bot from teleop and move it
@@ -16,7 +15,7 @@ WHAT THIS FILE SHOULD BE ABLE TO DO:
  */
 
 
-public class AprilTagManager extends AprilTagBase{
+public class V2AprilTagManager extends AprilTagBase {
 
     public BotBase bot;
     public V2TeleOpBase v2bot = null;
@@ -32,21 +31,25 @@ public class AprilTagManager extends AprilTagBase{
     final double MAX_AUTO_SPEED = 1;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_STRAFE= 1;   //  Clip the strafing speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN  = 1;   //  Clip the turn speed to this max value (adjust for your robot)
+    public int lockedTagID = redTag;
+    public boolean toggleTagLock = false;
 
-    public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, BotBase Bot) {
+    public V2AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, BotBase Bot) {
         super(HardwareMap, Telemetry);
         bot = Bot;
     }
-    public AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, V2TeleOpBase Bot) {
+    public V2AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, V2TeleOpBase Bot) {
         super(HardwareMap, Telemetry);
         v2bot = Bot;
         bot = Bot;
     }
 
-    public void alignTurretToAT(int tagID) {
-        if (v2bot == null) return;
 
-        AprilTagDetection tag = scanForAT(tagID);
+
+
+    public void alignTurretToAT() {
+        if (v2bot == null) return;
+        AprilTagDetection tag = scanForAT(lockedTagID);
         if (tag == null) return;
 
         double bearing = tag.ftcPose.bearing;   // degrees offset of tag from robot
@@ -55,26 +58,29 @@ public class AprilTagManager extends AprilTagBase{
         v2bot.adjustTurret(bearing);   // <-- let TeleOpBase handle conversion
     }
 
-
-    public void alignToAT(int tagID) {
-        AprilTagDetection tag = scanForAT(tagID);
-        if (tag == null) // BE CAREFUL
-            return;
-
-        double ATbearing = tag.ftcPose.bearing;
-
-        if (Math.abs(ATbearing) <= ATBearingTolerance) {
-            return;
+    public void switchLockedTag(){
+        if (lockedTagID == redTag){
+            lockedTagID = blueTag;
+        } else {
+            lockedTagID = redTag;
         }
-        double rotatePower = ATbearing*0.05;
-
-        tele.addLine("--- alignToAT ---");
-        tele.addData("Bearing", "%.2f", tag.ftcPose.bearing);
-        tele.addData("rotatePower", "%.2f", rotatePower);
-
-        bot.manualMove(0, 0, -rotatePower);
     }
 
+    public void displayLockedTag(){
+       if (lockedTagID == redTag){
+           tele.addLine("LockedTag: red");
+       } else {
+           tele.addLine("LockedTag: blue");
+       }
+    }
+
+    public void enableTagLock(){
+        toggleTagLock = !toggleTagLock;
+    }
+
+    public boolean isTagLocked(){
+        return toggleTagLock;
+    }
     public void FullAutoMove(int tagID){
         AprilTagDetection tag = scanForAT(tagID);
         if (tag == null) // BE CAREFUL
@@ -111,6 +117,35 @@ public class AprilTagManager extends AprilTagBase{
             return -1;
         return tag.ftcPose.range;
     }
+
+
+
+
+
+
+
+    //DEPRECEATED
+
+
+    public void alignToAT(int tagID) {
+        AprilTagDetection tag = scanForAT(tagID);
+        if (tag == null) // BE CAREFUL
+            return;
+
+        double ATbearing = tag.ftcPose.bearing;
+
+        if (Math.abs(ATbearing) <= ATBearingTolerance) {
+            return;
+        }
+        double rotatePower = ATbearing*0.05;
+
+        tele.addLine("--- alignToAT ---");
+        tele.addData("Bearing", "%.2f", tag.ftcPose.bearing);
+        tele.addData("rotatePower", "%.2f", rotatePower);
+
+        bot.manualMove(0, 0, -rotatePower);
+    }
+
     /*public double moveToATDist(int tagID, double desiredDistance) {
         ATval(tagID, false);
         if (ATdist == 0) return 0;
