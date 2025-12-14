@@ -27,14 +27,13 @@ public class CloseShotsAuton extends LinearOpMode {
             telemetry.update();
             bot.blockerOpen();
             sleep((long) gateWait);
-            // Sequence for one shot
             bot.transferArmUp();
             bot.spinFeeder();
-            sleep(1000);
+            sleep((long) shootSequenceWait);
             bot.killFeeder();
             bot.transferArmDown();
             bot.blockerClose();
-            sleep(500);
+            sleep((long) gateWait);
         }
         bot.endTeleOp();
     }

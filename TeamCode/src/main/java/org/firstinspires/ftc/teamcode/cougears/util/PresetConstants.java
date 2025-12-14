@@ -39,8 +39,8 @@ public class PresetConstants {
     public static double desiredDistFar = 0; // Need to find
     //Autons
     public static double spinUpTime = 0;
-    public static double timeBackwardsClose = 3;
-    public static double speedBackwardsClose = -.7;
+    public static double timeBackwardsClose = 1.4;
+    public static double speedBackwardsClose = -.5;
     public static int repeatShots = 5;
 
     // NAMES

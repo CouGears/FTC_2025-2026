@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.teleops.OctoberCompTeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.teleops.V2AprilTagManager;
-import org.firstinspires.ftc.teamcode.cougears.teleops.V2AprilTagManager;
 import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.OldPresetConstants.*;
 @Disabled
 
