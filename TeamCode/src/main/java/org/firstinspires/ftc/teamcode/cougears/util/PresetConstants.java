@@ -30,7 +30,7 @@ public class PresetConstants {
     public static int[] turretLimits = {-400,400}; // CW, CCW
     public static int turretStep = 100;
     //Servos
-    public static double[] transferArmPos = {.8,.4};
+    public static double[] transferArmPos = {.6,.17};
     public static double[] blockerPos = {.21,1};
     //AprilTag
     public static int redTag = 24;

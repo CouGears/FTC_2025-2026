@@ -17,6 +17,9 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 
 public class V2TeleOpBase extends BotBase {
 
@@ -26,6 +29,17 @@ public class V2TeleOpBase extends BotBase {
     public boolean IntakeSpinning, FeedServoSpinning, slowed;
 
     public double speedMultiplier = 1;
+
+    private GoBildaPinpointDriver pinpoint;
+
+    private double targetHeadingDeg = 0.0;
+    private boolean headingLocked = false;
+
+    // Tunables
+    private static final double HEADING_kP = 0.02;
+    private static final double DRIVE_DEADBAND = 0.05;
+
+
 
     public V2TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
@@ -61,6 +75,9 @@ public class V2TeleOpBase extends BotBase {
 
             Blocker = HM.get(Servo.class, "Blocker");
             Blocker.setPosition(blockerPos[0]);
+
+            pinpoint = HM.get(GoBildaPinpointDriver.class, "pinpoint");
+
 
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
@@ -170,26 +187,67 @@ public class V2TeleOpBase extends BotBase {
     }
 
     public void RafiDrive(Gamepad gamepad1) {
-        if (!slowed){
+
+        // --- Speed scaling ---
+        if (!slowed) {
             speedMultiplier = 1;
         } else {
             speedMultiplier = slowMultiplier;
         }
-        speedMultiplier = -1 * Range.clip(speedMultiplier,0, 1);
+        speedMultiplier = -Range.clip(speedMultiplier, 0, 1);
 
-        tele.addData(">", "RUNNING RAFI DRIVE");
-        double forward =  gamepad1.right_stick_y * speedMultiplier;
-        double strafe  =  gamepad1.right_stick_x * speedMultiplier;
-        double turn    =  gamepad1.left_stick_x * speedMultiplier;
+        // --- Update odometry ---
+        pinpoint.update();
 
-        // Mecanum drive calculations for a LEFT-side motor reversal configuration.
-        // These formulas are different from the standard right-side reversal.
+        // --- Driver inputs ---
+        double forward = gamepad1.right_stick_y * speedMultiplier;
+        double strafe  = gamepad1.right_stick_x * speedMultiplier;
+        double turnInput = gamepad1.left_stick_x * speedMultiplier;
+
+        double turn;
+
+        double currentHeading =
+                pinpoint.getPosition().getHeading(AngleUnit.DEGREES);
+
+        // Are we actually translating?
+        boolean driving =
+                Math.abs(forward) > DRIVE_DEADBAND ||
+                        Math.abs(strafe)  > DRIVE_DEADBAND;
+
+        // --- Heading assist logic ---
+        if (!driving) {
+            // Idle → zero assist
+            headingLocked = false;
+            turn = turnInput;
+        }
+        else if (Math.abs(turnInput) > 0.05) {
+            // Manual turn → no assist
+            headingLocked = false;
+            turn = turnInput;
+            targetHeadingDeg = currentHeading;
+        }
+        else {
+            // Driving straight/strafe → assist
+            if (!headingLocked) {
+                targetHeadingDeg = currentHeading;
+                headingLocked = true;
+            }
+
+            double error = targetHeadingDeg - currentHeading;
+
+            // Wrap [-180, 180]
+            while (error > 180) error -= 360;
+            while (error < -180) error += 360;
+
+            turn = error * HEADING_kP;
+        }
+
+        // --- RAFI mecanum math (unchanged) ---
         double frontLeftPower  = forward - strafe - turn;
         double frontRightPower = forward + strafe + turn;
         double backLeftPower   = forward + strafe - turn;
         double backRightPower  = forward - strafe + turn;
 
-        // Normalize the motor powers to ensure no value exceeds 1.0
         double maxPower = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
         maxPower = Math.max(maxPower, Math.abs(backLeftPower));
         maxPower = Math.max(maxPower, Math.abs(backRightPower));
@@ -201,7 +259,6 @@ public class V2TeleOpBase extends BotBase {
             backRightPower  /= maxPower;
         }
 
-        // Set the power for each motor
         motorFL.setPower(frontLeftPower);
         motorFR.setPower(frontRightPower);
         motorBL.setPower(backLeftPower);
