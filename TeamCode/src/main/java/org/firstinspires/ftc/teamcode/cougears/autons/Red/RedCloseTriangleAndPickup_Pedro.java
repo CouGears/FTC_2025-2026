@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous (group = "Red")
-public class RedCloseWall_Pedro extends OpMode {
+public class RedCloseTriangleAndPickup_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
@@ -22,26 +22,27 @@ public class RedCloseWall_Pedro extends OpMode {
         // For moving: START_END
         // For action: ACTION
         // For movement with action: START_END_ACTION
-        STARTPOS_SHOOTWALLPOS,
+        STARTPOS_SHOOTTRIANGLEPOS,
         SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
-        SHOOTPOS_BASICEND,
-        END
+        SHOOTPOS_BALLDEPOTSTART, BALLDEPOTSTART_BALLDEPOTEND, BALLDEPOTEND_SHOOTPOS,
+        SHOOTPOS_BASICEND, END
     }
-    pathStep currStep = pathStep.STARTPOS_SHOOTWALLPOS;
+    pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
 
     public void stepUpdate() {
         switch (currStep) {
-            case STARTPOS_SHOOTWALLPOS:
+            case STARTPOS_SHOOTTRIANGLEPOS:
                 bot.spinUpClose();
-                follower.followPath(RedStartPosToRedShootWallPos);
+                follower.followPath(RedStartPosToRedShootTrianglePos);
                 setPathStep(pathStep.SPINUP);
                 break;
             case SPINUP:
                 if (!follower.isBusy()) {
-                    bot.spinUpClose();
+                    if (opModeTimer.getElapsedTimeSeconds() >= 28) { setPathStep(pathStep.SHOOTPOS_BASICEND); }
+
                     if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait){
                         setPathStep(pathStep.OPEN);
-                    } else if (numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) {
+                    } else if ((numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) || bot.FW.getVelocity() >= FW_shootVel - 100) {
                         setPathStep(pathStep.OPEN);
                     }
                 }
@@ -69,7 +70,7 @@ public class RedCloseWall_Pedro extends OpMode {
                     bot.transferArmDown();
                     bot.killFeeder();
                     if (numShots >= Auton_numberOfRepeatShots) {
-                        setPathStep(pathStep.SHOOTPOS_BASICEND);
+                        setPathStep(pathStep.SHOOTPOS_BALLDEPOTSTART);
                     } else if (stepTimer.getElapsedTime() >= Auton_transferResetWait) {
                         setPathStep(pathStep.PUSH_NEW_BALL);
                     }
@@ -81,8 +82,29 @@ public class RedCloseWall_Pedro extends OpMode {
                     setPathStep(pathStep.SPINUP);
                 }
                 break;
+            case SHOOTPOS_BALLDEPOTSTART:
+                bot.startIntake();
+                follower.followPath(RedShootPosToRedBallDepotStart1);
+                setPathStep(pathStep.BALLDEPOTSTART_BALLDEPOTEND);
+                break;
+            case BALLDEPOTSTART_BALLDEPOTEND:
+                if (!follower.isBusy()){
+                    follower.setMaxPower(Auton_pickupSpeed);
+                    follower.followPath(RedBallDepotStart1ToRedBallDepotEnd1);
+                    setPathStep(pathStep.BALLDEPOTEND_SHOOTPOS);
+                }
+                break;
+            case BALLDEPOTEND_SHOOTPOS:
+                if (!follower.isBusy()) {
+                    follower.setMaxPower(1);
+                    follower.followPath(RedBallDepotEnd1ToRedShootPos);
+                    setPathStep(pathStep.SPINUP);
+                    numShots = 0;
+                }
+                break;
+
             case SHOOTPOS_BASICEND:
-                follower.followPath(RedShootWallPosToRedBasicEnd);
+                follower.followPath(RedShootTrianglePosToRedBasicEnd);
                 setPathStep(pathStep.END);
                 break;
             case END:
@@ -100,7 +122,7 @@ public class RedCloseWall_Pedro extends OpMode {
 
     public void start(){
         opModeTimer.resetTimer();
-        setPathStep(pathStep.STARTPOS_SHOOTWALLPOS);
+        setPathStep(pathStep.STARTPOS_SHOOTTRIANGLEPOS);
     }
 
     @Override

@@ -8,9 +8,10 @@ import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous
+@Autonomous (group = "Red")
 public class RedCloseTriangle_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
@@ -86,6 +87,7 @@ public class RedCloseTriangle_Pedro extends OpMode {
                 break;
             case END:
                 bot.endAuton();
+                Storage.endOfAutonPose = follower.getPose();
                 break;
             default:
                 telemetry.addLine("No Step");

@@ -16,7 +16,7 @@ USE import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*
 public class PresetConstants {
     // DRIVE
     public static double Drive_slowMultiplier = .25;
-    public static double Drive_intakePower = .8;
+    public static double Drive_intakePower = 1;
     //FW
     public static double[] FW_PIDF = {5.5, 0, 4, 6.9}; // Nice
     public static double FW_shootVel = 1600;
@@ -50,10 +50,12 @@ public class PresetConstants {
     public static double Auton_ballTransferWait = 1000;
     public static double Auton_transferResetWait = 750;
     public static double Auton_pushNewBallWait = 500;
+    public static double Auton_pickupSpeed = .4;
 
     // NAMES
     public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};
     public static String[] Names_servoNames = {"Transfer", "TransferArm"};
+    public static double randomVarConstant = 5; // To be used anywhere you need for testing
 
     /* Config
    Control hub:

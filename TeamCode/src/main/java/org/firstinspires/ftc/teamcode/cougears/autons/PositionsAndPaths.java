@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.cougears.autons;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.randomVarConstant;
 
 public class PositionsAndPaths {
 
@@ -12,9 +14,9 @@ public class PositionsAndPaths {
     public static final Pose RedShootTrianglePos = new Pose(144 - 66.51968503937007,  77.85826771653544, Math.toRadians(180 - 135));
     public static final Pose RedShootWallPos     = new Pose(144 - 66.51968503937007,  130.0000000000000, Math.toRadians(180 - 180));
 
-    public static final Pose RedBallDepotStart1 = new Pose(144 - 40.47819063004846, 83.74798061389338,  Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotStart2 = new Pose(144 - 40.47819063004846, 59.2,               Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotStart3 = new Pose(144 - 40.47819063004846, 35.592891760904685, Math.toRadians(180 - 180));
+    public static final Pose RedBallDepotStart1 = new Pose(144 - 45.47819063004846, 83.74798061389338,  Math.toRadians(180 - 180));
+    public static final Pose RedBallDepotStart2 = new Pose(144 - 45.47819063004846, 59.2,               Math.toRadians(180 - 180));
+    public static final Pose RedBallDepotStart3 = new Pose(144 - 45.47819063004846, 35.592891760904685, Math.toRadians(180 - 180));
 
     public static final Pose RedBallDepotEnd1   = new Pose(144 - 12.794830371567043, 83.74798061389338,  Math.toRadians(180 - 180));
     public static final Pose RedBallDepotEnd2   = new Pose(144 - 12.794830371567043, 59.2,               Math.toRadians(180));
@@ -36,9 +38,9 @@ public class PositionsAndPaths {
     public static final Pose BlueShootWallPos     = new Pose(144,  130,  Math.toRadians(180));
 
 
-    public static final Pose BlueBallDepotStart1 = new Pose(40.47819063004846, 83.74798061389338,  Math.toRadians(180));
-    public static final Pose BlueBallDepotStart2 = new Pose(40.47819063004846, 59.2,                 Math.toRadians(180));
-    public static final Pose BlueBallDepotStart3 = new Pose(40.47819063004846, 35.592891760904685, Math.toRadians(180));
+    public static final Pose BlueBallDepotStart1 = new Pose(45.47819063004846, 83.74798061389338,  Math.toRadians(180));
+    public static final Pose BlueBallDepotStart2 = new Pose(45.47819063004846, 59.2,                 Math.toRadians(180));
+    public static final Pose BlueBallDepotStart3 = new Pose(45.47819063004846, 35.592891760904685, Math.toRadians(180));
 
     public static final Pose BlueBallDepotEnd1   = new Pose(12.794830371567043, 83.74798061389338,  Math.toRadians(180));
     public static final Pose BlueBallDepotEnd2   = new Pose(12.794830371567043, 59.2,                 Math.toRadians(180));
@@ -72,6 +74,7 @@ public class PositionsAndPaths {
     public static PathChain RedSweepEndToRedShootPos;
     public static PathChain RedShootTrianglePosToRedBasicEnd;
     public static PathChain RedShootWallPosToRedBasicEnd;
+    public static PathChain RedShootTrianglePosToBallDepot1Pickup;
 
 
 
@@ -96,6 +99,8 @@ public class PositionsAndPaths {
     public static PathChain BlueSweepEndToBlueShootPos;
     public static PathChain BlueShootTrianglePosToBlueBasicEnd;
     public static PathChain BlueShootWallPosToBlueBasicEnd;
+    public static PathChain BlueShootTrianglePosToBallDepot1Pickup;
+
 
     // ===== BUILD ALL PATHS =====
     public static void buildPaths(Follower f) {
@@ -118,8 +123,9 @@ public class PositionsAndPaths {
         RedShootPosToRedSweepStart             = buildPath(f, RedShootTrianglePos, RedSweepStart);
         RedSweepStartToRedSweepEnd             = buildPath(f, RedSweepStart, RedSweepEnd);
         RedSweepEndToRedShootPos               = buildPath(f, RedSweepEnd, RedShootTrianglePos);
-        RedShootTrianglePosToRedBasicEnd = buildPath(f, RedShootTrianglePos, RedBasicEnd);
-        RedShootWallPosToRedBasicEnd = buildPath(f, RedShootWallPos, RedBasicEnd);
+        RedShootTrianglePosToRedBasicEnd       = buildPath(f, RedShootTrianglePos, RedBasicEnd);
+        RedShootWallPosToRedBasicEnd           = buildPath(f, RedShootWallPos, RedBasicEnd);
+        RedShootTrianglePosToBallDepot1Pickup  = buildLongPath(f, RedShootTrianglePos, RedBallDepotStart1, RedBallDepotEnd1);
         // ---- BLUE PATHS ----
         BlueStartPosToBlueShootTrianglePos       = buildPath(f, BlueStartPos, BlueShootTrianglePos);
         BlueStartPosToBlueShootWallPos           = buildPath(f, BlueStartPos, BlueShootWallPos);
@@ -140,13 +146,25 @@ public class PositionsAndPaths {
         BlueSweepEndToBlueShootPos               = buildPath(f, BlueSweepEnd, BlueShootTrianglePos);
         BlueShootTrianglePosToBlueBasicEnd       = buildPath(f, BlueShootTrianglePos, BlueBasicEnd);
         BlueShootWallPosToBlueBasicEnd           = buildPath(f, BlueShootWallPos, BlueBasicEnd);
+        BlueShootTrianglePosToBallDepot1Pickup   = buildLongPath(f, BlueShootTrianglePos, BlueBallDepotStart1, BlueBallDepotEnd1);
     }
 
     // ===== HELPER =====
-    private static PathChain buildPath(Follower f, Pose start, Pose end) {
+    // EX: PathChain path = buildPath(follower, RedStart, RedShoot)
+    public static PathChain buildPath(Follower f, Pose start, Pose end) {
         return f.pathBuilder()
                 .addPath(new BezierLine(start, end))
                 .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
                 .build();
+    }
+    // EX: PathChain path = buildLongPath(follower, RedStartPos, RedIntermidiaryPos1, RedIntermidiaryPos2, RedShootPos)
+    public static PathChain buildLongPath(Follower f, Pose... steps) {
+        PathBuilder builder = f.pathBuilder();
+            for (int i = 0; i+1 < steps.length; i++) {
+                builder
+                .addPath(new BezierLine(steps[i], steps[i+1]))
+                .setLinearHeadingInterpolation(steps[i].getHeading(), steps[i+1].getHeading());
+            }
+            return builder.build();
     }
 }
