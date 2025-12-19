@@ -27,18 +27,18 @@ public class TurretLimitsRotationTest extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            turret.setTargetPosition(turretPos[0]);
-            telemetry.addData(">", "turretPos[0] = %d", turretPos[0]);
+            turret.setTargetPosition(Turret_turretPos[0]);
+            telemetry.addData(">", "turretPos[0] = %d", Turret_turretPos[0]);
             telemetry.update();
             sleep(3000);
 
-            turret.setTargetPosition(turretPos[1]);
-            telemetry.addData(">", "turretPos[1] = %d", turretPos[1]);
+            turret.setTargetPosition(Turret_turretPos[1]);
+            telemetry.addData(">", "turretPos[1] = %d", Turret_turretPos[1]);
             telemetry.update();
             sleep(3000);
 
-            turret.setTargetPosition(turretPos[2]);
-            telemetry.addData(">", "turretPos[2] = %d", turretPos[2]);
+            turret.setTargetPosition(Turret_turretPos[2]);
+            telemetry.addData(">", "turretPos[2] = %d", Turret_turretPos[2]);
             telemetry.update();
             sleep(3000);
         }

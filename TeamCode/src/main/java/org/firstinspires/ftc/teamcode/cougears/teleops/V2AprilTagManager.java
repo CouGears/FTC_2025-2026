@@ -31,7 +31,7 @@ public class V2AprilTagManager extends AprilTagBase {
     final double MAX_AUTO_SPEED = 1;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_STRAFE= 1;   //  Clip the strafing speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN  = 1;   //  Clip the turn speed to this max value (adjust for your robot)
-    public int lockedTagID = redTag;
+    public int lockedTagID = AT_redTag;
     public boolean toggleTagLock = false;
 
     public V2AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, BotBase Bot) {
@@ -59,15 +59,15 @@ public class V2AprilTagManager extends AprilTagBase {
     }
 
     public void switchLockedTag(){
-        if (lockedTagID == redTag){
-            lockedTagID = blueTag;
+        if (lockedTagID == AT_redTag){
+            lockedTagID = AT_blueTag;
         } else {
-            lockedTagID = redTag;
+            lockedTagID = AT_redTag;
         }
     }
 
     public void displayLockedTag(){
-       if (lockedTagID == redTag){
+       if (lockedTagID == AT_redTag){
            tele.addLine("LockedTag: red");
        } else {
            tele.addLine("LockedTag: blue");
@@ -87,13 +87,13 @@ public class V2AprilTagManager extends AprilTagBase {
             return;
 
         // We want to go to the closer position
-        double distToClosePos = Math.abs(tag.ftcPose.range - desiredDistClose);
-        double distToFarPos = Math.abs(tag.ftcPose.range - desiredDistFar);
+        double distToClosePos = Math.abs(tag.ftcPose.range - AT_desiredDistClose);
+        double distToFarPos = Math.abs(tag.ftcPose.range - AT_desiredDistFar);
         double  rangeError;
         if (distToClosePos < distToFarPos)
-            rangeError = (tag.ftcPose.range - desiredDistClose);
+            rangeError = (tag.ftcPose.range - AT_desiredDistClose);
         else
-            rangeError = (tag.ftcPose.range - desiredDistFar);
+            rangeError = (tag.ftcPose.range - AT_desiredDistFar);
         // These are calculated the same no matter what
         double  headingError    = tag.ftcPose.bearing;
         double  yawError        = tag.ftcPose.yaw;

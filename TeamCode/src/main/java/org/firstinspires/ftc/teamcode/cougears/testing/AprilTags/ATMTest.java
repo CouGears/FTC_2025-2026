@@ -20,9 +20,9 @@ public class ATMTest extends LinearOpMode {
             telemetry.addData("ALIGN:", "L_Bumper");
             telemetry.addData("FULL AUTO:", "R_Bumper");
 
-            AprilTagDetection detectedTag = ATM.scanForAT(blueTag);
+            AprilTagDetection detectedTag = ATM.scanForAT(AT_blueTag);
             if (detectedTag == null) {
-                detectedTag = ATM.scanForAT(redTag);
+                detectedTag = ATM.scanForAT(AT_redTag);
             }
             telemetry.addData("Detected Tag?", "%b");
 

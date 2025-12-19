@@ -23,7 +23,7 @@ public class SamplePedroAuton extends OpMode {
         // For action: ACTION
         // For movement with action: START_END_ACTION
         STARTPOS_SHOOTPOS,
-        SPINUP_AND_OPEN, SHOOT, CLOSE_AND_RESET,
+        SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
         END
     }
     pathStep currStep = pathStep.STARTPOS_SHOOTPOS;
@@ -35,41 +35,54 @@ public class SamplePedroAuton extends OpMode {
                 .setLinearHeadingInterpolation(RedStartPos.getHeading(), RedShootPos.getHeading())
                 .build();
     }
-    public void stepUpdate(){
-        switch (currStep){
+    public void stepUpdate() {
+        switch (currStep) {
             case STARTPOS_SHOOTPOS:
+                bot.spinUpClose();
                 follower.followPath(Path_StartPos_ShootPos);
-                setPathStep(pathStep.SPINUP_AND_OPEN);
+                setPathStep(pathStep.SPINUP);
                 break;
-            case SPINUP_AND_OPEN:
-                if (!follower.isBusy()){
+            case SPINUP:
+                if (!follower.isBusy()) {
                     bot.spinUpClose();
-                    bot.blockerOpen();
-                    bot.killIntake();
-                    if (stepTimer.getElapsedTime() >= gateWait){
-                        setPathStep(pathStep.SHOOT);
+                    if (stepTimer.getElapsedTime() >= Auton_spinupWait){
+                        setPathStep(pathStep.OPEN);
                     }
                 }
                 break;
+            case OPEN:
+                bot.blockerOpen();
+                bot.killIntake();
+                if (stepTimer.getElapsedTime() >= Auton_gateWait) {
+                    setPathStep(pathStep.SHOOT);
+                }
+                break;
             case SHOOT:
-                if (!follower.isBusy()){
+                if (!follower.isBusy()) {
                     bot.transferArmUp();
                     bot.spinFeeder();
-                    if (stepTimer.getElapsedTime() >= ballTransferWait){
-                        setPathStep(pathStep.CLOSE_AND_RESET);
+                    if (stepTimer.getElapsedTime() >= Auton_ballTransferWait) {
+                        setPathStep(pathStep.CLOSE);
                         numShots++;
                     }
                 }
                 break;
-            case CLOSE_AND_RESET:
-                if (!follower.isBusy()){
+            case CLOSE:
+                if (!follower.isBusy()) {
+                    bot.blockerClose();
                     bot.transferArmDown();
                     bot.killFeeder();
-                    bot.startIntake();
-                    if(numShots >= 5) { setPathStep(pathStep.END); }
-                    if (stepTimer.getElapsedTime() >= transferResetWait){
-                        setPathStep(pathStep.SPINUP_AND_OPEN);
+                    if (numShots >= 5) {
+                        setPathStep(pathStep.END);
+                    } else if (stepTimer.getElapsedTime() >= Auton_transferResetWait) {
+                        setPathStep(pathStep.PUSH_NEW_BALL);
                     }
+                }
+                break;
+            case PUSH_NEW_BALL:
+                bot.startIntake();
+                if (stepTimer.getElapsedTime() >= Auton_pushNewBallWait) {
+                    setPathStep(pathStep.SPINUP);
                 }
                 break;
             case END:

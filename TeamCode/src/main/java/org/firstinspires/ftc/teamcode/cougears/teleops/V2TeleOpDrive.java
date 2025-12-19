@@ -36,8 +36,8 @@ public class V2TeleOpDrive extends LinearOpMode {
 
             //****** ATM ******
             if (bot.isPressed(1, Button.DPAD_DOWN)) {
-                ATM.FullAutoMove(redTag);
-                ATM.FullAutoMove(blueTag);
+                ATM.FullAutoMove(AT_redTag);
+                ATM.FullAutoMove(AT_blueTag);
             }
 
             if (bot.isPressed(1, Button.DPAD_UP)) {
@@ -66,14 +66,14 @@ public class V2TeleOpDrive extends LinearOpMode {
             // BUTTONS: L_TRIGGER, L_BUMPER, R_TRIGGER, R_BUMPER
             if (bot.isHeld(2, Button.L_TRIGGER)) {
                 bot.spinUpClose();
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVel);
+                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_shootVel);
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
                 bot.spinUpFar();
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", shootVelFar);
+                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_shootVelFar);
             } else if (bot.isHeld(2, Button.R_BUMPER)) {
                 bot.ejectFW();
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", ejectionVel);
+                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_ejectionVel);
             } else {
                 bot.killFW();
             }
@@ -96,19 +96,19 @@ public class V2TeleOpDrive extends LinearOpMode {
                     bot.createTimer("ShootSequence");
                 }
                 else {
-                    bot.createTimer("ShootSequence", (long) gateWait);
+                    bot.createTimer("ShootSequence", (long) Auton_gateWait);
                 }
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", gateWait+ transferResetWait)){
+            if (bot.timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_transferResetWait)){
                 bot.killFeeder();
                 bot.transferArmDown(); // Start moving arm down
                 bot.blockerClose();
-            } else if (bot.timerExpired_MSeconds("ShootSequence", gateWait)){
+            } else if (bot.timerExpired_MSeconds("ShootSequence", Auton_gateWait)){
                 bot.spinFeeder();
                 bot.transferArmUp();
                 bot.killIntake(); // Dont was ball to move below the arm while its up
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", gateWait+1250)){
+            if (bot.timerExpired_MSeconds("ShootSequence", Auton_gateWait +1250)){
                 bot.startIntake(); // Turn intake back on
                 bot.deleteTimer("ShootSequence");
             }

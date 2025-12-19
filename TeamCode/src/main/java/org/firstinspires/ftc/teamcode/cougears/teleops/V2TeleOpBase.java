@@ -2,13 +2,12 @@ package org.firstinspires.ftc.teamcode.cougears.teleops;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVel;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.shootVelFar;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVel;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVelFar;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -71,10 +70,10 @@ public class V2TeleOpBase extends BotBase {
             Transfer.setDirection(CRServo.Direction.FORWARD);
 
             TransferArm = HM.get(Servo.class, "TransferArm");
-            TransferArm.setPosition(transferArmPos[0]);
+            TransferArm.setPosition(Servo_transferArmPos[0]);
 
             Blocker = HM.get(Servo.class, "Blocker");
-            Blocker.setPosition(blockerPos[0]);
+            Blocker.setPosition(Servo_blockerPos[0]);
 
             pinpoint = HM.get(GoBildaPinpointDriver.class, "pinpoint");
 
@@ -89,21 +88,21 @@ public class V2TeleOpBase extends BotBase {
 
     //****** FLYWHEELS ******
     public void spinUpClose() {
-        FW.setVelocity(shootVel);
+        FW.setVelocity(FW_shootVel);
     }
     public void spinUpFar() {
-        FW.setVelocity(shootVelFar);
+        FW.setVelocity(FW_shootVelFar);
     }
     public void killFW() {
         FW.setPower(0);
     }
     public void ejectFW() {
-        FW.setPower(ejectionVel);
+        FW.setPower(FW_ejectionVel);
     }
 
     //****** TURRET ******
     public void setTurretPosManual(int pos){
-        pos = Range.clip(pos, turretLimits[0], turretLimits[1]);
+        pos = Range.clip(pos, Turret_turretLimits[0], Turret_turretLimits[1]);
         Turret.setTargetPosition(pos);
     }
 
@@ -112,22 +111,22 @@ public class V2TeleOpBase extends BotBase {
     }
 
     public void moveTurretL(){
-        int newPos = Turret.getCurrentPosition() + turretStep;
-        newPos = Math.min(newPos, turretLimits[1]);
+        int newPos = Turret.getCurrentPosition() + Turret_turretStep;
+        newPos = Math.min(newPos, Turret_turretLimits[1]);
         Turret.setTargetPosition(newPos);
     }
     public void moveTurretR(){
-        int newPos = Turret.getCurrentPosition() - turretStep;
-        newPos = Math.max(newPos, turretLimits[0]);
+        int newPos = Turret.getCurrentPosition() - Turret_turretStep;
+        newPos = Math.max(newPos, Turret_turretLimits[0]);
         Turret.setTargetPosition(newPos);
     }
 
     public void adjustTurret(double degAdjust) {
         int currentTicks = Turret.getCurrentPosition();
-        int deltaTicks   = (int)(degAdjust * ticksPerDeg);
+        int deltaTicks   = (int)(degAdjust * Turret_ticksPerDeg);
         int targetTicks  = currentTicks + deltaTicks;
 
-        targetTicks = Range.clip(targetTicks, turretLimits[0], turretLimits[1]);
+        targetTicks = Range.clip(targetTicks, Turret_turretLimits[0], Turret_turretLimits[1]);
         Turret.setTargetPosition(targetTicks);
     }
 
@@ -144,23 +143,23 @@ public class V2TeleOpBase extends BotBase {
     }
 
     public void transferArmUp(){
-        TransferArm.setPosition(transferArmPos[1]);
+        TransferArm.setPosition(Servo_transferArmPos[1]);
     }
     public void transferArmDown(){
-        TransferArm.setPosition(transferArmPos[0]);
+        TransferArm.setPosition(Servo_transferArmPos[0]);
     }
 
     public void blockerOpen(){
-        Blocker.setPosition(blockerPos[1]);
+        Blocker.setPosition(Servo_blockerPos[1]);
     }
     public void blockerClose(){
-        Blocker.setPosition(blockerPos[0]);
+        Blocker.setPosition(Servo_blockerPos[0]);
     }
 
 
     //****** INTAKE ******
     public void startIntake() {
-        Intake.setPower(intakePower);
+        Intake.setPower(Drive_intakePower);
         IntakeSpinning = true;
     }
     public void killIntake() {
@@ -192,7 +191,7 @@ public class V2TeleOpBase extends BotBase {
         if (!slowed) {
             speedMultiplier = 1;
         } else {
-            speedMultiplier = slowMultiplier;
+            speedMultiplier = Drive_slowMultiplier;
         }
         speedMultiplier = -Range.clip(speedMultiplier, 0, 1);
 
