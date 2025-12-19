@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous
+@Autonomous (group = "Blue")
 public class BlueCloseWall_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
@@ -117,6 +117,9 @@ public class BlueCloseWall_Pedro extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        telemetry.addLine("STEP: " + currStep);
+        telemetry.addLine("numShots: " + numShots);
+
         stepUpdate();
     }
 }
