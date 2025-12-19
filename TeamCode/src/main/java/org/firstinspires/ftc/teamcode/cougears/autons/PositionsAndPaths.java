@@ -8,31 +8,33 @@ import com.pedropathing.paths.PathChain;
 public class PositionsAndPaths {
 
     // ===== RED POSITIONS =====
-    public static final Pose RedStartPos         = new Pose(144 - 21.543307086614174, 122.20472440944881, Math.toRadians(180 - 135));
-    public static final Pose RedShootTrianglePos = new Pose(144 - 66.51968503937007,  77.85826771653544,  Math.toRadians(180 - 135));
-    public static final Pose RedShootWallPos     = new Pose(144 - 66.51968503937007,  130,  Math.toRadians(180 - 180));
+    public static final Pose RedStartPos         = new Pose(144 - 21.543307086614174, 122.2047244094488, Math.toRadians(180 - 135));
+    public static final Pose RedShootTrianglePos = new Pose(144 - 66.51968503937007,  77.85826771653544, Math.toRadians(180 - 135));
+    public static final Pose RedShootWallPos     = new Pose(144 - 66.51968503937007,  130.0000000000000, Math.toRadians(180 - 180));
 
     public static final Pose RedBallDepotStart1 = new Pose(144 - 40.47819063004846, 83.74798061389338,  Math.toRadians(180 - 180));
     public static final Pose RedBallDepotStart2 = new Pose(144 - 40.47819063004846, 59.2,               Math.toRadians(180 - 180));
     public static final Pose RedBallDepotStart3 = new Pose(144 - 40.47819063004846, 35.592891760904685, Math.toRadians(180 - 180));
 
     public static final Pose RedBallDepotEnd1   = new Pose(144 - 12.794830371567043, 83.74798061389338,  Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotEnd2   = new Pose(144 - 12.794830371567043, 59.2,                 Math.toRadians(180));
+    public static final Pose RedBallDepotEnd2   = new Pose(144 - 12.794830371567043, 59.2,               Math.toRadians(180));
     public static final Pose RedBallDepotEnd3   = new Pose(144 - 12.794830371567043, 35.592891760904685, Math.toRadians(180));
 
     public static final Pose RedGateInit        = new Pose(144 - 17.21486268174475, 74.21001615508885,  Math.toRadians(180 - 180));
     public static final Pose RedGateOpen        = new Pose(144 - 17.21486268174475, 79.56058158319871,  Math.toRadians(180 - 180));
 
     public static final Pose RedSweepStart      = new Pose(144 - 7.444264943457189, 53.04038772213247,  Math.toRadians(180 - 260));
-    public static final Pose RedSweepEnd        = new Pose(144 - 7.444264943457189, 17.8,                Math.toRadians(180 - 260));
+    public static final Pose RedSweepEnd        = new Pose(144 - 7.444264943457189, 17.8,               Math.toRadians(180 - 260));
 
-    public static final Pose RedBasicEnd = new Pose(144 - 47.9579176252764,  144 - 61.95628968237839,          Math.toRadians(-90));
+    public static final Pose RedBasicEnd = new Pose(144 - 47.9579176252764,  144 - 61.95628968237839, Math.toRadians(-90));
 
 
 
     // ===== BLUE POSITIONS =====
     public static final Pose BlueStartPos       = new Pose(21.543307086614174, 122.20472440944881, Math.toRadians(135));
-    public static final Pose BlueShootPos       = new Pose(66.51968503937007,  77.85826771653544,  Math.toRadians(135));
+    public static final Pose BlueShootTrianglePos = new Pose(66.51968503937007,  77.85826771653544,  Math.toRadians(135));
+    public static final Pose BlueShootWallPos     = new Pose(144,  130,  Math.toRadians(180));
+
 
     public static final Pose BlueBallDepotStart1 = new Pose(40.47819063004846, 83.74798061389338,  Math.toRadians(180));
     public static final Pose BlueBallDepotStart2 = new Pose(40.47819063004846, 59.2,                 Math.toRadians(180));
@@ -47,6 +49,8 @@ public class PositionsAndPaths {
 
     public static final Pose BlueSweepStart      = new Pose(7.444264943457189, 53.04038772213247,  Math.toRadians(260));
     public static final Pose BlueSweepEnd        = new Pose(7.444264943457189, 17.8,                Math.toRadians(260));
+
+    public static final Pose BlueBasicEnd = new Pose(144,  144, Math.toRadians(90));
 
     // ===== RED PATHS =====
     public static PathChain RedStartPosToRedShootTrianglePos;
@@ -72,7 +76,9 @@ public class PositionsAndPaths {
 
 
     // ===== BLUE PATHS =====
-    public static PathChain BlueStartPosToBlueShootPos;
+    public static PathChain BlueStartPosToBlueShootTrianglePos;
+    public static PathChain BlueStartPosToBlueShootWallPos;
+
     public static PathChain BlueShootPosToBlueBallDepotStart1;
     public static PathChain BlueBallDepotStart1ToBlueBallDepotEnd1;
     public static PathChain BlueBallDepotEnd1ToBlueShootPos;
@@ -88,6 +94,8 @@ public class PositionsAndPaths {
     public static PathChain BlueShootPosToBlueSweepStart;
     public static PathChain BlueSweepStartToBlueSweepEnd;
     public static PathChain BlueSweepEndToBlueShootPos;
+    public static PathChain BlueShootTrianglePosToBlueBasicEnd;
+    public static PathChain BlueShootWallPosToBlueBasicEnd;
 
     // ===== BUILD ALL PATHS =====
     public static void buildPaths(Follower f) {
@@ -113,22 +121,25 @@ public class PositionsAndPaths {
         RedShootTrianglePosToRedBasicEnd = buildPath(f, RedShootTrianglePos, RedBasicEnd);
         RedShootWallPosToRedBasicEnd = buildPath(f, RedShootWallPos, RedBasicEnd);
         // ---- BLUE PATHS ----
-        BlueStartPosToBlueShootPos               = buildPath(f, BlueStartPos, BlueShootPos);
-        BlueShootPosToBlueBallDepotStart1        = buildPath(f, BlueShootPos, BlueBallDepotStart1);
+        BlueStartPosToBlueShootTrianglePos       = buildPath(f, BlueStartPos, BlueShootTrianglePos);
+        BlueStartPosToBlueShootWallPos           = buildPath(f, BlueStartPos, BlueShootWallPos);
+        BlueShootPosToBlueBallDepotStart1        = buildPath(f, BlueShootTrianglePos, BlueBallDepotStart1);
         BlueBallDepotStart1ToBlueBallDepotEnd1   = buildPath(f, BlueBallDepotStart1, BlueBallDepotEnd1);
-        BlueBallDepotEnd1ToBlueShootPos          = buildPath(f, BlueBallDepotEnd1,  BlueShootPos);
-        BlueShootPosToBlueGateInit               = buildPath(f, BlueShootPos, BlueGateInit);
+        BlueBallDepotEnd1ToBlueShootPos          = buildPath(f, BlueBallDepotEnd1, BlueShootTrianglePos);
+        BlueShootPosToBlueGateInit               = buildPath(f, BlueShootTrianglePos, BlueGateInit);
         BlueGateInitToBlueGateOpen               = buildPath(f, BlueGateInit, BlueGateOpen);
         BlueGateOpenToBlueBallDepotStart1        = buildPath(f, BlueGateOpen, BlueBallDepotStart1);
         BlueBallDepotStart1ToBlueBallDepotStart2 = buildPath(f, BlueBallDepotStart1, BlueBallDepotStart2);
         BlueBallDepotStart2ToBlueBallDepotEnd2   = buildPath(f, BlueBallDepotStart2, BlueBallDepotEnd2);
-        BlueBallDepotEnd2ToBlueShootPos          = buildPath(f, BlueBallDepotEnd2,  BlueShootPos);
-        BlueShootPosToBlueBallDepotStart3        = buildPath(f, BlueShootPos, BlueBallDepotStart3);
+        BlueBallDepotEnd2ToBlueShootPos          = buildPath(f, BlueBallDepotEnd2, BlueShootTrianglePos);
+        BlueShootPosToBlueBallDepotStart3        = buildPath(f, BlueShootTrianglePos, BlueBallDepotStart3);
         BlueBallDepotStart3ToBlueBallDepotEnd3   = buildPath(f, BlueBallDepotStart3, BlueBallDepotEnd3);
-        BlueBallDepotEnd3ToBlueShootPos          = buildPath(f, BlueBallDepotEnd3, BlueShootPos);
-        BlueShootPosToBlueSweepStart             = buildPath(f, BlueShootPos, BlueSweepStart);
+        BlueBallDepotEnd3ToBlueShootPos          = buildPath(f, BlueBallDepotEnd3, BlueShootTrianglePos);
+        BlueShootPosToBlueSweepStart             = buildPath(f, BlueShootTrianglePos, BlueSweepStart);
         BlueSweepStartToBlueSweepEnd             = buildPath(f, BlueSweepStart, BlueSweepEnd);
-        BlueSweepEndToBlueShootPos               = buildPath(f, BlueSweepEnd, BlueShootPos);
+        BlueSweepEndToBlueShootPos               = buildPath(f, BlueSweepEnd, BlueShootTrianglePos);
+        BlueShootTrianglePosToBlueBasicEnd       = buildPath(f, BlueShootTrianglePos, BlueBasicEnd);
+        BlueShootWallPosToBlueBasicEnd           = buildPath(f, BlueShootWallPos, BlueBasicEnd);
     }
 
     // ===== HELPER =====

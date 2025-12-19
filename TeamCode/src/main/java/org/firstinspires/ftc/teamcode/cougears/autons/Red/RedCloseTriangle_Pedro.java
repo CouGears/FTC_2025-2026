@@ -21,16 +21,16 @@ public class RedCloseTriangle_Pedro extends OpMode {
         // For moving: START_END
         // For action: ACTION
         // For movement with action: START_END_ACTION
-        STARTPOS_SHOOTPOSTRIANGLE,
+        STARTPOS_SHOOTTRIANGLEPOS,
         SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
-        SHOOTPOS_STRAFEEND,
+        SHOOTPOS_BASICEND,
         END
     }
-    pathStep currStep = pathStep.STARTPOS_SHOOTPOSTRIANGLE;
+    pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
 
     public void stepUpdate() {
         switch (currStep) {
-            case STARTPOS_SHOOTPOSTRIANGLE:
+            case STARTPOS_SHOOTTRIANGLEPOS:
                 bot.spinUpClose();
                 follower.followPath(RedStartPosToRedShootTrianglePos);
                 setPathStep(pathStep.SPINUP);
@@ -68,7 +68,7 @@ public class RedCloseTriangle_Pedro extends OpMode {
                     bot.transferArmDown();
                     bot.killFeeder();
                     if (numShots >= Auton_numberOfRepeatShots) {
-                        setPathStep(pathStep.SHOOTPOS_STRAFEEND);
+                        setPathStep(pathStep.SHOOTPOS_BASICEND);
                     } else if (stepTimer.getElapsedTime() >= Auton_transferResetWait) {
                         setPathStep(pathStep.PUSH_NEW_BALL);
                     }
@@ -80,7 +80,7 @@ public class RedCloseTriangle_Pedro extends OpMode {
                     setPathStep(pathStep.SPINUP);
                 }
                 break;
-            case SHOOTPOS_STRAFEEND:
+            case SHOOTPOS_BASICEND:
                 follower.followPath(RedShootTrianglePosToRedBasicEnd);
                 setPathStep(pathStep.END);
                 break;
@@ -99,7 +99,7 @@ public class RedCloseTriangle_Pedro extends OpMode {
 
     public void start(){
         opModeTimer.resetTimer();
-        setPathStep(pathStep.STARTPOS_SHOOTPOSTRIANGLE);
+        setPathStep(pathStep.STARTPOS_SHOOTTRIANGLEPOS);
     }
 
     @Override

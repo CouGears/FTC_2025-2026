@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.autons;
+package org.firstinspires.ftc.teamcode.cougears.autons.DumbAutons;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

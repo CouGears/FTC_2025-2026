@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Red;
+package org.firstinspires.ftc.teamcode.cougears.autons.Blue;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous
-public class RedCloseWall_Pedro extends OpMode {
+public class BlueCloseTriangle_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
@@ -22,18 +22,18 @@ public class RedCloseWall_Pedro extends OpMode {
         // For moving: START_END
         // For action: ACTION
         // For movement with action: START_END_ACTION
-        STARTPOS_SHOOTWALLPOS,
+        STARTPOS_SHOOTTRIANGLEPOS,
         SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
         SHOOTPOS_BASICEND,
         END
     }
-    pathStep currStep = pathStep.STARTPOS_SHOOTWALLPOS;
+    pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
 
     public void stepUpdate() {
         switch (currStep) {
-            case STARTPOS_SHOOTWALLPOS:
+            case STARTPOS_SHOOTTRIANGLEPOS:
                 bot.spinUpClose();
-                follower.followPath(RedStartPosToRedShootWallPos);
+                follower.followPath(BlueStartPosToBlueShootTrianglePos);
                 setPathStep(pathStep.SPINUP);
                 break;
             case SPINUP:
@@ -82,7 +82,7 @@ public class RedCloseWall_Pedro extends OpMode {
                 }
                 break;
             case SHOOTPOS_BASICEND:
-                follower.followPath(RedShootWallPosToRedBasicEnd);
+                follower.followPath(BlueShootTrianglePosToBlueBasicEnd);
                 setPathStep(pathStep.END);
                 break;
             case END:
@@ -100,7 +100,7 @@ public class RedCloseWall_Pedro extends OpMode {
 
     public void start(){
         opModeTimer.resetTimer();
-        setPathStep(pathStep.STARTPOS_SHOOTWALLPOS);
+        setPathStep(pathStep.STARTPOS_SHOOTTRIANGLEPOS);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class RedCloseWall_Pedro extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        follower.setPose(RedStartPos);
+        follower.setPose(BlueStartPos);
         buildPaths(follower);
         bot = new V2AutonController(hardwareMap, telemetry);
         bot.botInit();
