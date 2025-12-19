@@ -42,9 +42,10 @@ public class PresetConstants {
     public static double spinUpTime = 0;
     public static double timeBackwardsClose = 1.4;
     public static double speedBackwardsClose = -.5;
-    public static int repeatShots = 5;
+    public static int Auton_numberOfRepeatShots = 3;
 
     public static double Auton_spinupWait = 2000;
+    public static double Auton_firstShotExtraSpinupWait = 2000;
     public static double Auton_gateWait = 750;
     public static double Auton_ballTransferWait = 1000;
     public static double Auton_transferResetWait = 750;

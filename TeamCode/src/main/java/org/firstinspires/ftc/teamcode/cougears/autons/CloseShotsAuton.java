@@ -21,7 +21,7 @@ public class CloseShotsAuton extends LinearOpMode {
         }
         bot.manualMove(0, 0 ,0);
 
-        for (int i = 0; i < repeatShots; i++) {
+        for (int i = 0; i < Auton_numberOfRepeatShots; i++) {
             if (!opModeIsActive()) break; // Allow stopping mid-sequence
             telemetry.addData("Shooting Shot", i + 1);
             telemetry.update();

@@ -1,18 +1,19 @@
-package org.firstinspires.ftc.teamcode.cougears.autons;
+package org.firstinspires.ftc.teamcode.cougears.autons.Red;
+
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedShootTrianglePosToRedBasicEnd;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import static org.firstinspires.ftc.teamcode.cougears.autons.Positions.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
+import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous
-public class SamplePedroAuton extends OpMode {
+public class RedCloseWall_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
@@ -22,30 +23,26 @@ public class SamplePedroAuton extends OpMode {
         // For moving: START_END
         // For action: ACTION
         // For movement with action: START_END_ACTION
-        STARTPOS_SHOOTPOS,
+        STARTPOS_SHOOTPOSWALL,
         SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
+        SHOOTPOS_BASICEND,
         END
     }
-    pathStep currStep = pathStep.STARTPOS_SHOOTPOS;
+    pathStep currStep = pathStep.STARTPOS_SHOOTPOSWALL;
 
-    private PathChain Path_StartPos_ShootPos;
-    public void buildPaths(){
-        Path_StartPos_ShootPos = follower.pathBuilder()
-                .addPath(new BezierLine(RedStartPos, RedShootPos))
-                .setLinearHeadingInterpolation(RedStartPos.getHeading(), RedShootPos.getHeading())
-                .build();
-    }
     public void stepUpdate() {
         switch (currStep) {
-            case STARTPOS_SHOOTPOS:
+            case STARTPOS_SHOOTPOSWALL:
                 bot.spinUpClose();
-                follower.followPath(Path_StartPos_ShootPos);
+                follower.followPath(RedStartPosToRedShootWallPos);
                 setPathStep(pathStep.SPINUP);
                 break;
             case SPINUP:
                 if (!follower.isBusy()) {
                     bot.spinUpClose();
-                    if (stepTimer.getElapsedTime() >= Auton_spinupWait){
+                    if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait){
+                        setPathStep(pathStep.OPEN);
+                    } else if (numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) {
                         setPathStep(pathStep.OPEN);
                     }
                 }
@@ -72,8 +69,8 @@ public class SamplePedroAuton extends OpMode {
                     bot.blockerClose();
                     bot.transferArmDown();
                     bot.killFeeder();
-                    if (numShots >= 5) {
-                        setPathStep(pathStep.END);
+                    if (numShots >= Auton_numberOfRepeatShots) {
+                        setPathStep(pathStep.SHOOTPOS_BASICEND);
                     } else if (stepTimer.getElapsedTime() >= Auton_transferResetWait) {
                         setPathStep(pathStep.PUSH_NEW_BALL);
                     }
@@ -84,6 +81,10 @@ public class SamplePedroAuton extends OpMode {
                 if (stepTimer.getElapsedTime() >= Auton_pushNewBallWait) {
                     setPathStep(pathStep.SPINUP);
                 }
+                break;
+            case SHOOTPOS_BASICEND:
+                follower.followPath(RedShootWallPosToRedBasicEnd);
+                setPathStep(pathStep.END);
                 break;
             case END:
                 bot.endAuton();
@@ -100,7 +101,7 @@ public class SamplePedroAuton extends OpMode {
 
     public void start(){
         opModeTimer.resetTimer();
-        setPathStep(pathStep.STARTPOS_SHOOTPOS);
+        setPathStep(pathStep.STARTPOS_SHOOTPOSWALL);
     }
 
     @Override
@@ -108,9 +109,8 @@ public class SamplePedroAuton extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        buildPaths();
         follower.setPose(RedStartPos);
-
+        buildPaths(follower);
         bot = new V2AutonController(hardwareMap, telemetry);
         bot.botInit();
     }
