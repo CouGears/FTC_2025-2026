@@ -22,14 +22,14 @@ public class ATTurretMoveTest extends LinearOpMode {
         telemetry.addLine("Initlized");
         waitForStart();
         while (opModeIsActive()){
-            AprilTagDetection blueTagDetection = ATM.scanForAT(blueTag);
+            AprilTagDetection blueTagDetection = ATM.scanForAT(AT_blueTag);
             if (blueTagDetection != null)
             {
                 telemetry.addLine("blueTagID = " + blueTagDetection.id);
                 telemetry.addLine("blueTagBearing = " + blueTagDetection.ftcPose.bearing);
             }
 
-            AprilTagDetection redTagDetection = ATM.scanForAT(redTag);
+            AprilTagDetection redTagDetection = ATM.scanForAT(AT_redTag);
             if (redTagDetection != null)
             {
                 telemetry.addLine("redTagID = " + redTagDetection.id);

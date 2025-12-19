@@ -4,13 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
-import java.util.ArrayList;
 @TeleOp(name="RunToPosTest", group="Testing")
 
 public class RunToPosTest extends LinearOpMode {
@@ -33,9 +31,9 @@ public class RunToPosTest extends LinearOpMode {
         while(opModeIsActive()){
             turret.setTargetPosition(targetPos);
             if (GPM.isPressed(Button.L_TRIGGER))
-                targetPos += turretStep;
+                targetPos += Turret_turretStep;
             if (GPM.isPressed(Button.R_TRIGGER))
-                targetPos -= turretStep;
+                targetPos -= Turret_turretStep;
             telemetry.addLine("TargetPos = " + targetPos);
             telemetry.update();
             GPM.update();

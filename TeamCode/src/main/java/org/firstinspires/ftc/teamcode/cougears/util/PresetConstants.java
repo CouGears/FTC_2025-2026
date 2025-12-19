@@ -15,40 +15,44 @@ USE import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*
 @Config
 public class PresetConstants {
     // DRIVE
-    public static double slowMultiplier = .25;
-    public static double intakePower = .8;
+    public static double Drive_slowMultiplier = .25;
+    public static double Drive_intakePower = .8;
     //FW
     public static double[] FW_PIDF = {5.5, 0, 4, 6.9}; // Nice
-    public static double shootVel = 1600;
-    public static double shootVelFar = 1800;
-    public static double ejectionVel = -1000;
-    public static double gateWait = 750;
-    public static double transferResetWait = 750;
-    public static double ballTransferWait = 1000;
+    public static double FW_shootVel = 1600;
+    public static double FW_shootVelFar = 1800;
+    public static double FW_ejectionVel = -1000;
+
 
     // Turret
-    public static double ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
-    public static int[] turretPos = {0, -(int) Math.round(ticksPerDeg * 45),
-            (int) Math.round(ticksPerDeg * 45)};
-    public static int[] turretLimits = {-400,400}; // CW, CCW
-    public static int turretStep = 100;
+    public static double Turret_ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
+    public static int[] Turret_turretPos = {0, -(int) Math.round(Turret_ticksPerDeg * 45),
+            (int) Math.round(Turret_ticksPerDeg * 45)};
+    public static int[] Turret_turretLimits = {-400,400}; // CW, CCW
+    public static int Turret_turretStep = 100;
     //Servos
-    public static double[] transferArmPos = {.75,.17};
-    public static double[] blockerPos = {.21,1};
+    public static double[] Servo_transferArmPos = {.75,.17};
+    public static double[] Servo_blockerPos = {.21,1};
     //AprilTag
-    public static int redTag = 24;
-    public static int blueTag = 20;
-    public static double desiredDistClose = 67.0;
-    public static double desiredDistFar = 0; // Need to find
+    public static int AT_redTag = 24;
+    public static int AT_blueTag = 20;
+    public static double AT_desiredDistClose = 67.0;
+    public static double AT_desiredDistFar = 0; // Need to find
     //Autons
     public static double spinUpTime = 0;
     public static double timeBackwardsClose = 1.4;
     public static double speedBackwardsClose = -.5;
     public static int repeatShots = 5;
 
+    public static double Auton_spinupWait = 2000;
+    public static double Auton_gateWait = 750;
+    public static double Auton_ballTransferWait = 1000;
+    public static double Auton_transferResetWait = 750;
+    public static double Auton_pushNewBallWait = 500;
+
     // NAMES
-    public static String[] motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};
-    public static String[] servoNames = {"Transfer", "TransferArm"};
+    public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};
+    public static String[] Names_servoNames = {"Transfer", "TransferArm"};
 
     /* Config
    Control hub:
