@@ -99,7 +99,7 @@ public class V2TeleOpDrive extends LinearOpMode {
                     bot.createTimer("ShootSequence", (long) gateWait);
                 }
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", gateWait+shootSequenceWait)){
+            if (bot.timerExpired_MSeconds("ShootSequence", gateWait+ transferResetWait)){
                 bot.killFeeder();
                 bot.transferArmDown(); // Start moving arm down
                 bot.blockerClose();

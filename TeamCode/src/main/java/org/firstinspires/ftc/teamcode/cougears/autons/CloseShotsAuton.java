@@ -29,7 +29,7 @@ public class CloseShotsAuton extends LinearOpMode {
             sleep((long) gateWait);
             bot.transferArmUp();
             bot.spinFeeder();
-            sleep((long) shootSequenceWait);
+            sleep((long) transferResetWait);
             bot.killFeeder();
             bot.transferArmDown();
             bot.blockerClose();

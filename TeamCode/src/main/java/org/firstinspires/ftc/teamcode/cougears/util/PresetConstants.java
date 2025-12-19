@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.cougears.util;
 
 
 import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
 
 /*
 EX:
@@ -10,7 +11,7 @@ public static int[] slidePresets = {0, 4000, 2000, 1000};
 
 USE import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*; to import
  */
-
+@Configurable
 @Config
 public class PresetConstants {
     // DRIVE
@@ -22,7 +23,9 @@ public class PresetConstants {
     public static double shootVelFar = 1800;
     public static double ejectionVel = -1000;
     public static double gateWait = 750;
-    public static double shootSequenceWait = 750;
+    public static double transferResetWait = 750;
+    public static double ballTransferWait = 1000;
+
     // Turret
     public static double ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
     public static int[] turretPos = {0, -(int) Math.round(ticksPerDeg * 45),
@@ -30,7 +33,7 @@ public class PresetConstants {
     public static int[] turretLimits = {-400,400}; // CW, CCW
     public static int turretStep = 100;
     //Servos
-    public static double[] transferArmPos = {.6,.17};
+    public static double[] transferArmPos = {.75,.17};
     public static double[] blockerPos = {.21,1};
     //AprilTag
     public static int redTag = 24;
