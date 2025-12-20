@@ -5,8 +5,8 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVel;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVelFar;
 
-
-
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -18,10 +18,14 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 public class V2TeleOpBase extends BotBase {
@@ -38,6 +42,8 @@ public class V2TeleOpBase extends BotBase {
     //Initialize heading stuff
     private double targetHeadingDeg = 0.0;
     private boolean headingLocked = false;
+
+    // Tunables
     private static final double HEADING_kP = 0.02;
     private static final double DRIVE_DEADBAND = 0.05;
 
@@ -80,6 +86,7 @@ public class V2TeleOpBase extends BotBase {
             Blocker.setPosition(Servo_blockerPos[0]);
 
             pinpoint = HM.get(GoBildaPinpointDriver.class, "pinpoint");
+            setPinpointPose();
 
 
         } catch (Exception e) {
@@ -90,6 +97,25 @@ public class V2TeleOpBase extends BotBase {
         return true;
     }
 
+    //****** AUTON MOVEMENT ******
+    public void setPinpointPose(){
+        Pose pedroPose = Storage.endOfAutonPose;
+        pinpoint.setPosition(new Pose2D(
+                DistanceUnit.INCH,
+                pedroPose.getX(),
+                pedroPose.getY(),
+                AngleUnit.RADIANS,
+                pedroPose.getHeading()
+        ));
+    }
+    public Pose getPedroPose(){
+        Pose2D p = pinpoint.getPosition();
+        return new Pose (
+                p.getX(DistanceUnit.INCH),
+                p.getY(DistanceUnit.INCH),
+                p.getHeading(AngleUnit.RADIANS)
+                );
+    }
     //****** FLYWHEELS ******
     public void spinUpClose() {
         FW.setVelocity(FW_shootVel);
@@ -327,9 +353,4 @@ public class V2TeleOpBase extends BotBase {
         motorBL.setPower(backLeftPower);
         motorBR.setPower(backRightPower);
     }
-
-    public void odoGoalLock (){
-
-    }
-
 }

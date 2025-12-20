@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 @TeleOp(name="V2Teleop", group="Drive")
 
@@ -17,6 +19,7 @@ public class V2TeleOpDrive extends LinearOpMode {
         goalUtils goal = new goalUtils();
         V2TeleOpBase bot = new V2TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         V2AprilTagManager ATM = new V2AprilTagManager(hardwareMap, telemetry, bot);
+        PedroTeleOpManager PTM = new PedroTeleOpManager(hardwareMap);
         // Initialize motors
         bot.botInit();
         ATM.initAprilTag();
@@ -33,8 +36,22 @@ public class V2TeleOpDrive extends LinearOpMode {
             if (bot.isPressed(1, Button.B)) {
                 bot.toggleSlow();
             }
-            bot.RafiDrive(gamepad1);
-            telemetry.addData("Slowed", "%b", bot.slowed);
+            if (!bot.isHeld(1, Button.DPAD_DOWN) && PTM.follower.isBusy()){
+                PTM.follower.breakFollowing();
+            }
+
+            telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
+            if (PTM.follower.isBusy()) {
+                telemetry.addLine("PEDRO IS DRIVING");
+                PTM.update();
+            } else {
+                PTM.follower.setPose(bot.getPedroPose());
+                if (bot.isPressed(1, Button.B)) {
+                    bot.toggleSlow();
+                }
+                bot.RafiDrive(gamepad1);
+                telemetry.addData("Slowed", "%b", bot.slowed);
+            }
 
             //****** ATM ******
             if (bot.isPressed(1, Button.DPAD_DOWN)) {
@@ -53,6 +70,12 @@ public class V2TeleOpDrive extends LinearOpMode {
 
             if (goal.isTagLockEnabled()){
                 ATM.alignTurretToAT();
+            }
+
+            //****** AUTON MOVING ******
+            if (bot.isHeld(1, Button.DPAD_DOWN)){
+                PTM.moveToPos(RedShootTrianglePos);
+                PTM.update();
             }
 
             //****** INTAKE ******
@@ -127,7 +150,6 @@ public class V2TeleOpDrive extends LinearOpMode {
                 bot.startIntake();
                 bot.deleteTimer("Eject");
             }
-
 
             bot.update();
             sleep(10);
