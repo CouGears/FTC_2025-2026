@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
+import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 
 @TeleOp(name="V2Teleop", group="Drive")
 
@@ -13,6 +14,7 @@ public class V2TeleOpDrive extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        goalUtils goal = new goalUtils();
         V2TeleOpBase bot = new V2TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         V2AprilTagManager ATM = new V2AprilTagManager(hardwareMap, telemetry, bot);
         // Initialize motors
@@ -41,15 +43,15 @@ public class V2TeleOpDrive extends LinearOpMode {
             }
 
             if (bot.isPressed(1, Button.DPAD_UP)) {
-                ATM.enableTagLock();
+                goal.toggleTagLock();
             }
 
             if (bot.isPressed(1, Button.Y)) {
-                ATM.switchLockedTag();
+                goal.switchLockedGoal();
             }
-            ATM.displayLockedTag();
+            goal.displayLockedTag();
 
-            if (ATM.isTagLocked()){
+            if (goal.isTagLockEnabled()){
                 ATM.alignTurretToAT();
             }
 

@@ -5,6 +5,8 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVel;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVelFar;
 
+
+
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -15,30 +17,32 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 
 
 public class V2TeleOpBase extends BotBase {
 
+    goalUtils goal;
+    //Initializing motors
     public DcMotorEx FW, Intake, Turret;
     public CRServo Transfer;
     public Servo TransferArm, Blocker;
+    //initializing toggles
     public boolean IntakeSpinning, FeedServoSpinning, slowed;
-
+    //intializing speed multplier for slowdrive
     public double speedMultiplier = 1;
-
-    private GoBildaPinpointDriver pinpoint;
-
+    //Initialize heading stuff
     private double targetHeadingDeg = 0.0;
     private boolean headingLocked = false;
-
-    // Tunables
     private static final double HEADING_kP = 0.02;
     private static final double DRIVE_DEADBAND = 0.05;
 
-
+    //initialize classes
+    public GoBildaPinpointDriver pinpoint;
 
     public V2TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
@@ -105,29 +109,89 @@ public class V2TeleOpBase extends BotBase {
         pos = Range.clip(pos, Turret_turretLimits[0], Turret_turretLimits[1]);
         Turret.setTargetPosition(pos);
     }
-
-    public void resetTurret(){
-        Turret.setTargetPosition(0);
-    }
-
+    //turret functions that actually make stuff move
     public void moveTurretL(){
-        int newPos = Turret.getCurrentPosition() + Turret_turretStep;
-        newPos = Math.min(newPos, Turret_turretLimits[1]);
-        Turret.setTargetPosition(newPos);
+        int tickAdjust = Turret.getCurrentPosition() + Turret_turretStep;
+        adjustTurretTick(tickAdjust);
     }
     public void moveTurretR(){
-        int newPos = Turret.getCurrentPosition() - Turret_turretStep;
-        newPos = Math.max(newPos, Turret_turretLimits[0]);
-        Turret.setTargetPosition(newPos);
+        int tickAdjust = Turret.getCurrentPosition() - Turret_turretStep;
+        adjustTurretTick(tickAdjust);
     }
 
-    public void adjustTurret(double degAdjust) {
+    public void odoTurretAdjust() {
+
+        // --- Robot field position (MM) ---
+        double botX = pinpoint.getPosX(DistanceUnit.MM);
+        double botY = pinpoint.getPosY(DistanceUnit.MM);
+
+        // --- Goal field position (MM) ---
+        double goalX, goalY;
+        if (goal.getLockedTagIndex() == 0) { // RED
+            goalX = redGoalXPos;
+            goalY = redGoalYPos;
+        } else { // BLUE
+            goalX = blueGoalXPos;
+            goalY = blueGoalYPos;
+        }
+
+        double dx = goalX - botX;
+        double dy = goalY - botY;
+
+        // --- Field angle robot must face (deg) ---
+        double targetFieldDeg = Math.toDegrees(Math.atan2(dy, dx));
+
+        // --- Current turret field angle ---
+        double turretFieldDeg = getTurretLocalizedDeg();
+
+        // --- Error ---
+        double deltaDeg = targetFieldDeg - turretFieldDeg;
+
+        // Wrap to [-180, 180]
+        while (deltaDeg > 180) deltaDeg -= 360;
+        while (deltaDeg < -180) deltaDeg += 360;
+
+        // --- Command turret ---
+        adjustTurretDeg(deltaDeg);
+    }
+
+
+    //turret adjustements
+    public void adjustTurretDeg(double degAdjust) {
         int currentTicks = Turret.getCurrentPosition();
         int deltaTicks   = (int)(degAdjust * Turret_ticksPerDeg);
         int targetTicks  = currentTicks + deltaTicks;
-
-        targetTicks = Range.clip(targetTicks, Turret_turretLimits[0], Turret_turretLimits[1]);
+        targetTicks = turretResetBound(targetTicks);
         Turret.setTargetPosition(targetTicks);
+    }
+
+    public void adjustTurretTick(int tickAdjust) {
+        int currentTicks = Turret.getCurrentPosition();
+        int targetTicks  = currentTicks + tickAdjust;
+        targetTicks = turretResetBound(targetTicks);
+        Turret.setTargetPosition(targetTicks);
+    }
+    //turret helper functions
+    public int turretResetBound(int targetTicks){
+        while (targetTicks < Turret_turretLimits[1] || targetTicks > Turret_turretLimits[2]) {
+            if (targetTicks < Turret_turretLimits[1]) {
+                targetTicks += 360;
+            } else if (targetTicks > Turret_turretLimits[2]){
+                targetTicks -= 360;
+            }
+        }
+        return targetTicks;
+    }
+
+    public double getTurretDeg(){
+        return ((Turret.getCurrentPosition())/Turret_ticksPerDeg);
+    }
+
+    public double getTurretLocalizedDeg(){
+        return pinpoint.getHeading(AngleUnit.DEGREES) + getTurretDeg();
+    }
+    public void resetTurret(){
+        Turret.setTargetPosition(0);
     }
 
 
@@ -263,4 +327,9 @@ public class V2TeleOpBase extends BotBase {
         motorBL.setPower(backLeftPower);
         motorBR.setPower(backRightPower);
     }
+
+    public void odoGoalLock (){
+
+    }
+
 }

@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 /*
 WHAT THIS FILE SHOULD BE ABLE TO DO:
 - Take the bot from teleop and move it
@@ -19,6 +20,7 @@ public class V2AprilTagManager extends AprilTagBase {
 
     public BotBase bot;
     public V2TeleOpBase v2bot = null;
+    public goalUtils goal;
     public int ATBearingTolerance = 1;
 
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
@@ -38,48 +40,27 @@ public class V2AprilTagManager extends AprilTagBase {
         super(HardwareMap, Telemetry);
         bot = Bot;
     }
-    public V2AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, V2TeleOpBase Bot) {
+    public V2AprilTagManager(HardwareMap HardwareMap, Telemetry Telemetry, V2TeleOpBase Bot, goalUtils Goal) {
         super(HardwareMap, Telemetry);
         v2bot = Bot;
         bot = Bot;
+        goal = Goal;
     }
+
+
 
 
 
 
     public void alignTurretToAT() {
         if (v2bot == null) return;
-        AprilTagDetection tag = scanForAT(lockedTagID);
+        AprilTagDetection tag = scanForAT(goal.getLockedTagID());
         if (tag == null) return;
 
         double bearing = tag.ftcPose.bearing;   // degrees offset of tag from robot
         tele.addLine("--- alignTurretToAT ---");
         tele.addData("Bearing", "%.2f", tag.ftcPose.bearing);
-        v2bot.adjustTurret(bearing);   // <-- let TeleOpBase handle conversion
-    }
-
-    public void switchLockedTag(){
-        if (lockedTagID == AT_redTag){
-            lockedTagID = AT_blueTag;
-        } else {
-            lockedTagID = AT_redTag;
-        }
-    }
-
-    public void displayLockedTag(){
-       if (lockedTagID == AT_redTag){
-           tele.addLine("LockedTag: red");
-       } else {
-           tele.addLine("LockedTag: blue");
-       }
-    }
-
-    public void enableTagLock(){
-        toggleTagLock = !toggleTagLock;
-    }
-
-    public boolean isTagLocked(){
-        return toggleTagLock;
+        v2bot.adjustTurretDeg(bearing);   // <-- let TeleOpBase handle conversion
     }
     public void FullAutoMove(int tagID){
         AprilTagDetection tag = scanForAT(tagID);

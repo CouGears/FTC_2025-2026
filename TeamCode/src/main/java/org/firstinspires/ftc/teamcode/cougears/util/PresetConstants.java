@@ -52,6 +52,15 @@ public class PresetConstants {
     public static double Auton_pushNewBallWait = 500;
     public static double Auton_pickupSpeed = .4;
 
+    public static int redGoalXPos = 3657;
+    public static int redGoalYPos = 3657;
+    public static int blueGoalXPos = 0;
+    public static int blueGoalYPos = 3657;
+    public static int BlueAutonTurretStartDeg = 135;
+    public static int RedAutonTurretStartDeg = 45;
+
+
+
     // NAMES
     public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};
     public static String[] Names_servoNames = {"Transfer", "TransferArm"};
