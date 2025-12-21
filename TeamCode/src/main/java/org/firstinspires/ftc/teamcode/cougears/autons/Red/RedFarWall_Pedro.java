@@ -9,10 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-
+// https://drive.google.com/drive/u/1/folders/195ZOaVz4Y1V8vUM4KzjuoF6N3_f7NXtK <- The vision
 @Autonomous (group = "Red")
-public class RedCloseTriangleAndPickup_Pedro extends OpMode {
+public class RedFarWall_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
@@ -22,27 +23,28 @@ public class RedCloseTriangleAndPickup_Pedro extends OpMode {
         // For moving: START_END
         // For action: ACTION
         // For movement with action: START_END_ACTION
-        STARTPOS_SHOOTTRIANGLEPOS,
+        STARTPOS_SHOOTWALLPOS,
         SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
-        SHOOTPOS_BALLDEPOTSTART, BALLDEPOTSTART_BALLDEPOTEND, BALLDEPOTEND_SHOOTPOS,
-        SHOOTPOS_BASICEND, END
+        SHOOTPOS_BASICEND,
+        END
     }
-    pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
+    pathStep currStep = pathStep.STARTPOS_SHOOTWALLPOS;
 
     public void stepUpdate() {
         if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd);  }
 
         switch (currStep) {
-            case STARTPOS_SHOOTTRIANGLEPOS:
+            case STARTPOS_SHOOTWALLPOS:
                 bot.spinUpClose();
-                follower.followPath(RedStartPosToRedShootTrianglePos);
+                follower.followPath(RedFarStartPosToRedShootWallPos);
                 setPathStep(pathStep.SPINUP);
                 break;
             case SPINUP:
                 if (!follower.isBusy()) {
+                    bot.spinUpClose();
                     if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait){
                         setPathStep(pathStep.OPEN);
-                    } else if ((numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) || bot.FW.getVelocity() >= FW_shootVel - 100) {
+                    } else if (numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) {
                         setPathStep(pathStep.OPEN);
                     }
                 }
@@ -70,7 +72,7 @@ public class RedCloseTriangleAndPickup_Pedro extends OpMode {
                     bot.transferArmDown();
                     bot.killFeeder();
                     if (numShots >= Auton_numberOfRepeatShots) {
-                        setPathStep(pathStep.SHOOTPOS_BALLDEPOTSTART);
+                        setPathStep(pathStep.SHOOTPOS_BASICEND);
                     } else if (stepTimer.getElapsedTime() >= Auton_transferResetWait) {
                         setPathStep(pathStep.PUSH_NEW_BALL);
                     }
@@ -82,33 +84,13 @@ public class RedCloseTriangleAndPickup_Pedro extends OpMode {
                     setPathStep(pathStep.SPINUP);
                 }
                 break;
-            case SHOOTPOS_BALLDEPOTSTART:
-                bot.startIntake();
-                follower.followPath(RedShootPosToRedBallDepotStart1);
-                setPathStep(pathStep.BALLDEPOTSTART_BALLDEPOTEND);
-                break;
-            case BALLDEPOTSTART_BALLDEPOTEND:
-                if (!follower.isBusy()){
-                    follower.setMaxPower(Auton_pickupSpeed);
-                    follower.followPath(RedBallDepotStart1ToRedBallDepotEnd1);
-                    setPathStep(pathStep.BALLDEPOTEND_SHOOTPOS);
-                }
-                break;
-            case BALLDEPOTEND_SHOOTPOS:
-                if (!follower.isBusy()) {
-                    follower.setMaxPower(1);
-                    follower.followPath(RedBallDepotEnd1ToRedShootPos);
-                    setPathStep(pathStep.SPINUP);
-                    numShots = 0;
-                }
-                break;
-
             case SHOOTPOS_BASICEND:
                 follower.followPath(RedShootTrianglePosToRedBasicEnd);
                 setPathStep(pathStep.END);
                 break;
             case END:
                 bot.endAuton();
+                Storage.endOfAutonPose = follower.getPose();
                 break;
             default:
                 telemetry.addLine("No Step");
@@ -122,7 +104,7 @@ public class RedCloseTriangleAndPickup_Pedro extends OpMode {
 
     public void start(){
         opModeTimer.resetTimer();
-        setPathStep(pathStep.STARTPOS_SHOOTTRIANGLEPOS);
+        setPathStep(pathStep.STARTPOS_SHOOTWALLPOS);
     }
 
     @Override

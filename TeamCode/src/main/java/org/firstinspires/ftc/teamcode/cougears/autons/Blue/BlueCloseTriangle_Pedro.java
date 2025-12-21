@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.cougears.autons.Blue;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.util.Timer;
@@ -15,46 +16,79 @@ public class BlueCloseTriangle_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
+    public int numShots = 0;
 
     public enum pathStep {
+        // For moving: START_END
+        // For action: ACTION
+        // For movement with action: START_END_ACTION
         STARTPOS_SHOOTTRIANGLEPOS,
-        SHOOTING_SEQUENCE,
+        SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
         SHOOTPOS_BASICEND,
         END
     }
     pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
 
     public void stepUpdate() {
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, BlueBasicEnd);  }
         switch (currStep) {
             case STARTPOS_SHOOTTRIANGLEPOS:
                 bot.spinUpClose();
                 follower.followPath(BlueStartPosToBlueShootTrianglePos);
-                setPathStep(pathStep.SHOOTING_SEQUENCE);
+                setPathStep(pathStep.SPINUP);
                 break;
-
-            case SHOOTING_SEQUENCE:
-                // Use the common shooting sequence from V2AutonController
+            case SPINUP:
                 if (!follower.isBusy()) {
-                    boolean sequenceActive = bot.updateShootingSequence(follower);
-                    if (!sequenceActive) {
-                        // Shooting complete, move to end
-                        setPathStep(pathStep.SHOOTPOS_BASICEND);
+                    bot.spinUpClose();
+                    if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait + Auton_firstShotExtraSpinupWait){
+                        setPathStep(pathStep.OPEN);
+                    } else if (numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) {
+                        setPathStep(pathStep.OPEN);
                     }
-                } else {
-                    // Keep updating sequence even while follower is busy
-                    bot.updateShootingSequence(follower);
                 }
                 break;
-
+            case OPEN:
+                bot.blockerOpen();
+                bot.killIntake();
+                if (stepTimer.getElapsedTime() >= Auton_gateWait) {
+                    setPathStep(pathStep.SHOOT);
+                }
+                break;
+            case SHOOT:
+                if (!follower.isBusy()) {
+                    bot.transferArmUp();
+                    bot.spinFeeder();
+                    if (stepTimer.getElapsedTime() >= Auton_ballTransferWait) {
+                        setPathStep(pathStep.CLOSE);
+                        numShots++;
+                    }
+                }
+                break;
+            case CLOSE:
+                if (!follower.isBusy()) {
+                    bot.blockerClose();
+                    bot.transferArmDown();
+                    bot.killFeeder();
+                    if (numShots >= Auton_numberOfRepeatShots) {
+                        setPathStep(pathStep.SHOOTPOS_BASICEND);
+                    } else if (stepTimer.getElapsedTime() >= Auton_transferResetWait) {
+                        setPathStep(pathStep.PUSH_NEW_BALL);
+                    }
+                }
+                break;
+            case PUSH_NEW_BALL:
+                bot.startIntake();
+                if (stepTimer.getElapsedTime() >= Auton_pushNewBallWait) {
+                    setPathStep(pathStep.SPINUP);
+                }
+                break;
             case SHOOTPOS_BASICEND:
                 follower.followPath(BlueShootTrianglePosToBlueBasicEnd);
                 setPathStep(pathStep.END);
                 break;
-
             case END:
-                bot.endAuton("Blue");
+                bot.endAuton();
                 break;
-
             default:
                 telemetry.addLine("No Step");
         }
@@ -63,11 +97,6 @@ public class BlueCloseTriangle_Pedro extends OpMode {
     public void setPathStep (pathStep newStep){
         currStep = newStep;
         stepTimer.resetTimer();
-
-        // When entering shooting sequence, start it
-        if (newStep == pathStep.SHOOTING_SEQUENCE) {
-            bot.startShootingSequence(null);
-        }
     }
 
     public void start(){
@@ -84,18 +113,11 @@ public class BlueCloseTriangle_Pedro extends OpMode {
         buildPaths(follower);
         bot = new V2AutonController(hardwareMap, telemetry);
         bot.botInit();
-        bot.follower = follower; // Set follower reference in bot
     }
 
     @Override
     public void loop() {
         follower.update();
         stepUpdate();
-
-        // Telemetry for debugging
-        telemetry.addData("Current Step", currStep);
-        telemetry.addData("Shots Fired", bot.getNumShots());
-        telemetry.addData("Shoot Step", bot.getCurrentShootStep());
-        telemetry.update();
     }
 }

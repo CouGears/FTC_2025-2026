@@ -28,7 +28,7 @@ public class PresetConstants {
     public static double Turret_ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
     public static int[] Turret_turretPos = {0, -(int) Math.round(Turret_ticksPerDeg * 45),
             (int) Math.round(Turret_ticksPerDeg * 45)};
-    public static int[] Turret_turretLimits = {-(int) Math.round(Turret_ticksPerDeg*180),(int) Math.round(Turret_ticksPerDeg*180)}; // CW, CCW
+    public static int[] Turret_turretLimits = { -45 * (int) Turret_ticksPerDeg,  45 * (int) Turret_ticksPerDeg}; // CW, CCW
     public static int Turret_turretStep = 100;
     //Servos
     public static double[] Servo_transferArmPos = {.75,.17};
@@ -39,7 +39,6 @@ public class PresetConstants {
     public static double AT_desiredDistClose = 67.0;
     public static double AT_desiredDistFar = 0; // Need to find
     //Autons
-    public static double spinUpTime = 0;
     public static double timeBackwardsClose = 1.4;
     public static double speedBackwardsClose = -.5;
     public static int Auton_numberOfRepeatShots = 3;
@@ -52,13 +51,12 @@ public class PresetConstants {
     public static double Auton_pushNewBallWait = 500;
     public static double Auton_pickupSpeed = .4;
 
-    public static int redGoalXPos = 3657;
-    public static int redGoalYPos = 3657;
-    public static int blueGoalXPos = 0;
-    public static int blueGoalYPos = 3657;
-
-
-
+    public static int Pedro_redGoalXPos = 3657;
+    public static int Pedro_redGoalYPos = 3657;
+    public static int Pedro_blueGoalXPos = 0;
+    public static int Pedro_blueGoalYPos = 3657;
+    public static int BlueAutonTurretStartDeg = 135;
+    public static int RedAutonTurretStartDeg = 45;
 
     // NAMES
     public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};

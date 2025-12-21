@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVel;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVelFar;
 
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -23,12 +22,12 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
-import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 public class V2TeleOpBase extends BotBase {
+
+    goalUtils goal;
     //Initializing motors
     public DcMotorEx FW, Intake, Turret;
     public CRServo Transfer;
@@ -46,8 +45,7 @@ public class V2TeleOpBase extends BotBase {
     private static final double DRIVE_DEADBAND = 0.05;
 
     //initialize classes
-    GoBildaPinpointDriver pinpoint;
-    goalUtils goal = new goalUtils();
+    public GoBildaPinpointDriver pinpoint;
 
     public V2TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
@@ -87,6 +85,7 @@ public class V2TeleOpBase extends BotBase {
             pinpoint = HM.get(GoBildaPinpointDriver.class, "pinpoint");
             setPinpointPose();
 
+
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
             tele.addData("ERROR MSG:", e);
@@ -106,14 +105,13 @@ public class V2TeleOpBase extends BotBase {
                 pedroPose.getHeading()
         ));
     }
-
     public Pose getPedroPose(){
         Pose2D p = pinpoint.getPosition();
         return new Pose (
                 p.getX(DistanceUnit.INCH),
                 p.getY(DistanceUnit.INCH),
                 p.getHeading(AngleUnit.RADIANS)
-        );
+                );
     }
 
     //****** FLYWHEELS ******
@@ -135,62 +133,44 @@ public class V2TeleOpBase extends BotBase {
         pos = Range.clip(pos, Turret_turretLimits[0], Turret_turretLimits[1]);
         Turret.setTargetPosition(pos);
     }
-
     //turret functions that actually make stuff move
     public void moveTurretL(){
-        int newPos = Turret.getCurrentPosition() + Turret_turretStep;
-        newPos = Math.min(newPos, Turret_turretLimits[1]);
-        Turret.setTargetPosition(newPos);
+        int tickAdjust = Turret.getCurrentPosition() + Turret_turretStep;
+        adjustTurretTick(tickAdjust);
     }
-
     public void moveTurretR(){
-        int newPos = Turret.getCurrentPosition() - Turret_turretStep;
-        newPos = Math.max(newPos, Turret_turretLimits[0]);
-        Turret.setTargetPosition(newPos);
+        int tickAdjust = Turret.getCurrentPosition() - Turret_turretStep;
+        adjustTurretTick(tickAdjust);
     }
 
     public void odoTurretAdjust() {
-        // Get bot position in millimeters
-        double botX = pinpoint.getPosX(DistanceUnit.MM);
-        double botY = pinpoint.getPosY(DistanceUnit.MM);
-        double botHeadingDeg = pinpoint.getHeading(AngleUnit.DEGREES);
+        double botX = pinpoint.getPosX(DistanceUnit.INCH);
+        double botY = pinpoint.getPosY(DistanceUnit.INCH);
 
-        // Get goal position based on locked tag
         double goalX, goalY;
-        if (goal.getLockedTagIndex() == 0) {
-            goalX = redGoalXPos;
-            goalY = redGoalYPos;
-        } else {
-            goalX = blueGoalXPos;
-            goalY = blueGoalYPos;
+        if (goal.getLockedTagIndex() == 0) { // RED
+            goalX = Pedro_redGoalXPos;
+            goalY = Pedro_redGoalYPos;
+        } else { // BLUE
+            goalX = Pedro_blueGoalXPos;
+            goalY = Pedro_blueGoalYPos;
         }
 
-        // Calculate vector from bot to goal
         double dx = goalX - botX;
         double dy = goalY - botY;
-
-        // Calculate angle to goal in field coordinates, use atan2 bc better??
         double targetFieldDeg = Math.toDegrees(Math.atan2(dy, dx));
+        double turretFieldDeg = getTurretLocalizedDeg();
+        double deltaDeg = targetFieldDeg - turretFieldDeg;
 
-        // Convert to turret-relative angle
-        double turretTargetDeg = targetFieldDeg - botHeadingDeg;
+        while (deltaDeg > 180) deltaDeg -= 360;
+        while (deltaDeg < -180) deltaDeg += 360;
 
-        // Normalize to [-180, 180], i want to use adjust tick function but chat and glaude both told me to do this
-        while (turretTargetDeg > 180) turretTargetDeg -= 360;
-        while (turretTargetDeg < -180) turretTargetDeg += 360;
-
-        // Convert to ticks and clip to limits
-        int targetTicks = (int)(turretTargetDeg * Turret_ticksPerDeg);
-        targetTicks = Range.clip(
-                targetTicks,
-                Turret_turretLimits[0],
-                Turret_turretLimits[1]
-        );
-
-        Turret.setTargetPosition(targetTicks);
+        // --- Command turret ---
+        adjustTurretDeg(deltaDeg);
     }
 
-    //turret adjustments
+
+    //turret adjustements
     public void adjustTurretDeg(double degAdjust) {
         int currentTicks = Turret.getCurrentPosition();
         int deltaTicks   = (int)(degAdjust * Turret_ticksPerDeg);
@@ -200,35 +180,30 @@ public class V2TeleOpBase extends BotBase {
     }
 
     public void adjustTurretTick(int tickAdjust) {
-        int targetTicks = Turret.getCurrentPosition() + tickAdjust;
+        int currentTicks = Turret.getCurrentPosition();
+        int targetTicks  = currentTicks + tickAdjust;
         targetTicks = turretResetBound(targetTicks);
         Turret.setTargetPosition(targetTicks);
     }
-
     //turret helper functions
     public int turretResetBound(int targetTicks){
-        // Wrap the turret position within valid bounds by rotating to the other side
-        // If we go past +180°, wrap to -180° side (and vice versa)
-        int fullRotationTicks = (int)(360 * Turret_ticksPerDeg);
-
-        while (targetTicks < Turret_turretLimits[0]) {
-            targetTicks += fullRotationTicks;
+        while (targetTicks < Turret_turretLimits[1] || targetTicks > Turret_turretLimits[2]) {
+            if (targetTicks < Turret_turretLimits[1]) {
+                targetTicks += 360;
+            } else if (targetTicks > Turret_turretLimits[2]){
+                targetTicks -= 360;
+            }
         }
-        while (targetTicks > Turret_turretLimits[1]) {
-            targetTicks -= fullRotationTicks;
-        }
-
         return targetTicks;
     }
 
     public double getTurretDeg(){
-        return (Turret.getCurrentPosition() / Turret_ticksPerDeg);
+        return ((Turret.getCurrentPosition())/Turret_ticksPerDeg);
     }
 
     public double getTurretLocalizedDeg(){
         return pinpoint.getHeading(AngleUnit.DEGREES) + getTurretDeg();
     }
-
     public void resetTurret(){
         Turret.setTargetPosition(0);
     }
@@ -258,6 +233,7 @@ public class V2TeleOpBase extends BotBase {
         Blocker.setPosition(Servo_blockerPos[0]);
     }
 
+
     //****** INTAKE ******
     public void startIntake() {
         Intake.setPower(Drive_intakePower);
@@ -273,6 +249,23 @@ public class V2TeleOpBase extends BotBase {
         IntakeSpinning = false; // So next time you press X it starts spinning in
     }
 
+    //****** SHOOTING ******
+    public void handleShootSequence() {
+        if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait)) {
+            killFeeder();
+            transferArmDown(); // Start moving arm down
+            blockerClose();
+        } else if (timerExpired_MSeconds("ShootSequence", Auton_gateWait)) {
+            spinFeeder();
+            transferArmUp();
+            killIntake(); // Dont was ball to move below the arm while its up
+        }
+        if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait + Auton_transferResetWait)) {
+            startIntake(); // Turn intake back on
+            deleteTimer("ShootSequence");
+        }
+    }
+
     //****** OTHER ******
     public void endTeleOp(){
         super.endTeleOp();
@@ -286,9 +279,7 @@ public class V2TeleOpBase extends BotBase {
         slowed = !slowed;
     }
 
-    public void RafiDrive(Gamepad gamepad1, boolean twoControllerMode) {
-        // Update pinpoint odometry
-        pinpoint.update();
+    public void RafiDrive(Gamepad gamepad1) {
 
         // --- Speed scaling ---
         if (!slowed) {
@@ -298,29 +289,18 @@ public class V2TeleOpBase extends BotBase {
         }
         speedMultiplier = -Range.clip(speedMultiplier, 0, 1);
 
-        // --- Driver inputs (depends on mode) ---
-        double forward, strafe, turnInput;
+        // --- Update odometry ---
+        pinpoint.update();
 
-        if (twoControllerMode) {
-            // TWO CONTROLLER MODE: Split-stick control
-            // Right stick Y = forward/backward ONLY
-            // Left stick X = strafe left/right ONLY
-            // Right trigger = turn right
-            // Left trigger = turn left
-            forward = gamepad1.right_stick_y * speedMultiplier;
-            strafe  = gamepad1.left_stick_x * speedMultiplier;
-            turnInput = (gamepad1.right_trigger - gamepad1.left_trigger) * speedMultiplier;
-        } else {
-            // ONE CONTROLLER MODE: Original control
-            // Right stick = forward/backward AND strafe
-            // Left stick X = turn
-            forward = gamepad1.right_stick_y * speedMultiplier;
-            strafe  = gamepad1.right_stick_x * speedMultiplier;
-            turnInput = gamepad1.left_stick_x * speedMultiplier;
-        }
+        // --- Driver inputs ---
+        double forward = gamepad1.right_stick_y * speedMultiplier;
+        double strafe  = gamepad1.right_stick_x * speedMultiplier;
+        double turnInput = gamepad1.left_stick_x * speedMultiplier;
 
         double turn;
-        double currentHeading = pinpoint.getPosition().getHeading(AngleUnit.DEGREES);
+
+        double currentHeading =
+                pinpoint.getPosition().getHeading(AngleUnit.DEGREES);
 
         // Are we actually translating?
         boolean driving =
@@ -355,7 +335,7 @@ public class V2TeleOpBase extends BotBase {
             turn = error * HEADING_kP;
         }
 
-        // --- RAFI mecanum math ---
+        // --- RAFI mecanum math (unchanged) ---
         double frontLeftPower  = forward - strafe - turn;
         double frontRightPower = forward + strafe + turn;
         double backLeftPower   = forward + strafe - turn;
