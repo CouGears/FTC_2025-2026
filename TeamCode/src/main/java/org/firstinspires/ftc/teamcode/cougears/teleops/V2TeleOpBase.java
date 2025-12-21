@@ -187,10 +187,10 @@ public class V2TeleOpBase extends BotBase {
     }
     //turret helper functions
     public int turretResetBound(int targetTicks){
-        while (targetTicks < Turret_turretLimits[1] || targetTicks > Turret_turretLimits[2]) {
-            if (targetTicks < Turret_turretLimits[1]) {
+        while (targetTicks < Turret_turretLimits[0] || targetTicks > Turret_turretLimits[1]) {
+            if (targetTicks < Turret_turretLimits[0]) {
                 targetTicks += 360;
-            } else if (targetTicks > Turret_turretLimits[2]){
+            } else if (targetTicks > Turret_turretLimits[0]){
                 targetTicks -= 360;
             }
         }

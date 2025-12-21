@@ -25,14 +25,11 @@ public class RedFarWall_Pedro extends OpMode {
         // For movement with action: START_END_ACTION
         STARTPOS_SHOOTWALLPOS,
         SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
-        SHOOTPOS_BASICEND,
         END
     }
     pathStep currStep = pathStep.STARTPOS_SHOOTWALLPOS;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd);  }
-
         switch (currStep) {
             case STARTPOS_SHOOTWALLPOS:
                 bot.spinUpClose();
@@ -72,7 +69,7 @@ public class RedFarWall_Pedro extends OpMode {
                     bot.transferArmDown();
                     bot.killFeeder();
                     if (numShots >= Auton_numberOfRepeatShots) {
-                        setPathStep(pathStep.SHOOTPOS_BASICEND);
+                        setPathStep(pathStep.END);
                     } else if (stepTimer.getElapsedTime() >= Auton_transferResetWait) {
                         setPathStep(pathStep.PUSH_NEW_BALL);
                     }
@@ -83,10 +80,6 @@ public class RedFarWall_Pedro extends OpMode {
                 if (stepTimer.getElapsedTime() >= Auton_pushNewBallWait) {
                     setPathStep(pathStep.SPINUP);
                 }
-                break;
-            case SHOOTPOS_BASICEND:
-                follower.followPath(RedShootTrianglePosToRedBasicEnd);
-                setPathStep(pathStep.END);
                 break;
             case END:
                 bot.endAuton();
@@ -112,7 +105,7 @@ public class RedFarWall_Pedro extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        follower.setPose(RedStartPos);
+        follower.setPose(RedStartPosFar);
         buildPaths(follower);
         bot = new V2AutonController(hardwareMap, telemetry);
         bot.botInit();

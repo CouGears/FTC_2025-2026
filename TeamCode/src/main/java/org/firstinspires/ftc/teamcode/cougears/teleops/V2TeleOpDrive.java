@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
@@ -45,7 +46,8 @@ public class V2TeleOpDrive extends LinearOpMode {
                 telemetry.addLine("PEDRO IS DRIVING");
                 PTM.update();
             } else {
-                PTM.follower.setPose(bot.getPedroPose());
+//                PTM.follower.setPose(bot.getPedroPose());
+                PTM.follower.updatePose();
                 if (bot.isPressed(1, Button.B)) {
                     bot.toggleSlow();
                 }
@@ -54,10 +56,10 @@ public class V2TeleOpDrive extends LinearOpMode {
             }
 
             //****** ATM ******
-            if (bot.isPressed(1, Button.DPAD_DOWN)) {
-                ATM.FullAutoMove(AT_redTag);
-                ATM.FullAutoMove(AT_blueTag);
-            }
+//            if (bot.isPressed(1, Button.DPAD_DOWN)) {
+//                ATM.FullAutoMove(AT_redTag);
+//                ATM.FullAutoMove(AT_blueTag);
+//            }
 
             if (bot.isPressed(1, Button.DPAD_UP)) {
                 goal.toggleTagLock();
@@ -74,7 +76,10 @@ public class V2TeleOpDrive extends LinearOpMode {
 
             //****** AUTON MOVING ******
             if (bot.isHeld(1, Button.DPAD_DOWN)){
-                PTM.moveToPos(RedShootTrianglePos);
+                if (goal.getLockedTagID() == AT_redTag)
+                    PTM.moveToPos(RedShootTrianglePos);
+                else if (goal.getLockedTagID() == AT_blueTag)
+                    PTM.moveToPos(BlueShootTrianglePos);
                 PTM.update();
             }
 
@@ -106,12 +111,13 @@ public class V2TeleOpDrive extends LinearOpMode {
 
             //****** TURRET (Controller 2) ******
             // BUTTONS: A, DPAD_RIGHT, DPAD_LEFT
-            if (bot.isPressed(2, Button.A))
+            if (bot.isPressed(2, Button.A)) {
                 bot.resetTurret();
-            else if (bot.isPressed(2, Button.DPAD_RIGHT))
+            }else if (bot.isPressed(2, Button.DPAD_RIGHT)) {
                 bot.moveTurretR();
-            else if (bot.isPressed(2, Button.DPAD_LEFT))
+            }else if (bot.isPressed(2, Button.DPAD_LEFT)){
                 bot.moveTurretL();
+                }
 
             //****** SHOOT SEQUENCE (Controller 2)******
             // BUTTONS: R_TRIGGER

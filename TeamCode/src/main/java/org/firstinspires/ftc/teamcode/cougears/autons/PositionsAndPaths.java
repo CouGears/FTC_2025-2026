@@ -12,9 +12,9 @@ public class PositionsAndPaths {
 
     // ===== RED POSITIONS =====
     public static final Pose RedStartPos         = new Pose(144 - 21.5, 122, Math.toRadians(180 - 135));
-    public static final Pose RedStartPosFar      = new Pose(144 - 88,   8, Math.toRadians(90));
+    public static final Pose RedStartPosFar      = new Pose(144 - 56,   8, Math.toRadians(90));
     public static final Pose RedShootTrianglePos = new Pose(144 - 66.5,  78, Math.toRadians(180 - 135));
-    public static final Pose RedShootWallPos     = new Pose(144 - 66.5,  130, Math.toRadians(180 - 180));
+    public static final Pose RedShootWallPos     = new Pose(144 - 66.5,  120, Math.toRadians(180 - 180));
 
     public static final Pose RedBallDepotStart1 = new Pose(144 - 45.5, 84,  Math.toRadians(180 - 180));
     public static final Pose RedBallDepotStart2 = new Pose(144 - 45.5, 59,               Math.toRadians(180 - 180));
@@ -30,17 +30,18 @@ public class PositionsAndPaths {
     public static final Pose RedSweepStart      = new Pose(144 - 7.5, 53,  Math.toRadians(180 - 260));
     public static final Pose RedSweepEnd        = new Pose(144 - 7.5, 18,               Math.toRadians(180 - 260));
 
-    public static final Pose RedBasicEnd = new Pose(144 - 48,  144 - 62, Math.toRadians(-90));
+    public static final Pose RedBasicEnd = new Pose(144 - 48,  144 - 70, Math.toRadians(-90));
 
-    public static final Pose RedFarToWallIntermidate1 = new Pose(45, 60, Math.toRadians(90));
-    public static final Pose RedFarToWallIntermidate2 = new Pose(45, 105, Math.toRadians(90));
+    public static final Pose RedFarToWallIntermidate1 = new Pose(144 - 45, 60, Math.toRadians(90));
+    public static final Pose RedFarToWallIntermidate2 = new Pose(144 - 45, 105, Math.toRadians(90));
 
 
 
     // ===== BLUE POSITIONS =====
     public static final Pose BlueStartPos       = new Pose(21.5, 122, Math.toRadians(135));
+    public static final Pose BlueStartPosFar      = new Pose(56,   8, Math.toRadians(90));
     public static final Pose BlueShootTrianglePos = new Pose(66.5,  78,  Math.toRadians(135));
-    public static final Pose BlueShootWallPos     = new Pose(66.5,  130,  Math.toRadians(180));
+    public static final Pose BlueShootWallPos     = new Pose(66.5,  120,  Math.toRadians(180));
 
     public static final Pose BlueBallDepotStart1 = new Pose(45.5, 84,  Math.toRadians(180));
     public static final Pose BlueBallDepotStart2 = new Pose(45.5, 59,                 Math.toRadians(180));
@@ -56,7 +57,10 @@ public class PositionsAndPaths {
     public static final Pose BlueSweepStart      = new Pose(7.5, 53,  Math.toRadians(260));
     public static final Pose BlueSweepEnd        = new Pose(7.5, 18,                Math.toRadians(260));
 
-    public static final Pose BlueBasicEnd = new Pose(48,  62, Math.toRadians(90));
+    public static final Pose BlueBasicEnd = new Pose(48,  70, Math.toRadians(90));
+
+    public static final Pose BlueFarToWallIntermidate1 = new Pose(45, 60, Math.toRadians(90));
+    public static final Pose BlueFarToWallIntermidate2 = new Pose(45, 105, Math.toRadians(90));
 
     // ===== RED PATHS =====
     public static PathChain RedStartPosToRedShootTrianglePos;
@@ -105,6 +109,7 @@ public class PositionsAndPaths {
     public static PathChain BlueShootTrianglePosToBlueBasicEnd;
     public static PathChain BlueShootWallPosToBlueBasicEnd;
     public static PathChain BlueShootTrianglePosToBallDepot1Pickup;
+    public static PathChain BlueFarStartPosToBlueShootWallPos;
 
 
     // ===== BUILD ALL PATHS =====
@@ -154,6 +159,8 @@ public class PositionsAndPaths {
         BlueShootTrianglePosToBlueBasicEnd       = buildPath(f, BlueShootTrianglePos, BlueBasicEnd);
         BlueShootWallPosToBlueBasicEnd           = buildPath(f, BlueShootWallPos, BlueBasicEnd);
         BlueShootTrianglePosToBallDepot1Pickup   = buildLongPath(f, BlueShootTrianglePos, BlueBallDepotStart1, BlueBallDepotEnd1);
+        BlueFarStartPosToBlueShootWallPos        = buildLongPath(f, BlueStartPosFar, BlueFarToWallIntermidate1, BlueFarToWallIntermidate2, BlueShootWallPos);
+
     }
 
     // ===== HELPER =====

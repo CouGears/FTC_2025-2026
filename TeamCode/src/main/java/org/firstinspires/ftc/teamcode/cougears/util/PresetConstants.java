@@ -41,7 +41,7 @@ public class PresetConstants {
     //Autons
     public static double timeBackwardsClose = 1.4;
     public static double speedBackwardsClose = -.5;
-    public static int Auton_numberOfRepeatShots = 3;
+    public static int Auton_numberOfRepeatShots = 5;
 
     public static double Auton_spinupWait = 2000;
     public static double Auton_firstShotExtraSpinupWait = 2000;

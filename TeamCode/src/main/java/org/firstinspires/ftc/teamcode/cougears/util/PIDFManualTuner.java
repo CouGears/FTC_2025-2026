@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+@TeleOp (group = "Testing")
 public class PIDFManualTuner extends OpMode {
     public DcMotorEx FW;
     public double highVel = 1600;
@@ -70,9 +71,9 @@ public class PIDFManualTuner extends OpMode {
         telemetry.addData("Target Velocity", curTargVel);
         telemetry.addData("Current Velocity", curVel);
         telemetry.addData("Error", error);
-        telemetry.addData("P", "%F (Dpad U-/D+)", P);
-        telemetry.addData("F", "%F (Dpad L-/R+)", F);
-        telemetry.addData("Increments", "%F (A+/B-)", increm[ind]);
+        telemetry.addData("P", "%.2f (Dpad U-/D+)", P);
+        telemetry.addData("F", "%.2f (Dpad L-/R+)", F);
+        telemetry.addData("Increments", "%.2f (A+/B-)", increm[ind]);
         telemetry.addLine("Guide: Use Y to slow wheel down to test the adjustment" +
                 "\nAdd a bunch of P to start" +
                 "\nTune F until error is low" +
