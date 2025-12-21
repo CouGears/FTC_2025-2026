@@ -5,4 +5,5 @@ import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*
 
 public class Storage {
     static public Pose endOfAutonPose = RedStartPos;
+    static public String endOfAutonColor = "Red";
 }

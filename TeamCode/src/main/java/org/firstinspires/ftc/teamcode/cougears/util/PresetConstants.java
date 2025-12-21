@@ -28,7 +28,7 @@ public class PresetConstants {
     public static double Turret_ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
     public static int[] Turret_turretPos = {0, -(int) Math.round(Turret_ticksPerDeg * 45),
             (int) Math.round(Turret_ticksPerDeg * 45)};
-    public static int[] Turret_turretLimits = {-400,400}; // CW, CCW
+    public static int[] Turret_turretLimits = {-(int) Math.round(Turret_ticksPerDeg*180),(int) Math.round(Turret_ticksPerDeg*180)}; // CW, CCW
     public static int Turret_turretStep = 100;
     //Servos
     public static double[] Servo_transferArmPos = {.75,.17};
@@ -56,8 +56,7 @@ public class PresetConstants {
     public static int redGoalYPos = 3657;
     public static int blueGoalXPos = 0;
     public static int blueGoalYPos = 3657;
-    public static int BlueAutonTurretStartDeg = 135;
-    public static int RedAutonTurretStartDeg = 45;
+
 
 
 

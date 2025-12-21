@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.cougears.autons.Red;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.util.Timer;
@@ -16,14 +15,10 @@ public class RedCloseWall_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
-    public int numShots = 0;
 
     public enum pathStep {
-        // For moving: START_END
-        // For action: ACTION
-        // For movement with action: START_END_ACTION
         STARTPOS_SHOOTWALLPOS,
-        SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
+        SHOOTING_SEQUENCE,
         SHOOTPOS_BASICEND,
         END
     }
@@ -34,60 +29,32 @@ public class RedCloseWall_Pedro extends OpMode {
             case STARTPOS_SHOOTWALLPOS:
                 bot.spinUpClose();
                 follower.followPath(RedStartPosToRedShootWallPos);
-                setPathStep(pathStep.SPINUP);
+                setPathStep(pathStep.SHOOTING_SEQUENCE);
                 break;
-            case SPINUP:
+
+            case SHOOTING_SEQUENCE:
+                // Use the common shooting sequence from V2AutonController
                 if (!follower.isBusy()) {
-                    bot.spinUpClose();
-                    if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait){
-                        setPathStep(pathStep.OPEN);
-                    } else if (numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) {
-                        setPathStep(pathStep.OPEN);
-                    }
-                }
-                break;
-            case OPEN:
-                bot.blockerOpen();
-                bot.killIntake();
-                if (stepTimer.getElapsedTime() >= Auton_gateWait) {
-                    setPathStep(pathStep.SHOOT);
-                }
-                break;
-            case SHOOT:
-                if (!follower.isBusy()) {
-                    bot.transferArmUp();
-                    bot.spinFeeder();
-                    if (stepTimer.getElapsedTime() >= Auton_ballTransferWait) {
-                        setPathStep(pathStep.CLOSE);
-                        numShots++;
-                    }
-                }
-                break;
-            case CLOSE:
-                if (!follower.isBusy()) {
-                    bot.blockerClose();
-                    bot.transferArmDown();
-                    bot.killFeeder();
-                    if (numShots >= Auton_numberOfRepeatShots) {
+                    boolean sequenceActive = bot.updateShootingSequence(follower);
+                    if (!sequenceActive) {
+                        // Shooting complete, move to end
                         setPathStep(pathStep.SHOOTPOS_BASICEND);
-                    } else if (stepTimer.getElapsedTime() >= Auton_transferResetWait) {
-                        setPathStep(pathStep.PUSH_NEW_BALL);
                     }
+                } else {
+                    // Keep updating sequence even while follower is busy
+                    bot.updateShootingSequence(follower);
                 }
                 break;
-            case PUSH_NEW_BALL:
-                bot.startIntake();
-                if (stepTimer.getElapsedTime() >= Auton_pushNewBallWait) {
-                    setPathStep(pathStep.SPINUP);
-                }
-                break;
+
             case SHOOTPOS_BASICEND:
                 follower.followPath(RedShootWallPosToRedBasicEnd);
                 setPathStep(pathStep.END);
                 break;
+
             case END:
-                bot.endAuton();
+                bot.endAuton("Red");
                 break;
+
             default:
                 telemetry.addLine("No Step");
         }
@@ -96,6 +63,11 @@ public class RedCloseWall_Pedro extends OpMode {
     public void setPathStep (pathStep newStep){
         currStep = newStep;
         stepTimer.resetTimer();
+
+        // When entering shooting sequence, start it
+        if (newStep == pathStep.SHOOTING_SEQUENCE) {
+            bot.startShootingSequence(null);
+        }
     }
 
     public void start(){
@@ -112,11 +84,18 @@ public class RedCloseWall_Pedro extends OpMode {
         buildPaths(follower);
         bot = new V2AutonController(hardwareMap, telemetry);
         bot.botInit();
+        bot.follower = follower; // Set follower reference in bot
     }
 
     @Override
     public void loop() {
         follower.update();
         stepUpdate();
+
+        // Telemetry for debugging
+        telemetry.addData("Current Step", currStep);
+        telemetry.addData("Shots Fired", bot.getNumShots());
+        telemetry.addData("Shoot Step", bot.getCurrentShootStep());
+        telemetry.update();
     }
 }

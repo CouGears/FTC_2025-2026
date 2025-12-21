@@ -29,8 +29,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 public class V2TeleOpBase extends BotBase {
-
-    goalUtils goal;
     //Initializing motors
     public DcMotorEx FW, Intake, Turret;
     public CRServo Transfer;
@@ -48,7 +46,8 @@ public class V2TeleOpBase extends BotBase {
     private static final double DRIVE_DEADBAND = 0.05;
 
     //initialize classes
-    public GoBildaPinpointDriver pinpoint;
+    GoBildaPinpointDriver pinpoint;
+    goalUtils goal = new goalUtils();
 
     public V2TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
@@ -88,7 +87,6 @@ public class V2TeleOpBase extends BotBase {
             pinpoint = HM.get(GoBildaPinpointDriver.class, "pinpoint");
             setPinpointPose();
 
-
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
             tele.addData("ERROR MSG:", e);
@@ -108,14 +106,16 @@ public class V2TeleOpBase extends BotBase {
                 pedroPose.getHeading()
         ));
     }
+
     public Pose getPedroPose(){
         Pose2D p = pinpoint.getPosition();
         return new Pose (
                 p.getX(DistanceUnit.INCH),
                 p.getY(DistanceUnit.INCH),
                 p.getHeading(AngleUnit.RADIANS)
-                );
+        );
     }
+
     //****** FLYWHEELS ******
     public void spinUpClose() {
         FW.setVelocity(FW_shootVel);
@@ -135,54 +135,62 @@ public class V2TeleOpBase extends BotBase {
         pos = Range.clip(pos, Turret_turretLimits[0], Turret_turretLimits[1]);
         Turret.setTargetPosition(pos);
     }
+
     //turret functions that actually make stuff move
     public void moveTurretL(){
-        int tickAdjust = Turret.getCurrentPosition() + Turret_turretStep;
-        adjustTurretTick(tickAdjust);
+        int newPos = Turret.getCurrentPosition() + Turret_turretStep;
+        newPos = Math.min(newPos, Turret_turretLimits[1]);
+        Turret.setTargetPosition(newPos);
     }
+
     public void moveTurretR(){
-        int tickAdjust = Turret.getCurrentPosition() - Turret_turretStep;
-        adjustTurretTick(tickAdjust);
+        int newPos = Turret.getCurrentPosition() - Turret_turretStep;
+        newPos = Math.max(newPos, Turret_turretLimits[0]);
+        Turret.setTargetPosition(newPos);
     }
 
     public void odoTurretAdjust() {
-
-        // --- Robot field position (MM) ---
+        // Get bot position in millimeters
         double botX = pinpoint.getPosX(DistanceUnit.MM);
         double botY = pinpoint.getPosY(DistanceUnit.MM);
+        double botHeadingDeg = pinpoint.getHeading(AngleUnit.DEGREES);
 
-        // --- Goal field position (MM) ---
+        // Get goal position based on locked tag
         double goalX, goalY;
-        if (goal.getLockedTagIndex() == 0) { // RED
+        if (goal.getLockedTagIndex() == 0) {
             goalX = redGoalXPos;
             goalY = redGoalYPos;
-        } else { // BLUE
+        } else {
             goalX = blueGoalXPos;
             goalY = blueGoalYPos;
         }
 
+        // Calculate vector from bot to goal
         double dx = goalX - botX;
         double dy = goalY - botY;
 
-        // --- Field angle robot must face (deg) ---
+        // Calculate angle to goal in field coordinates, use atan2 bc better??
         double targetFieldDeg = Math.toDegrees(Math.atan2(dy, dx));
 
-        // --- Current turret field angle ---
-        double turretFieldDeg = getTurretLocalizedDeg();
+        // Convert to turret-relative angle
+        double turretTargetDeg = targetFieldDeg - botHeadingDeg;
 
-        // --- Error ---
-        double deltaDeg = targetFieldDeg - turretFieldDeg;
+        // Normalize to [-180, 180], i want to use adjust tick function but chat and glaude both told me to do this
+        while (turretTargetDeg > 180) turretTargetDeg -= 360;
+        while (turretTargetDeg < -180) turretTargetDeg += 360;
 
-        // Wrap to [-180, 180]
-        while (deltaDeg > 180) deltaDeg -= 360;
-        while (deltaDeg < -180) deltaDeg += 360;
+        // Convert to ticks and clip to limits
+        int targetTicks = (int)(turretTargetDeg * Turret_ticksPerDeg);
+        targetTicks = Range.clip(
+                targetTicks,
+                Turret_turretLimits[0],
+                Turret_turretLimits[1]
+        );
 
-        // --- Command turret ---
-        adjustTurretDeg(deltaDeg);
+        Turret.setTargetPosition(targetTicks);
     }
 
-
-    //turret adjustements
+    //turret adjustments
     public void adjustTurretDeg(double degAdjust) {
         int currentTicks = Turret.getCurrentPosition();
         int deltaTicks   = (int)(degAdjust * Turret_ticksPerDeg);
@@ -192,34 +200,38 @@ public class V2TeleOpBase extends BotBase {
     }
 
     public void adjustTurretTick(int tickAdjust) {
-        int currentTicks = Turret.getCurrentPosition();
-        int targetTicks  = currentTicks + tickAdjust;
+        int targetTicks = Turret.getCurrentPosition() + tickAdjust;
         targetTicks = turretResetBound(targetTicks);
         Turret.setTargetPosition(targetTicks);
     }
+
     //turret helper functions
     public int turretResetBound(int targetTicks){
-        while (targetTicks < Turret_turretLimits[1] || targetTicks > Turret_turretLimits[2]) {
-            if (targetTicks < Turret_turretLimits[1]) {
-                targetTicks += 360;
-            } else if (targetTicks > Turret_turretLimits[2]){
-                targetTicks -= 360;
-            }
+        // Wrap the turret position within valid bounds by rotating to the other side
+        // If we go past +180°, wrap to -180° side (and vice versa)
+        int fullRotationTicks = (int)(360 * Turret_ticksPerDeg);
+
+        while (targetTicks < Turret_turretLimits[0]) {
+            targetTicks += fullRotationTicks;
         }
+        while (targetTicks > Turret_turretLimits[1]) {
+            targetTicks -= fullRotationTicks;
+        }
+
         return targetTicks;
     }
 
     public double getTurretDeg(){
-        return ((Turret.getCurrentPosition())/Turret_ticksPerDeg);
+        return (Turret.getCurrentPosition() / Turret_ticksPerDeg);
     }
 
     public double getTurretLocalizedDeg(){
         return pinpoint.getHeading(AngleUnit.DEGREES) + getTurretDeg();
     }
+
     public void resetTurret(){
         Turret.setTargetPosition(0);
     }
-
 
     //****** SERVOS ******
     public void spinFeeder(){
@@ -245,7 +257,6 @@ public class V2TeleOpBase extends BotBase {
     public void blockerClose(){
         Blocker.setPosition(Servo_blockerPos[0]);
     }
-
 
     //****** INTAKE ******
     public void startIntake() {
@@ -275,7 +286,9 @@ public class V2TeleOpBase extends BotBase {
         slowed = !slowed;
     }
 
-    public void RafiDrive(Gamepad gamepad1) {
+    public void RafiDrive(Gamepad gamepad1, boolean twoControllerMode) {
+        // Update pinpoint odometry
+        pinpoint.update();
 
         // --- Speed scaling ---
         if (!slowed) {
@@ -285,18 +298,29 @@ public class V2TeleOpBase extends BotBase {
         }
         speedMultiplier = -Range.clip(speedMultiplier, 0, 1);
 
-        // --- Update odometry ---
-        pinpoint.update();
+        // --- Driver inputs (depends on mode) ---
+        double forward, strafe, turnInput;
 
-        // --- Driver inputs ---
-        double forward = gamepad1.right_stick_y * speedMultiplier;
-        double strafe  = gamepad1.right_stick_x * speedMultiplier;
-        double turnInput = gamepad1.left_stick_x * speedMultiplier;
+        if (twoControllerMode) {
+            // TWO CONTROLLER MODE: Split-stick control
+            // Right stick Y = forward/backward ONLY
+            // Left stick X = strafe left/right ONLY
+            // Right trigger = turn right
+            // Left trigger = turn left
+            forward = gamepad1.right_stick_y * speedMultiplier;
+            strafe  = gamepad1.left_stick_x * speedMultiplier;
+            turnInput = (gamepad1.right_trigger - gamepad1.left_trigger) * speedMultiplier;
+        } else {
+            // ONE CONTROLLER MODE: Original control
+            // Right stick = forward/backward AND strafe
+            // Left stick X = turn
+            forward = gamepad1.right_stick_y * speedMultiplier;
+            strafe  = gamepad1.right_stick_x * speedMultiplier;
+            turnInput = gamepad1.left_stick_x * speedMultiplier;
+        }
 
         double turn;
-
-        double currentHeading =
-                pinpoint.getPosition().getHeading(AngleUnit.DEGREES);
+        double currentHeading = pinpoint.getPosition().getHeading(AngleUnit.DEGREES);
 
         // Are we actually translating?
         boolean driving =
@@ -331,7 +355,7 @@ public class V2TeleOpBase extends BotBase {
             turn = error * HEADING_kP;
         }
 
-        // --- RAFI mecanum math (unchanged) ---
+        // --- RAFI mecanum math ---
         double frontLeftPower  = forward - strafe - turn;
         double frontRightPower = forward + strafe + turn;
         double backLeftPower   = forward + strafe - turn;
