@@ -31,6 +31,8 @@ public class RedFarWall_Pedro extends OpMode {
     pathStep currStep = pathStep.STARTPOS_SHOOTWALLPOS;
 
     public void stepUpdate() {
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd);  }
+
         switch (currStep) {
             case STARTPOS_SHOOTWALLPOS:
                 bot.spinUpClose();

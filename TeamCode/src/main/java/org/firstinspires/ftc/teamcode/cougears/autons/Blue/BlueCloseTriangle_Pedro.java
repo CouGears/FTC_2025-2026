@@ -30,6 +30,7 @@ public class BlueCloseTriangle_Pedro extends OpMode {
     pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
 
     public void stepUpdate() {
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, BlueBasicEnd);  }
         switch (currStep) {
             case STARTPOS_SHOOTTRIANGLEPOS:
                 bot.spinUpClose();

@@ -30,6 +30,8 @@ public class RedCloseTriangleAndPickup_Pedro extends OpMode {
     pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
 
     public void stepUpdate() {
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd);  }
+
         switch (currStep) {
             case STARTPOS_SHOOTTRIANGLEPOS:
                 bot.spinUpClose();
@@ -38,8 +40,6 @@ public class RedCloseTriangleAndPickup_Pedro extends OpMode {
                 break;
             case SPINUP:
                 if (!follower.isBusy()) {
-                    if (opModeTimer.getElapsedTimeSeconds() >= 28) { setPathStep(pathStep.SHOOTPOS_BASICEND); }
-
                     if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait){
                         setPathStep(pathStep.OPEN);
                     } else if ((numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) || bot.FW.getVelocity() >= FW_shootVel - 100) {

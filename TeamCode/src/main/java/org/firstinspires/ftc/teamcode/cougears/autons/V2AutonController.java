@@ -11,6 +11,9 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Servo
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_turretLimits;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_turretStep;
 
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -160,6 +163,16 @@ public class V2AutonController {
     public void ejectIntake() {
         Intake.setPower(-1);
         IntakeSpinning = false; // So next time you press X it starts spinning in
+    }
+
+    //****** AUTON ******
+    public void moveToPose(Follower f, Pose targetPose){
+        f.followPath(
+                f.pathBuilder()
+                        .addPath(new BezierLine(f.getPose(), targetPose))
+                        .setLinearHeadingInterpolation(f.getHeading(), targetPose.getHeading())
+                        .build()
+        );
     }
 
     //****** OTHER ******

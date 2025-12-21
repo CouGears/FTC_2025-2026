@@ -30,6 +30,7 @@ public class BlueCloseWall_Pedro extends OpMode {
     pathStep currStep = pathStep.STARTPOS_SHOOTPOSWALL;
 
     public void stepUpdate() {
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, BlueBasicEnd);  }
         switch (currStep) {
             case STARTPOS_SHOOTPOSWALL:
                 bot.spinUpClose();
