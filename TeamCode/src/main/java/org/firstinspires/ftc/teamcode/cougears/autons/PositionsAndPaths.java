@@ -11,26 +11,26 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.rando
 public class PositionsAndPaths {
 
     // ===== RED POSITIONS =====
-    public static final Pose RedStartPos         = new Pose(144 - 21.543307086614174, 122.2047244094488, Math.toRadians(180 - 135));
-    public static final Pose RedStartPosFar      = new Pose(144 - 88, 8, Math.toRadians(90));
-    public static final Pose RedShootTrianglePos = new Pose(144 - 66.51968503937007,  77.85826771653544, Math.toRadians(180 - 135));
-    public static final Pose RedShootWallPos     = new Pose(144 - 66.51968503937007,  130.0000000000000, Math.toRadians(180 - 180));
+    public static final Pose RedStartPos         = new Pose(144 - 21.5, 122, Math.toRadians(180 - 135));
+    public static final Pose RedStartPosFar      = new Pose(144 - 88,   8, Math.toRadians(90));
+    public static final Pose RedShootTrianglePos = new Pose(144 - 66.5,  78, Math.toRadians(180 - 135));
+    public static final Pose RedShootWallPos     = new Pose(144 - 66.5,  130, Math.toRadians(180 - 180));
 
-    public static final Pose RedBallDepotStart1 = new Pose(144 - 45.47819063004846, 83.74798061389338,  Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotStart2 = new Pose(144 - 45.47819063004846, 59.2,               Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotStart3 = new Pose(144 - 45.47819063004846, 35.592891760904685, Math.toRadians(180 - 180));
+    public static final Pose RedBallDepotStart1 = new Pose(144 - 45.5, 84,  Math.toRadians(180 - 180));
+    public static final Pose RedBallDepotStart2 = new Pose(144 - 45.5, 59,               Math.toRadians(180 - 180));
+    public static final Pose RedBallDepotStart3 = new Pose(144 - 45.5, 35.5, Math.toRadians(180 - 180));
 
-    public static final Pose RedBallDepotEnd1   = new Pose(144 - 12.794830371567043, 83.74798061389338,  Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotEnd2   = new Pose(144 - 12.794830371567043, 59.2,               Math.toRadians(180));
-    public static final Pose RedBallDepotEnd3   = new Pose(144 - 12.794830371567043, 35.592891760904685, Math.toRadians(180));
+    public static final Pose RedBallDepotEnd1   = new Pose(144 - 13, 84,  Math.toRadians(180 - 180));
+    public static final Pose RedBallDepotEnd2   = new Pose(144 - 13, 59,               Math.toRadians(180));
+    public static final Pose RedBallDepotEnd3   = new Pose(144 - 13, 35.5, Math.toRadians(180));
 
-    public static final Pose RedGateInit        = new Pose(144 - 17.21486268174475, 74.21001615508885,  Math.toRadians(180 - 180));
-    public static final Pose RedGateOpen        = new Pose(144 - 17.21486268174475, 79.56058158319871,  Math.toRadians(180 - 180));
+    public static final Pose RedGateInit        = new Pose(144 - 17, 74,  Math.toRadians(180 - 180));
+    public static final Pose RedGateOpen        = new Pose(144 - 17, 79.5,  Math.toRadians(180 - 180));
 
-    public static final Pose RedSweepStart      = new Pose(144 - 7.444264943457189, 53.04038772213247,  Math.toRadians(180 - 260));
-    public static final Pose RedSweepEnd        = new Pose(144 - 7.444264943457189, 17.8,               Math.toRadians(180 - 260));
+    public static final Pose RedSweepStart      = new Pose(144 - 7.5, 53,  Math.toRadians(180 - 260));
+    public static final Pose RedSweepEnd        = new Pose(144 - 7.5, 18,               Math.toRadians(180 - 260));
 
-    public static final Pose RedBasicEnd = new Pose(144 - 47.9579176252764,  144 - 61.95628968237839, Math.toRadians(-90));
+    public static final Pose RedBasicEnd = new Pose(144 - 48,  144 - 62, Math.toRadians(-90));
 
     public static final Pose RedFarToWallIntermidate1 = new Pose(45, 60, Math.toRadians(90));
     public static final Pose RedFarToWallIntermidate2 = new Pose(45, 105, Math.toRadians(90));
@@ -38,26 +38,25 @@ public class PositionsAndPaths {
 
 
     // ===== BLUE POSITIONS =====
-    public static final Pose BlueStartPos       = new Pose(21.543307086614174, 122.20472440944881, Math.toRadians(135));
-    public static final Pose BlueShootTrianglePos = new Pose(66.51968503937007,  77.85826771653544,  Math.toRadians(135));
-    public static final Pose BlueShootWallPos     = new Pose(144,  130,  Math.toRadians(180));
+    public static final Pose BlueStartPos       = new Pose(21.5, 122, Math.toRadians(135));
+    public static final Pose BlueShootTrianglePos = new Pose(66.5,  78,  Math.toRadians(135));
+    public static final Pose BlueShootWallPos     = new Pose(66.5,  130,  Math.toRadians(180));
 
+    public static final Pose BlueBallDepotStart1 = new Pose(45.5, 84,  Math.toRadians(180));
+    public static final Pose BlueBallDepotStart2 = new Pose(45.5, 59,                 Math.toRadians(180));
+    public static final Pose BlueBallDepotStart3 = new Pose(45.5, 35.5, Math.toRadians(180));
 
-    public static final Pose BlueBallDepotStart1 = new Pose(45.47819063004846, 83.74798061389338,  Math.toRadians(180));
-    public static final Pose BlueBallDepotStart2 = new Pose(45.47819063004846, 59.2,                 Math.toRadians(180));
-    public static final Pose BlueBallDepotStart3 = new Pose(45.47819063004846, 35.592891760904685, Math.toRadians(180));
+    public static final Pose BlueBallDepotEnd1   = new Pose(13, 84,  Math.toRadians(180));
+    public static final Pose BlueBallDepotEnd2   = new Pose(13, 59,                 Math.toRadians(180));
+    public static final Pose BlueBallDepotEnd3   = new Pose(13, 35.5, Math.toRadians(180));
 
-    public static final Pose BlueBallDepotEnd1   = new Pose(12.794830371567043, 83.74798061389338,  Math.toRadians(180));
-    public static final Pose BlueBallDepotEnd2   = new Pose(12.794830371567043, 59.2,                 Math.toRadians(180));
-    public static final Pose BlueBallDepotEnd3   = new Pose(12.794830371567043, 35.592891760904685, Math.toRadians(180));
+    public static final Pose BlueGateInit        = new Pose(17, 74.21001615508885,  Math.toRadians(180));
+    public static final Pose BlueGateOpen        = new Pose(17, 79.56058158319871,  Math.toRadians(180));
 
-    public static final Pose BlueGateInit        = new Pose(17.21486268174475, 74.21001615508885,  Math.toRadians(180));
-    public static final Pose BlueGateOpen        = new Pose(17.21486268174475, 79.56058158319871,  Math.toRadians(180));
+    public static final Pose BlueSweepStart      = new Pose(7.5, 53,  Math.toRadians(260));
+    public static final Pose BlueSweepEnd        = new Pose(7.5, 18,                Math.toRadians(260));
 
-    public static final Pose BlueSweepStart      = new Pose(7.444264943457189, 53.04038772213247,  Math.toRadians(260));
-    public static final Pose BlueSweepEnd        = new Pose(7.444264943457189, 17.8,                Math.toRadians(260));
-
-    public static final Pose BlueBasicEnd = new Pose(144,  144, Math.toRadians(90));
+    public static final Pose BlueBasicEnd = new Pose(48,  62, Math.toRadians(90));
 
     // ===== RED PATHS =====
     public static PathChain RedStartPosToRedShootTrianglePos;
