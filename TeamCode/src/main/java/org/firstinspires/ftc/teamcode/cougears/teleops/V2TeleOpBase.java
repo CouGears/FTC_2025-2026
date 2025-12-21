@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVel;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVelFar;
 
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -23,9 +22,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
-import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 public class V2TeleOpBase extends BotBase {
@@ -116,6 +113,7 @@ public class V2TeleOpBase extends BotBase {
                 p.getHeading(AngleUnit.RADIANS)
                 );
     }
+
     //****** FLYWHEELS ******
     public void spinUpClose() {
         FW.setVelocity(FW_shootVel);
@@ -146,34 +144,24 @@ public class V2TeleOpBase extends BotBase {
     }
 
     public void odoTurretAdjust() {
+        double botX = pinpoint.getPosX(DistanceUnit.INCH);
+        double botY = pinpoint.getPosY(DistanceUnit.INCH);
 
-        // --- Robot field position (MM) ---
-        double botX = pinpoint.getPosX(DistanceUnit.MM);
-        double botY = pinpoint.getPosY(DistanceUnit.MM);
-
-        // --- Goal field position (MM) ---
         double goalX, goalY;
         if (goal.getLockedTagIndex() == 0) { // RED
-            goalX = redGoalXPos;
-            goalY = redGoalYPos;
+            goalX = Pedro_redGoalXPos;
+            goalY = Pedro_redGoalYPos;
         } else { // BLUE
-            goalX = blueGoalXPos;
-            goalY = blueGoalYPos;
+            goalX = Pedro_blueGoalXPos;
+            goalY = Pedro_blueGoalYPos;
         }
 
         double dx = goalX - botX;
         double dy = goalY - botY;
-
-        // --- Field angle robot must face (deg) ---
         double targetFieldDeg = Math.toDegrees(Math.atan2(dy, dx));
-
-        // --- Current turret field angle ---
         double turretFieldDeg = getTurretLocalizedDeg();
-
-        // --- Error ---
         double deltaDeg = targetFieldDeg - turretFieldDeg;
 
-        // Wrap to [-180, 180]
         while (deltaDeg > 180) deltaDeg -= 360;
         while (deltaDeg < -180) deltaDeg += 360;
 
@@ -220,7 +208,6 @@ public class V2TeleOpBase extends BotBase {
         Turret.setTargetPosition(0);
     }
 
-
     //****** SERVOS ******
     public void spinFeeder(){
         Transfer.setPower(1);
@@ -260,6 +247,23 @@ public class V2TeleOpBase extends BotBase {
     public void ejectIntake() {
         Intake.setPower(-1);
         IntakeSpinning = false; // So next time you press X it starts spinning in
+    }
+
+    //****** SHOOTING ******
+    public void handleShootSequence() {
+        if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait)) {
+            killFeeder();
+            transferArmDown(); // Start moving arm down
+            blockerClose();
+        } else if (timerExpired_MSeconds("ShootSequence", Auton_gateWait)) {
+            spinFeeder();
+            transferArmUp();
+            killIntake(); // Dont was ball to move below the arm while its up
+        }
+        if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait + Auton_transferResetWait)) {
+            startIntake(); // Turn intake back on
+            deleteTimer("ShootSequence");
+        }
     }
 
     //****** OTHER ******

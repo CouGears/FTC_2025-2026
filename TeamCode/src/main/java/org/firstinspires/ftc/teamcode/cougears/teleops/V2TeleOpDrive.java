@@ -25,7 +25,7 @@ public class V2TeleOpDrive extends LinearOpMode {
         ATM.initAprilTag();
 
         // Wait for the game to start (driver presses PLAY)
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("SStatus", "Initialized");
         telemetry.update();
         waitForStart();
 
@@ -66,7 +66,7 @@ public class V2TeleOpDrive extends LinearOpMode {
             if (bot.isPressed(1, Button.Y)) {
                 goal.switchLockedGoal();
             }
-            goal.displayLockedTag();
+            goal.displayLockedTag(telemetry);
 
             if (goal.isTagLockEnabled()){
                 ATM.alignTurretToAT();
@@ -121,22 +121,10 @@ public class V2TeleOpDrive extends LinearOpMode {
                     bot.createTimer("ShootSequence");
                 }
                 else {
-                    bot.createTimer("ShootSequence", (long) Auton_gateWait);
+                    bot.createTimer("ShootSequence", (long) Auton_gateWait); // Dont want to waste time opeing gate if gate is already open
                 }
             }
-            if (bot.timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_transferResetWait)){
-                bot.killFeeder();
-                bot.transferArmDown(); // Start moving arm down
-                bot.blockerClose();
-            } else if (bot.timerExpired_MSeconds("ShootSequence", Auton_gateWait)){
-                bot.spinFeeder();
-                bot.transferArmUp();
-                bot.killIntake(); // Dont was ball to move below the arm while its up
-            }
-            if (bot.timerExpired_MSeconds("ShootSequence", Auton_gateWait +1250)){
-                bot.startIntake(); // Turn intake back on
-                bot.deleteTimer("ShootSequence");
-            }
+            bot.handleShootSequence();
 
             //****** EJECT BALLS (Controller 1 & 2)******
             // R_STICKPRESS
