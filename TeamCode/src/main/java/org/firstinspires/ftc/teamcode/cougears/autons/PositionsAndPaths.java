@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.cougears.autons;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.randomVarConstant;
@@ -11,6 +12,7 @@ public class PositionsAndPaths {
 
     // ===== RED POSITIONS =====
     public static final Pose RedStartPos         = new Pose(144 - 21.543307086614174, 122.2047244094488, Math.toRadians(180 - 135));
+    public static final Pose RedStartPosFar      = new Pose(144 - 88, 8, Math.toRadians(90));
     public static final Pose RedShootTrianglePos = new Pose(144 - 66.51968503937007,  77.85826771653544, Math.toRadians(180 - 135));
     public static final Pose RedShootWallPos     = new Pose(144 - 66.51968503937007,  130.0000000000000, Math.toRadians(180 - 180));
 
@@ -29,6 +31,9 @@ public class PositionsAndPaths {
     public static final Pose RedSweepEnd        = new Pose(144 - 7.444264943457189, 17.8,               Math.toRadians(180 - 260));
 
     public static final Pose RedBasicEnd = new Pose(144 - 47.9579176252764,  144 - 61.95628968237839, Math.toRadians(-90));
+
+    public static final Pose RedFarToWallIntermidate1 = new Pose(45, 60, Math.toRadians(90));
+    public static final Pose RedFarToWallIntermidate2 = new Pose(45, 105, Math.toRadians(90));
 
 
 
@@ -75,6 +80,7 @@ public class PositionsAndPaths {
     public static PathChain RedShootTrianglePosToRedBasicEnd;
     public static PathChain RedShootWallPosToRedBasicEnd;
     public static PathChain RedShootTrianglePosToBallDepot1Pickup;
+    public static PathChain RedFarStartPosToRedShootWallPos;
 
 
 
@@ -126,6 +132,8 @@ public class PositionsAndPaths {
         RedShootTrianglePosToRedBasicEnd       = buildPath(f, RedShootTrianglePos, RedBasicEnd);
         RedShootWallPosToRedBasicEnd           = buildPath(f, RedShootWallPos, RedBasicEnd);
         RedShootTrianglePosToBallDepot1Pickup  = buildLongPath(f, RedShootTrianglePos, RedBallDepotStart1, RedBallDepotEnd1);
+        RedFarStartPosToRedShootWallPos        = buildLongPath(f, RedStartPosFar, RedFarToWallIntermidate1, RedFarToWallIntermidate2, RedShootWallPos);
+
         // ---- BLUE PATHS ----
         BlueStartPosToBlueShootTrianglePos       = buildPath(f, BlueStartPos, BlueShootTrianglePos);
         BlueStartPosToBlueShootWallPos           = buildPath(f, BlueStartPos, BlueShootWallPos);
