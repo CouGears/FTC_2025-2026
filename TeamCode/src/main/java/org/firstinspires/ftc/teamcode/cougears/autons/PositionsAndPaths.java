@@ -35,6 +35,9 @@ public class PositionsAndPaths {
     public static final Pose RedFarToWallIntermidate1 = new Pose(144 - 45, 60, Math.toRadians(90));
     public static final Pose RedFarToWallIntermidate2 = new Pose(144 - 45, 105, Math.toRadians(90));
 
+    public static final Pose RedPark = new Pose(37.686591276252024, 32.568659127625196, Math.toRadians(180));
+
+
 
 
     // ===== BLUE POSITIONS =====
@@ -61,6 +64,10 @@ public class PositionsAndPaths {
 
     public static final Pose BlueFarToWallIntermidate1 = new Pose(45, 60, Math.toRadians(90));
     public static final Pose BlueFarToWallIntermidate2 = new Pose(45, 105, Math.toRadians(90));
+
+    public static final Pose BluePark = new Pose(144-37.686591276252024, 32.568659127625196, Math.toRadians(0));
+
+
 
     // ===== RED PATHS =====
     public static PathChain RedStartPosToRedShootTrianglePos;
