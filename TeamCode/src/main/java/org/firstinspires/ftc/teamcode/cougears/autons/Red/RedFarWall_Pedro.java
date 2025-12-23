@@ -82,8 +82,7 @@ public class RedFarWall_Pedro extends OpMode {
                 }
                 break;
             case END:
-                bot.endAuton();
-                Storage.endOfAutonPose = follower.getPose();
+                bot.endAuton(follower, "Red");
                 break;
             default:
                 telemetry.addLine("No Step");
