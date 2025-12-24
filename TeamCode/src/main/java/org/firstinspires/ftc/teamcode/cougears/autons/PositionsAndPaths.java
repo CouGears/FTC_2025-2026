@@ -13,8 +13,8 @@ public class PositionsAndPaths {
     // ===== RED POSITIONS =====
     public static final Pose RedStartPos         = new Pose(144 - 21.5, 122, Math.toRadians(180 - 135));
     public static final Pose RedStartPosFar      = new Pose(144 - 56,   8, Math.toRadians(90));
-    public static final Pose RedShootTrianglePos = new Pose(144 - 66.5,  78, Math.toRadians(180 - 135));
-    public static final Pose RedShootWallPos     = new Pose(144 - 66.5,  120, Math.toRadians(180 - 180));
+    public static final Pose RedShootTrianglePos = new Pose(144 - 57.5,  78, Math.toRadians(180 - 135));
+    public static final Pose RedShootWallPos     = new Pose(144 - 58.5,  120, Math.toRadians(180 - 180));
 
     public static final Pose RedBallDepotStart1 = new Pose(144 - 45.5, 84,  Math.toRadians(180 - 180));
     public static final Pose RedBallDepotStart2 = new Pose(144 - 45.5, 59,               Math.toRadians(180 - 180));
@@ -43,8 +43,8 @@ public class PositionsAndPaths {
     // ===== BLUE POSITIONS =====
     public static final Pose BlueStartPos       = new Pose(21.5, 122, Math.toRadians(135));
     public static final Pose BlueStartPosFar      = new Pose(56,   8, Math.toRadians(90));
-    public static final Pose BlueShootTrianglePos = new Pose(66.5,  78,  Math.toRadians(135));
-    public static final Pose BlueShootWallPos     = new Pose(66.5,  120,  Math.toRadians(180));
+    public static final Pose BlueShootTrianglePos = new Pose(57.5,  78,  Math.toRadians(135));
+    public static final Pose BlueShootWallPos     = new Pose(58.5,  120,  Math.toRadians(180));
 
     public static final Pose BlueBallDepotStart1 = new Pose(45.5, 84,  Math.toRadians(180));
     public static final Pose BlueBallDepotStart2 = new Pose(45.5, 59,                 Math.toRadians(180));

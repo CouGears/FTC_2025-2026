@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 
 
 public class V2AutonController {
@@ -176,11 +177,13 @@ public class V2AutonController {
     }
 
     //****** OTHER ******
-    public void endAuton(){
+    public void endAuton(Follower follower, String color){
         FW.setPower(0);
         Intake.setPower(0);
         Transfer.setPower(0);
         Turret.setPower(0);
+        Storage.endOfAutonPose = follower.getPose();
+        Storage.endOfAutonColor = color;
     }
 
     //****** PEDRO ******

@@ -108,7 +108,7 @@ public class RedCloseTriangleAndPickup_Pedro extends OpMode {
                 setPathStep(pathStep.END);
                 break;
             case END:
-                bot.endAuton();
+                bot.endAuton(follower, "Red");
                 break;
             default:
                 telemetry.addLine("No Step");

@@ -87,7 +87,7 @@ public class BlueCloseWall_Pedro extends OpMode {
                 setPathStep(pathStep.END);
                 break;
             case END:
-                bot.endAuton();
+                bot.endAuton(follower, "Blue");
                 break;
             default:
                 telemetry.addLine("No Step");

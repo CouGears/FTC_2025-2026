@@ -83,7 +83,7 @@ public class BlueFarWall_Pedro extends OpMode {
                 }
                 break;
             case END:
-                bot.endAuton();
+                bot.endAuton(follower, "Blue");
                 Storage.endOfAutonPose = follower.getPose();
                 break;
             default:
