@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_ticksPerDeg;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_turretLimits;
@@ -60,9 +61,15 @@ public class PedroTeleOpManager {
             // Calculate angle to goal in field coordinates, use atan2 bc better??
             double targetFieldDeg = Math.toDegrees(Math.atan2(dy, dx));
             Pose poseGoalAngle = new Pose(botX, botY, targetFieldDeg);
-            Pose currentPose = follower.getPose();
-            PathChain alignToGoalPath = PositionsAndPaths.buildPath(follower, currentPose, poseGoalAngle);
-            follower.followPath(alignToGoalPath);
+            moveToPos(poseGoalAngle);
+        }
+
+        public void parkRobot(){
+            if (endOfAutonColor.equals("Red")){
+                moveToPos(RedPark);
+            } else {
+                moveToPos(BluePark);
+            }
         }
 
         public void update () {
