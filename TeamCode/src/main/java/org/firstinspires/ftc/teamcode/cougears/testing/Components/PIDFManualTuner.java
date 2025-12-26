@@ -1,15 +1,15 @@
-package org.firstinspires.ftc.teamcode.cougears.util;
+package org.firstinspires.ftc.teamcode.cougears.testing.Components;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 public class PIDFManualTuner extends OpMode {
     public DcMotorEx FW;
-    public double highVel = 1600;
-    public double lowVel = 900;
+    public double highVel = FW_shootVelFar;
+    public double lowVel = FW_shootVel;
     public double curTargVel = highVel;
     public double[] increm = {10, 1, 0.1, 0.01,};
     public int ind = 0;
@@ -40,9 +40,6 @@ public class PIDFManualTuner extends OpMode {
             ind = (ind+1)%increm.length;
         }
 
-        if (gamepad1.bWasPressed()){
-            ind = (ind-1)%increm.length;
-        }
 
         if (gamepad1.dpadLeftWasPressed()){
             F-=increm[ind];
@@ -57,7 +54,7 @@ public class PIDFManualTuner extends OpMode {
         }
 
         if (gamepad1.dpadDownWasPressed()){
-            F-=increm[ind];
+            P-=increm[ind];
         }
 
 
@@ -70,9 +67,9 @@ public class PIDFManualTuner extends OpMode {
         telemetry.addData("Target Velocity", curTargVel);
         telemetry.addData("Current Velocity", curVel);
         telemetry.addData("Error", error);
-        telemetry.addData("P", "%F (Dpad U-/D+)", P);
-        telemetry.addData("F", "%F (Dpad L-/R+)", F);
-        telemetry.addData("Increments", "%F (A+/B-)", increm[ind]);
+        telemetry.addData("P", "%.2f (Dpad U-/D+)", P);
+        telemetry.addData("F", "%.2f (Dpad L-/R+)", F);
+        telemetry.addData("Increments", "%.2f (A+/B-)", increm[ind]);
         telemetry.addLine("Guide: Use Y to slow wheel down to test the adjustment" +
                 "\nAdd a bunch of P to start" +
                 "\nTune F until error is low" +

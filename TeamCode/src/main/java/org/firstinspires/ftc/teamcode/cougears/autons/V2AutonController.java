@@ -182,8 +182,8 @@ public class V2AutonController {
         Intake.setPower(0);
         Transfer.setPower(0);
         Turret.setPower(0);
-        Storage.endOfAutonPose = follower.getPose();
-        Storage.endOfAutonColor = color;
+        Storage.Storage_endOfAutonPose = follower.getPose();
+        Storage.Storage_endOfAutonColor = color;
     }
 
     //****** PEDRO ******

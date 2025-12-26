@@ -3,24 +3,13 @@ package org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_ticksPerDeg;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_turretLimits;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathBuilder;
-import com.pedropathing.paths.PathChain;
 import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.*;
 
 public class PedroTeleOpManager {
@@ -28,7 +17,7 @@ public class PedroTeleOpManager {
     public Follower follower;
     public PedroTeleOpManager(HardwareMap HM) {
         follower = Constants.createFollower(HM);
-        follower.setPose(Storage.endOfAutonPose);
+        follower.setPose(Storage.Storage_endOfAutonPose);
     }
     public void moveToPos(Pose targetPos) {
         follower.followPath(
@@ -46,7 +35,7 @@ public class PedroTeleOpManager {
             double botHeadingDeg = follower.getHeading();
 
             double goalX, goalY;
-            if (endOfAutonColor.equals("Red")) {
+            if (Storage_endOfAutonColor.equals("Red")) {
                 goalX = 0;
                 goalY = 144;
             } else {
@@ -65,7 +54,7 @@ public class PedroTeleOpManager {
         }
 
         public void parkRobot(){
-            if (endOfAutonColor.equals("Red")){
+            if (Storage_endOfAutonColor.equals("Red")){
                 moveToPos(RedPark);
             } else {
                 moveToPos(BluePark);

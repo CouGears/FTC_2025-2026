@@ -96,7 +96,7 @@ public class V2TeleOpBase extends BotBase {
 
     //****** AUTON MOVEMENT ******
     public void setPinpointPose(){
-        Pose pedroPose = Storage.endOfAutonPose;
+        Pose pedroPose = Storage.Storage_endOfAutonPose;
         pinpoint.setPosition(new Pose2D(
                 DistanceUnit.INCH,
                 pedroPose.getX(),

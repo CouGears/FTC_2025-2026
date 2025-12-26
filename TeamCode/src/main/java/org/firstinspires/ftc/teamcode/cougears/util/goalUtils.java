@@ -15,7 +15,7 @@ public class goalUtils {
         goalIndex = (goalIndex + 1 ) % goalTagIDs.length;
     }
     public void getLockedGoal() {
-        if (Storage.endOfAutonColor.equals("Red")){
+        if (Storage.Storage_endOfAutonColor.equals("Red")){
             goalIndex = 0;
         } else {
             goalIndex = 1;
