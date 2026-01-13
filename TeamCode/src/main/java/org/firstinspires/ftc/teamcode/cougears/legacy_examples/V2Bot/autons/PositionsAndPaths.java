@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.autons;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -39,7 +39,7 @@ public class PositionsAndPaths {
 
 
     // ===== BLUE POSITIONS =====
-    public static final Pose BlueStartPos         = new Pose(21.5, 122, Math.toRadians(135));
+    public static final Pose BlueStartPos       = new Pose(21.5, 122, Math.toRadians(135));
     public static final Pose BlueStartPosFar      = new Pose(56,   8, Math.toRadians(90));
     public static final Pose BlueShootTrianglePos = new Pose(57.5,  78,  Math.toRadians(135));
     public static final Pose BlueShootWallPos     = new Pose(58.5,  120,  Math.toRadians(180));

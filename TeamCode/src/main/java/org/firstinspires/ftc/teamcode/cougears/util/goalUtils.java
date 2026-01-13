@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.cougears.util;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
 
 public class goalUtils {
 

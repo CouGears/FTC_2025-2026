@@ -1,19 +1,23 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Red;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.Blue;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.V2AutonController;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
 // https://drive.google.com/drive/u/1/folders/195ZOaVz4Y1V8vUM4KzjuoF6N3_f7NXtK <- The vision
-@Autonomous (group = "Red")
-public class RedFarWall_Pedro extends OpMode {
+@Disabled
+
+@Autonomous (group = "Blue")
+public class BlueFarWall_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
@@ -33,13 +37,13 @@ public class RedFarWall_Pedro extends OpMode {
         switch (currStep) {
             case STARTPOS_SHOOTWALLPOS:
                 bot.spinUpClose();
-                follower.followPath(RedFarStartPosToRedShootWallPos);
+                follower.followPath(BlueFarStartPosToBlueShootWallPos);
                 setPathStep(pathStep.SPINUP);
                 break;
             case SPINUP:
                 if (!follower.isBusy()) {
                     bot.spinUpClose();
-                    if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait){
+                    if ((numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait)){
                         setPathStep(pathStep.OPEN);
                     } else if (numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) {
                         setPathStep(pathStep.OPEN);
@@ -82,7 +86,8 @@ public class RedFarWall_Pedro extends OpMode {
                 }
                 break;
             case END:
-                bot.endAuton(follower, "Red");
+                bot.endAuton(follower, "Blue");
+                Storage.Storage_endOfAutonPose = follower.getPose();
                 break;
             default:
                 telemetry.addLine("No Step");
@@ -104,7 +109,7 @@ public class RedFarWall_Pedro extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        follower.setPose(RedStartPosFar);
+        follower.setPose(BlueStartPosFar);
         buildPaths(follower);
         bot = new V2AutonController(hardwareMap, telemetry);
         bot.botInit();

@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.DumbAutons;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import org.firstinspires.ftc.teamcode.cougears.teleops.V2TeleOpBase;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.teleops.V2TeleOpBase;
 @Autonomous
 public class CloseShotsAuton extends LinearOpMode {
     public V2TeleOpBase bot = null;

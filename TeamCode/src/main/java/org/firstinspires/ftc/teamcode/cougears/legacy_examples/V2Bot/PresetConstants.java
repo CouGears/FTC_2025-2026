@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.util;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot;
 
 
 import com.acmerobotics.dashboard.config.Config;
@@ -23,9 +23,21 @@ public class PresetConstants {
     public static double FW_shootVelFar = 1800;
     public static double FW_ejectionVel = -1000;
 
-    //Servos
-    public static double[] Servo_blockerPos = {.21,1};
 
+    // Turret
+    public static double Turret_ticksPerDeg = 800/90.0; // ~ 2.08, 90 deg = 188 ticks
+    public static int[] Turret_turretPos = {0, -(int) Math.round(Turret_ticksPerDeg * 45),
+            (int) Math.round(Turret_ticksPerDeg * 45)};
+    public static int[] Turret_turretLimits = { -45 * (int) Turret_ticksPerDeg,  45 * (int) Turret_ticksPerDeg}; // CW, CCW
+    public static int Turret_turretStep = 100;
+    //Servos
+    public static double[] Servo_transferArmPos = {.75,.17};
+    public static double[] Servo_blockerPos = {.21,1};
+    //AprilTag
+    public static int AT_redTag = 24;
+    public static int AT_blueTag = 20;
+    public static double AT_desiredDistClose = 67.0;
+    public static double AT_desiredDistFar = 0; // Need to find
     //Autons
     public static double timeBackwardsClose = 1.4;
     public static double speedBackwardsClose = -.5;
@@ -47,12 +59,31 @@ public class PresetConstants {
     public static int RedAutonTurretStartDeg = 45;
 
     // NAMES
-    public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "Intake"};
-    public static String[] Names_servoNames = {"Transfer"};
+    public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "TurretController", "Intake"};
+    public static String[] Names_servoNames = {"Transfer", "TransferArm"};
     public static double randomVarConstant = 5; // To be used anywhere you need for testing
 
     /* Config
+   Control hub:
+       Motors: motorFL, motorBL, TurretRotator, FW
+       Servos:
+   Expansion hub:
+       Motors: motorFR, motorFL, Intake, __
+       Servos:__, Transfer
 
+    BUTTONS
+        Y -> Align to april tag
+        X -> Toggles intake
+        A -> Reset Turret
+        Lt -> Close shot
+        Lb -> Far shot
+        Rb -> Reject
+        Rt -> Transfer (needs to be added maybe timer?)
+        Right joystick -> Cardinal directions
+        Left joystick -> Turning
+        L/R Dpad -> Manual control of turret
+        Up Dpad -> Align turret to AT
+        Down Dpad -> Full Auto to AT
     */
 
 

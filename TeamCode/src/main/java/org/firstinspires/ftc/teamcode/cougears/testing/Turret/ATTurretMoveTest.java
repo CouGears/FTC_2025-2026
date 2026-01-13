@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.cougears.testing.Turret;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.V2TeleOpBase;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.teleops.V2TeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.V2AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
 
 @TeleOp (name = "ATTurretMoveTest", group = "Testing")
 public class ATTurretMoveTest extends LinearOpMode {

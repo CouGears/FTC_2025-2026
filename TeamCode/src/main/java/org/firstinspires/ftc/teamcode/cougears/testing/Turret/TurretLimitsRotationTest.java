@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
 
 
 @TeleOp(name="TurretLimitsRotationTest", group="Testing")

@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.PositionsAndPaths.*;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.*;
 

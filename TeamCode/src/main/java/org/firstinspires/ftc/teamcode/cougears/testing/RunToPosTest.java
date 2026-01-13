@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
 
 @TeleOp(name="RunToPosTest", group="Testing")
 

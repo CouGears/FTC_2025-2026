@@ -1,48 +1,54 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Blue;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.Red;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Auton_ballTransferWait;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Auton_firstShotExtraSpinupWait;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Auton_gateWait;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Auton_numberOfRepeatShots;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Auton_pushNewBallWait;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Auton_spinupWait;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Auton_transferResetWait;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVel;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.V2AutonController;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+@Disabled
 
-@Autonomous (group = "Blue")
-public class BlueCloseWall_Pedro extends OpMode {
+@Autonomous (group = "Red")
+public class RedCloseTriangle_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
-    public int numShots = 0;
+    public int  numShots = 0;
 
     public enum pathStep {
-        // For moving: START_END
-        // For action: ACTION
-        // For movement with action: START_END_ACTION
-        STARTPOS_SHOOTPOSWALL,
+        STARTPOS_SHOOTTRIANGLEPOS,
         SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
         SHOOTPOS_BASICEND,
         END
     }
-    pathStep currStep = pathStep.STARTPOS_SHOOTPOSWALL;
+    pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, BlueBasicEnd);  }
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd);  }
         switch (currStep) {
-            case STARTPOS_SHOOTPOSWALL:
+            case STARTPOS_SHOOTTRIANGLEPOS:
                 bot.spinUpClose();
-                follower.followPath(BlueStartPosToBlueShootWallPos);
+                follower.followPath(RedStartPosToRedShootTrianglePos);
                 setPathStep(pathStep.SPINUP);
                 break;
+
             case SPINUP:
                 if (!follower.isBusy()) {
-                    bot.spinUpClose();
                     if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait){
                         setPathStep(pathStep.OPEN);
-                    } else if (numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) {
+                    } else if ((numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) || bot.FW.getVelocity() >= FW_shootVel - 100) {
                         setPathStep(pathStep.OPEN);
                     }
                 }
@@ -82,13 +88,16 @@ public class BlueCloseWall_Pedro extends OpMode {
                     setPathStep(pathStep.SPINUP);
                 }
                 break;
+
             case SHOOTPOS_BASICEND:
-                follower.followPath(BlueShootWallPosToBlueBasicEnd);
+                follower.followPath(RedShootTrianglePosToRedBasicEnd);
                 setPathStep(pathStep.END);
                 break;
+
             case END:
-                bot.endAuton(follower, "Blue");
+                bot.endAuton(follower, "Red");
                 break;
+
             default:
                 telemetry.addLine("No Step");
         }
@@ -101,7 +110,7 @@ public class BlueCloseWall_Pedro extends OpMode {
 
     public void start(){
         opModeTimer.resetTimer();
-        setPathStep(pathStep.STARTPOS_SHOOTPOSWALL);
+        setPathStep(pathStep.STARTPOS_SHOOTTRIANGLEPOS);
     }
 
     @Override
@@ -109,7 +118,7 @@ public class BlueCloseWall_Pedro extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        follower.setPose(BlueStartPos);
+        follower.setPose(RedStartPos);
         buildPaths(follower);
         bot = new V2AutonController(hardwareMap, telemetry);
         bot.botInit();
@@ -118,9 +127,10 @@ public class BlueCloseWall_Pedro extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        telemetry.addLine("STEP: " + currStep);
-        telemetry.addLine("numShots: " + numShots);
-
         stepUpdate();
+
+        // Telemetry for debugging
+        telemetry.addData("Current Step", currStep);
+        telemetry.update();
     }
 }
