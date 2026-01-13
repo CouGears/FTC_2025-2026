@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.teleops;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 
 
-public class V2TeleOpBase extends BotBase {
+public class V3BTeleOpBase extends BotBase {
 
     goalUtils goal;
     //Initializing motors
@@ -47,7 +47,7 @@ public class V2TeleOpBase extends BotBase {
     //initialize classes
     public GoBildaPinpointDriver pinpoint;
 
-    public V2TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
+    public V3BTeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
     }
 
@@ -111,7 +111,7 @@ public class V2TeleOpBase extends BotBase {
                 p.getX(DistanceUnit.INCH),
                 p.getY(DistanceUnit.INCH),
                 p.getHeading(AngleUnit.RADIANS)
-                );
+        );
     }
 
     //****** FLYWHEELS ******

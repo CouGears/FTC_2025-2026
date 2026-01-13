@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.teleops;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
@@ -7,13 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 @TeleOp(name="V2Teleop", group="Drive")
 
-public class V2TeleOpDrive extends LinearOpMode {
+public class V3BTeleOpDrive extends LinearOpMode {
 
     @Override
     public void runOpMode() {
