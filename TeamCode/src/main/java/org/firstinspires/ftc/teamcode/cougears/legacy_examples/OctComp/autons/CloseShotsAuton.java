@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.teleops.OctoberCompTeleOpBase;
-import org.firstinspires.ftc.teamcode.cougears.teleops.V2AprilTagManager;
 import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.OctComp.OldPresetConstants.*;
 @Disabled
 
@@ -15,9 +14,7 @@ public class CloseShotsAuton extends LinearOpMode {
     @Override
     public void runOpMode() {
         OctoberCompTeleOpBase bot = new OctoberCompTeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
-        V2AprilTagManager ATM = new V2AprilTagManager(hardwareMap, telemetry, bot);
         bot.botInit();
-        ATM.initAprilTag();
 
         // Signal that initialization is complete
         telemetry.addData("Status", "Ready to run");

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot;
+package org.firstinspires.ftc.teamcode.cougears.teleops;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
@@ -6,7 +6,6 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_sh
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVelFar;
 
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -25,15 +24,14 @@ import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 
 
-public class V3BTeleOpBase extends BotBase {
+public class V3TeleOpBase extends BotBase {
 
     goalUtils goal;
     //Initializing motors
-    public DcMotorEx FW, Intake, Turret;
-    public CRServo Transfer;
-    public Servo TransferArm, Blocker;
+    public DcMotorEx FW, Intake;
+    public Servo Blocker;
     //initializing toggles
-    public boolean IntakeSpinning, FeedServoSpinning, slowed;
+    public boolean IntakeSpinning, slowed;
     //intializing speed multplier for slowdrive
     public double speedMultiplier = 1;
     //Initialize heading stuff
@@ -47,7 +45,7 @@ public class V3BTeleOpBase extends BotBase {
     //initialize classes
     public GoBildaPinpointDriver pinpoint;
 
-    public V3BTeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
+    public V3TeleOpBase(HardwareMap HardwareMap, Telemetry Telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
     }
 
@@ -61,23 +59,9 @@ public class V3BTeleOpBase extends BotBase {
             FW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             FW.setVelocityPIDFCoefficients(FW_PIDF[0], FW_PIDF[1], FW_PIDF[2], FW_PIDF[3]);
 
-            Turret = HM.get(DcMotorEx.class, "TurretRotator");
-            Turret.setDirection(DcMotor.Direction.REVERSE);
-            Turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            Turret.setTargetPosition(0);
-            Turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            Turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            Turret.setPower(1);
-
             Intake = HM.get(DcMotorEx.class, "Intake");
             Intake.setDirection(DcMotor.Direction.REVERSE);
             Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-            Transfer = HM.get(CRServo.class, "Transfer");
-            Transfer.setDirection(CRServo.Direction.FORWARD);
-
-            TransferArm = HM.get(Servo.class, "TransferArm");
-            TransferArm.setPosition(Servo_transferArmPos[0]);
 
             Blocker = HM.get(Servo.class, "Blocker");
             Blocker.setPosition(Servo_blockerPos[0]);
@@ -128,111 +112,12 @@ public class V3BTeleOpBase extends BotBase {
         FW.setPower(FW_ejectionVel);
     }
 
-    //****** TURRET ******
-    public void setTurretPosManual(int pos){
-        pos = Range.clip(pos, Turret_turretLimits[0], Turret_turretLimits[1]);
-        Turret.setTargetPosition(pos);
-    }
-    //turret functions that actually make stuff move
-    public void moveTurretL(){
-        int tickAdjust = Turret.getCurrentPosition() + Turret_turretStep;
-        adjustTurretTick(tickAdjust);
-    }
-    public void moveTurretR(){
-        int tickAdjust = Turret.getCurrentPosition() - Turret_turretStep;
-        adjustTurretTick(tickAdjust);
-    }
-
-    public void odoTurretAdjust() {
-        double botX = pinpoint.getPosX(DistanceUnit.INCH);
-        double botY = pinpoint.getPosY(DistanceUnit.INCH);
-
-        double goalX, goalY;
-        if (goal.getLockedTagIndex() == 0) { // RED
-            goalX = Pedro_redGoalXPos;
-            goalY = Pedro_redGoalYPos;
-        } else { // BLUE
-            goalX = Pedro_blueGoalXPos;
-            goalY = Pedro_blueGoalYPos;
-        }
-
-        double dx = goalX - botX;
-        double dy = goalY - botY;
-        double targetFieldDeg = Math.toDegrees(Math.atan2(dy, dx));
-        double turretFieldDeg = getTurretLocalizedDeg();
-        double deltaDeg = targetFieldDeg - turretFieldDeg;
-
-        while (deltaDeg > 180) deltaDeg -= 360;
-        while (deltaDeg < -180) deltaDeg += 360;
-
-        // --- Command turret ---
-        adjustTurretDeg(deltaDeg);
-    }
-
-
-    //turret adjustements
-    public void adjustTurretDeg(double degAdjust) {
-        int currentTicks = Turret.getCurrentPosition();
-        int deltaTicks   = (int)(degAdjust * Turret_ticksPerDeg);
-        int targetTicks  = currentTicks + deltaTicks;
-        targetTicks = turretResetBound(targetTicks);
-        Turret.setTargetPosition(targetTicks);
-    }
-
-    public void adjustTurretTick(int tickAdjust) {
-        int currentTicks = Turret.getCurrentPosition();
-        int targetTicks  = currentTicks + tickAdjust;
-        targetTicks = turretResetBound(targetTicks);
-        Turret.setTargetPosition(targetTicks);
-    }
-    //turret helper functions
-    public int turretResetBound(int targetTicks){
-        while (targetTicks < Turret_turretLimits[0] || targetTicks > Turret_turretLimits[1]) {
-            if (targetTicks < Turret_turretLimits[0]) {
-                targetTicks += 360;
-            } else if (targetTicks > Turret_turretLimits[0]){
-                targetTicks -= 360;
-            }
-        }
-        return targetTicks;
-    }
-
-    public double getTurretDeg(){
-        return ((Turret.getCurrentPosition())/Turret_ticksPerDeg);
-    }
-
-    public double getTurretLocalizedDeg(){
-        return pinpoint.getHeading(AngleUnit.DEGREES) + getTurretDeg();
-    }
-    public void resetTurret(){
-        Turret.setTargetPosition(0);
-    }
-
-    //****** SERVOS ******
-    public void spinFeeder(){
-        Transfer.setPower(1);
-    }
-    public void ejectFeeder(){
-        Transfer.setPower(-1);
-    }
-    public void killFeeder(){
-        Transfer.setPower(0);
-    }
-
-    public void transferArmUp(){
-        TransferArm.setPosition(Servo_transferArmPos[1]);
-    }
-    public void transferArmDown(){
-        TransferArm.setPosition(Servo_transferArmPos[0]);
-    }
-
     public void blockerOpen(){
         Blocker.setPosition(Servo_blockerPos[1]);
     }
     public void blockerClose(){
         Blocker.setPosition(Servo_blockerPos[0]);
     }
-
 
     //****** INTAKE ******
     public void startIntake() {
@@ -249,18 +134,13 @@ public class V3BTeleOpBase extends BotBase {
         IntakeSpinning = false; // So next time you press X it starts spinning in
     }
 
-    //****** SHOOTING ******
+    //****** SHOOTING ****** NEEDS TO BE REWORKED
     public void handleShootSequence() {
-        if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait)) {
-            killFeeder();
-            transferArmDown(); // Start moving arm down
-            blockerClose();
-        } else if (timerExpired_MSeconds("ShootSequence", Auton_gateWait)) {
-            spinFeeder();
-            transferArmUp();
+        if (timerExpired_MSeconds("ShootSequence", Auton_gateWait)) {
             killIntake(); // Dont was ball to move below the arm while its up
-        }
-        if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait + Auton_transferResetWait)) {
+        } else if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait)) {
+            blockerClose();
+        } else if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait + Auton_transferResetWait)) {
             startIntake(); // Turn intake back on
             deleteTimer("ShootSequence");
         }
@@ -271,8 +151,6 @@ public class V3BTeleOpBase extends BotBase {
         super.endTeleOp();
         FW.setPower(0);
         Intake.setPower(0);
-        Transfer.setPower(0);
-        Turret.setPower(0);
     }
 
     public void toggleSlow(){

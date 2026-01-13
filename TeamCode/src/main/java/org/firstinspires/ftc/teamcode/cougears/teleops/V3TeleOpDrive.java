@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot;
+package org.firstinspires.ftc.teamcode.cougears.teleops;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
@@ -6,24 +6,22 @@ import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.cougears.teleops.V3TeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 @TeleOp(name="V2Teleop", group="Drive")
 
-public class V3BTeleOpDrive extends LinearOpMode {
+public class V3TeleOpDrive extends LinearOpMode {
 
     @Override
     public void runOpMode() {
         goalUtils goal = new goalUtils();
-        V2TeleOpBase bot = new V2TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
-        V2AprilTagManager ATM = new V2AprilTagManager(hardwareMap, telemetry, bot);
+        V3TeleOpBase bot = new V3TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         PedroTeleOpManager PTM = new PedroTeleOpManager(hardwareMap);
         // Initialize motors
         bot.botInit();
-        ATM.initAprilTag();
-
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -54,20 +52,10 @@ public class V3BTeleOpDrive extends LinearOpMode {
                 telemetry.addData("Slowed", "%b", bot.slowed);
             }
 
-            //****** ATM ******
-//            if (bot.isPressed(1, Button.DPAD_DOWN)) {
-//                ATM.FullAutoMove(AT_redTag);
-//                ATM.FullAutoMove(AT_blueTag);
-//            }
-
             if (bot.isPressed(1, Button.Y)) {
                 goal.switchLockedGoal();
             }
             goal.displayLockedTag(telemetry);
-
-//            if (goal.isTagLockEnabled()){
-//                ATM.alignTurretToAT();
-//            }
 
             //****** AUTON MOVING ******
             if (bot.isHeld(1, Button.DPAD_DOWN)){
@@ -109,16 +97,6 @@ public class V3BTeleOpDrive extends LinearOpMode {
             }
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
 
-            //****** TURRET (Controller 2) ******
-            // BUTTONS: A, DPAD_RIGHT, DPAD_LEFT
-//            if (bot.isPressed(2, Button.A)) {
-//                bot.resetTurret();
-//            }else if (bot.isPressed(2, Button.DPAD_RIGHT)) {
-//                bot.moveTurretR();
-//            }else if (bot.isPressed(2, Button.DPAD_LEFT)){
-//                bot.moveTurretL();
-//                }
-
             //****** SHOOT SEQUENCE (Controller 2)******
             // BUTTONS: R_TRIGGER
             if (bot.isPressed(2, Button.R_TRIGGER)) {
@@ -135,12 +113,10 @@ public class V3BTeleOpDrive extends LinearOpMode {
             //****** EJECT BALLS (Controller 1 & 2)******
             // R_STICKPRESS
             if (bot.isPressed(2, Button.R_STICKPRESS) || bot.isPressed(1, Button.R_STICKPRESS)) {
-                bot.ejectFeeder();
                 bot.ejectIntake();
                 bot.createTimer("Eject");
             }
             if (bot.timerExpired_MSeconds("Eject", 1500)){
-                bot.killFeeder();
                 bot.startIntake();
                 bot.deleteTimer("Eject");
             }

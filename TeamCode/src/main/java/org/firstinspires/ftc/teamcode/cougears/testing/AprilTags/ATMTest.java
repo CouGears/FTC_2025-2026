@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.cougears.testing.AprilTags;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import org.firstinspires.ftc.teamcode.cougears.teleops.V2AprilTagManager;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.V2AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
