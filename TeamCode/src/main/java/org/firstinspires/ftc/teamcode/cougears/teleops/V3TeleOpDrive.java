@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
-@TeleOp(name="V2Teleop", group="Drive")
+@TeleOp(name="V3Teleop", group="Drive")
 
 public class V3TeleOpDrive extends LinearOpMode {
 
