@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
-import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 /*
 WHAT THIS FILE SHOULD BE ABLE TO DO:
 - Take the bot from teleop and move it

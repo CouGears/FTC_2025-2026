@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 @TeleOp(name="V2Teleop", group="Drive")
@@ -16,7 +15,6 @@ public class V3TeleOpDrive extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        goalUtils goal = new goalUtils();
         V3TeleOpBase bot = new V3TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         PedroTeleOpManager PTM = new PedroTeleOpManager(hardwareMap);
         // Initialize motors
@@ -29,21 +27,12 @@ public class V3TeleOpDrive extends LinearOpMode {
 
         while (opModeIsActive()) {
             //****** DRIVE (Controller 1)******
-            // BUTTONS: L-Joystick, R-Joystick, B
-            if (bot.isPressed(1, Button.B)) {
-                bot.toggleSlow();
-            }
-            if (!bot.isHeld(1, Button.DPAD_DOWN) && PTM.follower.isBusy()){
-                PTM.follower.breakFollowing();
-            }
-
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
-            if (PTM.follower.isBusy()) {
-                telemetry.addLine("PEDRO IS DRIVING");
-//                PTM.update();
-            } else {
-//                PTM.follower.setPose(bot.getPedroPose());
-                PTM.follower.updatePose();
+            if (!bot.isHeld(1, Button.DPAD_DOWN) && PTM.follower.isBusy()){
+                PTM.breakFollower();
+            }
+            if (!PTM.isBusy()) {
+                PTM.updatePos(); // Update w/o motors
                 if (bot.isPressed(1, Button.B)) {
                     bot.toggleSlow();
                 }
@@ -52,19 +41,18 @@ public class V3TeleOpDrive extends LinearOpMode {
             }
 
             if (bot.isPressed(1, Button.Y)) {
-                goal.switchLockedGoal();
+                PTM.switchGoal();
             }
-            goal.displayLockedTag(telemetry);
+            telemetry.addData("Assigned Goal", "%s", PTM.getGoal());
 
             //****** AUTON MOVING ******
             if (bot.isHeld(1, Button.DPAD_DOWN)){
-                if (goal.getLockedTagID() == AT_redTag)
+                if (PTM.getGoal().equals("Red"))
                     PTM.moveToPos(RedShootTrianglePos);
-                else if (goal.getLockedTagID() == AT_blueTag)
+                else if (PTM.getGoal().equals("Blue"))
                     PTM.moveToPos(BlueShootTrianglePos);
-                PTM.update();
+                PTM.updatePosAndMotors();
             }
-
             if (bot.isHeld(1, Button.DPAD_UP)) {
                 PTM.alignToGoal();
             }

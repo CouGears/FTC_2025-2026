@@ -24,11 +24,9 @@ public class PresetConstants {
     public static double FW_ejectionVel = -1000;
 
     //Servos
-    public static double[] Servo_blockerPos = {.21,1};
+    public static double[] Servo_blockerPos = {.3,.6};
 
     //Autons
-    public static double timeBackwardsClose = 1.4;
-    public static double speedBackwardsClose = -.5;
     public static int Auton_numberOfRepeatShots = 5;
 
     public static double Auton_spinupWait = 2000;
@@ -36,7 +34,6 @@ public class PresetConstants {
     public static double Auton_gateWait = 750;
     public static double Auton_ballTransferWait = 1000;
     public static double Auton_transferResetWait = 750;
-    public static double Auton_pushNewBallWait = 500;
     public static double Auton_pickupSpeed = .4;
 
     public static int Pedro_redGoalXPos = 3657;
