@@ -1,17 +1,18 @@
-package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.teleops;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.PositionsAndPaths.*;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.V2AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
-
+@Disabled
 @TeleOp(name="V2Teleop", group="Drive")
-
 public class V2TeleOpDrive extends LinearOpMode {
 
     @Override

@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVel;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVelFar;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_PIDF;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVel;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVelFar;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;

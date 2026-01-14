@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
 @TeleOp (group = "Testing")
 public class PIDFManualTuner extends OpMode {
     public DcMotorEx FW;
@@ -62,6 +62,7 @@ public class PIDFManualTuner extends OpMode {
 
         PIDFCoefficients pidf = new PIDFCoefficients(P, 0, 0, F);
         FW.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
+        FW.setVelocity(curTargVel);
 
         double curVel = FW.getVelocity();
         double error = curTargVel-curVel;

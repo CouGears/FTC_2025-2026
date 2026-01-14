@@ -1,18 +1,19 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Red;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.Blue;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.cougears.autons.V2AutonController;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.V2AutonController;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-
-@Autonomous (group = "Red")
-public class RedCloseWall_Pedro extends OpMode {
+@Disabled
+@Autonomous (group = "Blue")
+public class BlueCloseTriangle_Pedro extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V2AutonController bot;
@@ -22,26 +23,25 @@ public class RedCloseWall_Pedro extends OpMode {
         // For moving: START_END
         // For action: ACTION
         // For movement with action: START_END_ACTION
-        STARTPOS_SHOOTWALLPOS,
+        STARTPOS_SHOOTTRIANGLEPOS,
         SPINUP, OPEN, SHOOT, CLOSE, PUSH_NEW_BALL,
         SHOOTPOS_BASICEND,
         END
     }
-    pathStep currStep = pathStep.STARTPOS_SHOOTWALLPOS;
+    pathStep currStep = pathStep.STARTPOS_SHOOTTRIANGLEPOS;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd);  }
-
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, BlueBasicEnd);  }
         switch (currStep) {
-            case STARTPOS_SHOOTWALLPOS:
+            case STARTPOS_SHOOTTRIANGLEPOS:
                 bot.spinUpClose();
-                follower.followPath(RedStartPosToRedShootWallPos);
+                follower.followPath(BlueStartPosToBlueShootTrianglePos);
                 setPathStep(pathStep.SPINUP);
                 break;
             case SPINUP:
                 if (!follower.isBusy()) {
                     bot.spinUpClose();
-                    if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait+Auton_firstShotExtraSpinupWait){
+                    if (numShots == 0 && stepTimer.getElapsedTime() >= Auton_spinupWait + Auton_firstShotExtraSpinupWait){
                         setPathStep(pathStep.OPEN);
                     } else if (numShots > 0 && stepTimer.getElapsedTime() >= Auton_spinupWait) {
                         setPathStep(pathStep.OPEN);
@@ -84,11 +84,11 @@ public class RedCloseWall_Pedro extends OpMode {
                 }
                 break;
             case SHOOTPOS_BASICEND:
-                follower.followPath(RedShootWallPosToRedBasicEnd);
+                follower.followPath(BlueShootTrianglePosToBlueBasicEnd);
                 setPathStep(pathStep.END);
                 break;
             case END:
-                bot.endAuton(follower, "Red");
+                bot.endAuton(follower, "Blue");
                 break;
             default:
                 telemetry.addLine("No Step");
@@ -102,7 +102,7 @@ public class RedCloseWall_Pedro extends OpMode {
 
     public void start(){
         opModeTimer.resetTimer();
-        setPathStep(pathStep.STARTPOS_SHOOTWALLPOS);
+        setPathStep(pathStep.STARTPOS_SHOOTTRIANGLEPOS);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class RedCloseWall_Pedro extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        follower.setPose(RedStartPos);
+        follower.setPose(BlueStartPos);
         buildPaths(follower);
         bot = new V2AutonController(hardwareMap, telemetry);
         bot.botInit();

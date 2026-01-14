@@ -1,15 +1,15 @@
-package org.firstinspires.ftc.teamcode.cougears.autons;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Servo_blockerPos;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_ejectionVel;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Drive_intakePower;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVel;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_shootVelFar;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_ticksPerDeg;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Servo_transferArmPos;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_turretLimits;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Turret_turretStep;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_PIDF;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Servo_blockerPos;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_ejectionVel;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Drive_intakePower;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVel;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVelFar;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Turret_ticksPerDeg;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Servo_transferArmPos;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Turret_turretLimits;
+import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Turret_turretStep;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
