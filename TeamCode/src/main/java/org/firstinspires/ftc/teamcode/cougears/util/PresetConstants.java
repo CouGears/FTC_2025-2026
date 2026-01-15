@@ -16,7 +16,7 @@ USE import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.
 public class PresetConstants {
     // DRIVE
     public static double Drive_slowMultiplier = .25;
-    public static double Drive_intakePower = 1;
+    public static double Drive_intakePower = .6;
     //FW
     public static double[] FW_PIDF = {5.5, 0, 4, 6.9}; // Nice
     public static double FW_shootVel = 1600;

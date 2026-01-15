@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 @TeleOp (group = "Testing")
 public class PIDFManualTuner extends OpMode {
     public DcMotorEx FW;
