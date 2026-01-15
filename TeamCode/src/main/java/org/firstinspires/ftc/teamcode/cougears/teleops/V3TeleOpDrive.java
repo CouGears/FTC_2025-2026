@@ -74,9 +74,6 @@ public class V3TeleOpDrive extends LinearOpMode {
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_shootVel);
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
-                bot.spinUpFar();
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_shootVelFar);
-            } else if (bot.isHeld(2, Button.R_BUMPER)) {
                 bot.ejectFW();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_ejectionVel);
             } else {
@@ -85,20 +82,16 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
 
             //****** SHOOT SEQUENCE (Controller 2)******
-            // BUTTONS: R_TRIGGER
-            if (bot.isPressed(2, Button.R_TRIGGER)) {
-                if (bot.timers.get("ShootSequence") == null) { // Not in the middle of a sequence
-                    bot.blockerOpen();
-                    bot.createTimer("ShootSequence");
+            if (bot.isHeld(2, Button.R_TRIGGER)) {
+                bot.openBlocker();
+                if ((bot.blockerIsOpen() && bot.FWUpToSpeed(FW_shootVel)) || bot.isHeld(2, Button.R_BUMPER)){
+                    bot.startTransfer();
                 }
-                else {
-                    bot.createTimer("ShootSequence", (long) Auton_gateWait); // Dont want to waste time opeing gate if gate is already open
-                }
+                else
+                    bot.killTransfer();
             }
-            bot.handleShootSequence();
 
             //****** EJECT BALLS (Controller 1 & 2)******
-            // R_STICKPRESS
             if (bot.isPressed(2, Button.R_STICKPRESS) || bot.isPressed(1, Button.R_STICKPRESS)) {
                 bot.ejectIntake();
                 bot.createTimer("Eject");
