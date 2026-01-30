@@ -11,6 +11,7 @@ public class PositionsAndPaths {
     // ===== RED POSITIONS =====
     public static final Pose RedStartPos         = new Pose(144 - 19, 119.2, Math.toRadians(180 - 135));
     public static final Pose RedStartPosFar      = new Pose(144 - 56,   8, Math.toRadians(90));
+    public static final Pose RedShootTriangleClose = new Pose(144 - 57.5,  78, Math.toRadians(180 - 135));
     public static final Pose RedShootTriangleTip = new Pose(144 - 57.5,  78, Math.toRadians(180 - 135));
     public static final Pose RedShootWall     = new Pose(144 - 58.5,  120, Math.toRadians(180 - 180));
     public static final Pose RedShootCenterZone     = new Pose(144 - 58.5,  120, Math.toRadians(180 - 180));
@@ -71,7 +72,8 @@ public class PositionsAndPaths {
 
     public static ShootingPosition RedWall = new ShootingPosition(RedShootWall, 1160);
     public static ShootingPosition RedCenterZone = new ShootingPosition(RedShootCenterZone, 1160);
-    public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1280);
+    public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1180);
+    public static ShootingPosition RedTriangleClose = new ShootingPosition(RedShootTriangleClose, 1280);
     public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1450);
     public static ShootingPosition[] shootingPosArray = {RedWall, RedCenterZone, RedTriangleTip, RedFar};
 
