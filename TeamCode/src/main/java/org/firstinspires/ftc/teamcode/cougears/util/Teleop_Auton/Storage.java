@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton;
 
 import com.pedropathing.geometry.Pose;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 public class Storage {
     static public Pose Storage_endOfAutonPose = RedStartPos;

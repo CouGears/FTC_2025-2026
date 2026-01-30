@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -78,7 +79,7 @@ public class V3TeleOpBase extends BotBase {
 
     //****** FLYWHEELS ******
     public void spinUpClose() {
-        FW.setVelocity(FW_shootVel);
+        FW.setVelocity(RedFar.getShootingVelocity());
     }
     public void killFW() {
         FW.setPower(0);

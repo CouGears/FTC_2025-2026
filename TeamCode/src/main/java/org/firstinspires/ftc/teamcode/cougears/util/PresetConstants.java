@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.cougears.util;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.geometry.Pose;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 /*
 EX:
@@ -19,9 +21,7 @@ public class PresetConstants {
     public static double Drive_intakePower = .6;
     public static double Drive_transferPower = 1;
     //FW
-    public static double[] FW_PIDF = {5.5, 0, 4, 6.9}; // Nice
-    public static double FW_shootVel = 1600;
-    public static double FW_shootVelFar = 1800;
+    public static double[] FW_PIDF = {214, 0, 0, 18};
     public static double FW_ejectionVel = -1000;
 
     //Servos

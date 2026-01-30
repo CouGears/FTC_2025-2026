@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.cougears.autons;
-
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.pedropathing.follower.Follower;
@@ -62,10 +62,10 @@ public class V3AutonController {
 
     //****** FLYWHEELS ******
     public void spinUpClose() {
-        FW.setVelocity(FW_shootVel);
+        FW.setVelocity(RedTriangleTip.getShootingVelocity());
     }
     public void spinUpFar() {
-        FW.setVelocity(FW_shootVelFar);
+        FW.setVelocity(RedFar.getShootingVelocity());
     }
     public void killFW() {
         FW.setPower(0);

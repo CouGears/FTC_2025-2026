@@ -48,7 +48,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             //****** AUTON MOVING ******
             if (bot.isHeld(1, Button.DPAD_DOWN)){
                 if (PTM.getGoal().equals("Red"))
-                    PTM.moveToPos(RedShootTrianglePos);
+                    PTM.moveToPos(RedTriangleTip.getShootingPose());
                 else if (PTM.getGoal().equals("Blue"))
                     PTM.moveToPos(BlueShootTrianglePos);
                 PTM.updatePosAndMotors();
@@ -71,7 +71,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             // BUTTONS: L_TRIGGER, L_BUMPER, R_TRIGGER, R_BUMPER
             if (bot.isHeld(2, Button.L_TRIGGER)) {
                 bot.spinUpClose();
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_shootVel);
+                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", RedTriangleTip.getShootingVelocity());
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
                 bot.ejectFW();
@@ -84,7 +84,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             //****** SHOOT SEQUENCE (Controller 2)******
             if (bot.isHeld(2, Button.R_TRIGGER)) {
                 bot.openBlocker();
-                if ((bot.blockerIsOpen() && bot.FWUpToSpeed(FW_shootVel)) || bot.isHeld(2, Button.R_BUMPER)){
+                if ((bot.blockerIsOpen() && bot.FWUpToSpeed(RedFar.getShootingVelocity())) || bot.isHeld(2, Button.R_BUMPER)){
                     bot.startTransfer();
                 }
                 else

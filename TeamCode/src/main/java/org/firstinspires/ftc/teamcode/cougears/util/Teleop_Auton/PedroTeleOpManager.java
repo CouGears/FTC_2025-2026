@@ -5,6 +5,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.*;
@@ -32,6 +33,22 @@ public class PedroTeleOpManager {
         );
     }
 
+    public ShootingPosition getClosestPose(){
+        double closestPos = robotDistanceFromPos(shootingPosArray[0].getShootingPose());
+        ShootingPosition closestShootingPosition = shootingPosArray[0];
+        for(ShootingPosition shootingPos : shootingPosArray){
+            double shootPosDistance = robotDistanceFromPos(shootingPos.getShootingPose());
+            if (shootPosDistance < closestPos){
+                closestPos = shootPosDistance;
+                closestShootingPosition = shootingPos;
+            }
+        }
+        return closestShootingPosition;
+    }
+
+    public double robotDistanceFromPos(Pose pose){
+        return Math.pow(Math.pow(pose.getX(), 2) + Math.pow(pose.getY(), 2), 1/2);
+    }
     public void alignToGoal () {
         double botX = follower.getPose().getX();
         double botY = follower.getPose().getY();
