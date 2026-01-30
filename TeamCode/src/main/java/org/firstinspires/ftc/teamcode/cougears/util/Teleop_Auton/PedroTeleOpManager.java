@@ -18,6 +18,11 @@ public class PedroTeleOpManager {
         follower = Constants.createFollower(HM);
         follower.setPose(Storage.Storage_endOfAutonPose);
     }
+
+    public PedroTeleOpManager(HardwareMap HM, Pose setPose) {
+        follower = Constants.createFollower(HM);
+        follower.setPose(setPose);
+    }
     public void moveToPos(Pose targetPos) {
         follower.followPath(
                 follower.pathBuilder()
@@ -48,6 +53,7 @@ public class PedroTeleOpManager {
         moveToPos(poseGoalAngle);
     }
     public String getGoal() {return goal;}
+    public Pose getCurrPos() {return follower.getPose();}
     public void switchGoal(){
         if (goal.equals("Red"))
             goal = "Blue";
