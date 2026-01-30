@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_PIDF;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVel;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVelFar;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -15,20 +12,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
-import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.goalUtils;
 
 
 public class V3TeleOpBase extends BotBase {
 
     goalUtils goal;
     //Initializing motors
-    public DcMotorEx FW, Intake;
+    public DcMotorEx FW, Intake, Transfer;
     public Servo Blocker;
     //initializing toggles
     public boolean IntakeSpinning, slowed;
@@ -63,12 +57,14 @@ public class V3TeleOpBase extends BotBase {
             Intake.setDirection(DcMotor.Direction.REVERSE);
             Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+            Transfer = HM.get(DcMotorEx.class, "Transfer");
+            Transfer.setDirection(DcMotor.Direction.FORWARD);
+            Transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
             Blocker = HM.get(Servo.class, "Blocker");
             Blocker.setPosition(Servo_blockerPos[0]);
 
             pinpoint = HM.get(GoBildaPinpointDriver.class, "pinpoint");
-            setPinpointPose();
-
 
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
@@ -78,32 +74,11 @@ public class V3TeleOpBase extends BotBase {
         return true;
     }
 
-    //****** AUTON MOVEMENT ******
-    public void setPinpointPose(){
-        Pose pedroPose = Storage.Storage_endOfAutonPose;
-        pinpoint.setPosition(new Pose2D(
-                DistanceUnit.INCH,
-                pedroPose.getX(),
-                pedroPose.getY(),
-                AngleUnit.RADIANS,
-                pedroPose.getHeading()
-        ));
-    }
-    public Pose getPedroPose(){
-        Pose2D p = pinpoint.getPosition();
-        return new Pose (
-                p.getX(DistanceUnit.INCH),
-                p.getY(DistanceUnit.INCH),
-                p.getHeading(AngleUnit.RADIANS)
-        );
-    }
+
 
     //****** FLYWHEELS ******
     public void spinUpClose() {
         FW.setVelocity(FW_shootVel);
-    }
-    public void spinUpFar() {
-        FW.setVelocity(FW_shootVelFar);
     }
     public void killFW() {
         FW.setPower(0);
@@ -111,13 +86,17 @@ public class V3TeleOpBase extends BotBase {
     public void ejectFW() {
         FW.setPower(FW_ejectionVel);
     }
+    public boolean FWUpToSpeed (double speed) {
+        return FW.getVelocity() >= speed;
+    }
 
-    public void blockerOpen(){
+    public void openBlocker(){
         Blocker.setPosition(Servo_blockerPos[1]);
     }
-    public void blockerClose(){
+    public void closeBlocker(){
         Blocker.setPosition(Servo_blockerPos[0]);
     }
+    public boolean blockerIsOpen() {return Blocker.getPosition() > Servo_blockerPos[1] - .05; }
 
     //****** INTAKE ******
     public void startIntake() {
@@ -128,23 +107,17 @@ public class V3TeleOpBase extends BotBase {
         Intake.setPower(0);
         IntakeSpinning = false;
     }
-
     public void ejectIntake() {
         Intake.setPower(-1);
         IntakeSpinning = false; // So next time you press X it starts spinning in
     }
+    //****** Transfer ******
+    public void startTransfer() { Transfer.setPower(Drive_transferPower);}
+    public void killTransfer() { Transfer.setPower(0);}
+    public void ejectTransfer() { Transfer.setPower(-1);}
 
-    //****** SHOOTING ****** NEEDS TO BE REWORKED
-    public void handleShootSequence() {
-        if (timerExpired_MSeconds("ShootSequence", Auton_gateWait)) {
-            killIntake(); // Dont was ball to move below the arm while its up
-        } else if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait)) {
-            blockerClose();
-        } else if (timerExpired_MSeconds("ShootSequence", Auton_gateWait + Auton_ballTransferWait + Auton_transferResetWait)) {
-            startIntake(); // Turn intake back on
-            deleteTimer("ShootSequence");
-        }
-    }
+    //****** SHOOTING ******
+
 
     //****** OTHER ******
     public void endTeleOp(){

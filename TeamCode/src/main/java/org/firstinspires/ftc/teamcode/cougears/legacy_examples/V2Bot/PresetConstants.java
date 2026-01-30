@@ -11,8 +11,7 @@ public static int[] slidePresets = {0, 4000, 2000, 1000};
 
 USE import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*; to import
  */
-@Configurable
-@Config
+
 public class PresetConstants {
     // DRIVE
     public static double Drive_slowMultiplier = .25;

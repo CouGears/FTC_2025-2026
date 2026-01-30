@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.*;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 @TeleOp(name="V3Teleop", group="Drive")
@@ -16,7 +15,6 @@ public class V3TeleOpDrive extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        goalUtils goal = new goalUtils();
         V3TeleOpBase bot = new V3TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         PedroTeleOpManager PTM = new PedroTeleOpManager(hardwareMap);
         // Initialize motors
@@ -29,21 +27,12 @@ public class V3TeleOpDrive extends LinearOpMode {
 
         while (opModeIsActive()) {
             //****** DRIVE (Controller 1)******
-            // BUTTONS: L-Joystick, R-Joystick, B
-            if (bot.isPressed(1, Button.B)) {
-                bot.toggleSlow();
-            }
-            if (!bot.isHeld(1, Button.DPAD_DOWN) && PTM.follower.isBusy()){
-                PTM.follower.breakFollowing();
-            }
-
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
-            if (PTM.follower.isBusy()) {
-                telemetry.addLine("PEDRO IS DRIVING");
-//                PTM.update();
-            } else {
-//                PTM.follower.setPose(bot.getPedroPose());
-                PTM.follower.updatePose();
+            if (!bot.isHeld(1, Button.DPAD_DOWN) && PTM.follower.isBusy()){
+                PTM.breakFollower();
+            }
+            if (!PTM.isBusy()) {
+                PTM.updatePos(); // Update w/o motors
                 if (bot.isPressed(1, Button.B)) {
                     bot.toggleSlow();
                 }
@@ -52,19 +41,18 @@ public class V3TeleOpDrive extends LinearOpMode {
             }
 
             if (bot.isPressed(1, Button.Y)) {
-                goal.switchLockedGoal();
+                PTM.switchGoal();
             }
-            goal.displayLockedTag(telemetry);
+            telemetry.addData("Assigned Goal", "%s", PTM.getGoal());
 
             //****** AUTON MOVING ******
             if (bot.isHeld(1, Button.DPAD_DOWN)){
-                if (goal.getLockedTagID() == AT_redTag)
+                if (PTM.getGoal().equals("Red"))
                     PTM.moveToPos(RedShootTrianglePos);
-                else if (goal.getLockedTagID() == AT_blueTag)
+                else if (PTM.getGoal().equals("Blue"))
                     PTM.moveToPos(BlueShootTrianglePos);
-                PTM.update();
+                PTM.updatePosAndMotors();
             }
-
             if (bot.isHeld(1, Button.DPAD_UP)) {
                 PTM.alignToGoal();
             }
@@ -86,9 +74,6 @@ public class V3TeleOpDrive extends LinearOpMode {
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_shootVel);
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
-                bot.spinUpFar();
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_shootVelFar);
-            } else if (bot.isHeld(2, Button.R_BUMPER)) {
                 bot.ejectFW();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_ejectionVel);
             } else {
@@ -97,20 +82,16 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
 
             //****** SHOOT SEQUENCE (Controller 2)******
-            // BUTTONS: R_TRIGGER
-            if (bot.isPressed(2, Button.R_TRIGGER)) {
-                if (bot.timers.get("ShootSequence") == null) { // Not in the middle of a sequence
-                    bot.blockerOpen();
-                    bot.createTimer("ShootSequence");
+            if (bot.isHeld(2, Button.R_TRIGGER)) {
+                bot.openBlocker();
+                if ((bot.blockerIsOpen() && bot.FWUpToSpeed(FW_shootVel)) || bot.isHeld(2, Button.R_BUMPER)){
+                    bot.startTransfer();
                 }
-                else {
-                    bot.createTimer("ShootSequence", (long) Auton_gateWait); // Dont want to waste time opeing gate if gate is already open
-                }
+                else
+                    bot.killTransfer();
             }
-            bot.handleShootSequence();
 
             //****** EJECT BALLS (Controller 1 & 2)******
-            // R_STICKPRESS
             if (bot.isPressed(2, Button.R_STICKPRESS) || bot.isPressed(1, Button.R_STICKPRESS)) {
                 bot.ejectIntake();
                 bot.createTimer("Eject");

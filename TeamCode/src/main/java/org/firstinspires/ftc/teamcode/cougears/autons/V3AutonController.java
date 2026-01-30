@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode.cougears.autons;
 
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Drive_intakePower;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_PIDF;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_ejectionVel;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVel;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.FW_shootVelFar;
-import static org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.PresetConstants.Servo_blockerPos;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;

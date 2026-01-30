@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.V2AprilTagManager;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
-import org.firstinspires.ftc.teamcode.cougears.util.goalUtils;
+import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.goalUtils;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 @Disabled
 @TeleOp(name="V2Teleop", group="Drive")
@@ -76,7 +76,7 @@ public class V2TeleOpDrive extends LinearOpMode {
                     PTM.moveToPos(RedShootTrianglePos);
                 else if (goal.getLockedTagID() == AT_blueTag)
                     PTM.moveToPos(BlueShootTrianglePos);
-                PTM.update();
+                PTM.updatePosAndMotors();
             }
 
             if (bot.isHeld(1, Button.DPAD_UP)) {
