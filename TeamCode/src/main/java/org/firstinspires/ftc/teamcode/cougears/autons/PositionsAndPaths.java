@@ -10,34 +10,34 @@ public class PositionsAndPaths {
 
     // ===== RED POSITIONS =====
     public static final Pose RedStartPos         = new Pose(144 - 19, 119.2, Math.toRadians(180 - 135));
-    public static final Pose RedStartPosFar      = new Pose(144 - 56,   8, Math.toRadians(90));
-    public static final Pose RedShootTriangleClose = new Pose(144 - 57.5,  78, Math.toRadians(180 - 135));
-    public static final Pose RedShootTriangleTip = new Pose(144 - 57.5,  78, Math.toRadians(180 - 135));
-    public static final Pose RedShootWall     = new Pose(144 - 58.5,  120, Math.toRadians(180 - 180));
-    public static final Pose RedShootCenterZone     = new Pose(144 - 58.5,  120, Math.toRadians(180 - 180));
-    public static final Pose RedShootFar     = new Pose(144 - 58.5,  120, Math.toRadians(180 - 180));
+    public static final Pose RedStartPosFar      = new Pose(96.07,   9.71, Math.toRadians(90));
+    public static final Pose RedShootTriangleClose = new Pose(91.55,  85.3, Math.toRadians(50.6));
+    public static final Pose RedShootTriangleTip = new Pose(78.7,  59.2, Math.toRadians(53.93));
+    public static final Pose RedShootWall     = new Pose(80.3,  121.1, Math.toRadians(12.8));
+    public static final Pose RedShootCenterZone     = new Pose(80.12,  105.27, Math.toRadians(29.9));
+    public static final Pose RedShootFar     = new Pose(94.5,  18.64, Math.toRadians(71.2));
 
 
-    public static final Pose RedBallDepotStart1 = new Pose(144 - 45.5, 84,  Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotStart2 = new Pose(144 - 45.5, 59,               Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotStart3 = new Pose(144 - 45.5, 35.5, Math.toRadians(180 - 180));
+    public static final Pose RedBallDepotStart1 = new Pose(108.1, 27.63 + 48,  Math.toRadians(0));
+    public static final Pose RedBallDepotStart2 = new Pose(108.1, 27.63 + 24,  Math.toRadians(0));
+    public static final Pose RedBallDepotStart3 = new Pose(108.1, 27.63,       Math.toRadians(0));
 
-    public static final Pose RedBallDepotEnd1   = new Pose(144 - 13, 84,  Math.toRadians(180 - 180));
-    public static final Pose RedBallDepotEnd2   = new Pose(144 - 13, 59,               Math.toRadians(180));
-    public static final Pose RedBallDepotEnd3   = new Pose(144 - 13, 35.5, Math.toRadians(180));
+    public static final Pose RedBallDepotEnd1   = new Pose(132.25, 27.63 + 48,  Math.toRadians(0));
+    public static final Pose RedBallDepotEnd2   = new Pose(132.25, 27.63 + 24,  Math.toRadians(0));
+    public static final Pose RedBallDepotEnd3   = new Pose(132.25, 27.63,       Math.toRadians(0));
 
-    public static final Pose RedGateInit        = new Pose(144 - 17, 74,  Math.toRadians(180 - 180));
-    public static final Pose RedGateOpen        = new Pose(144 - 17, 79.5,  Math.toRadians(180 - 180));
+    public static final Pose RedGateInit        = new Pose(128, 72.4,  Math.toRadians(90));
+    public static final Pose RedGateOpen        = new Pose(131.6, 72.4,  Math.toRadians(90));
 
-    public static final Pose RedSweepStart      = new Pose(144 - 7.5, 53,  Math.toRadians(180 - 260));
-    public static final Pose RedSweepEnd        = new Pose(144 - 7.5, 18,               Math.toRadians(180 - 260));
+//    public static final Pose RedSweepStart      = new Pose(144 - 7.5, 53,  Math.toRadians(180 - 260));
+//    public static final Pose RedSweepEnd        = new Pose(144 - 7.5, 18,  Math.toRadians(180 - 260));
 
-    public static final Pose RedBasicEnd = new Pose(144 - 48,  144 - 70, Math.toRadians(-90));
+    public static final Pose RedBasicEnd = new Pose(105,  77.15, Math.toRadians(45));
 
-    public static final Pose RedFarToWallIntermidate1 = new Pose(144 - 45, 60, Math.toRadians(90));
-    public static final Pose RedFarToWallIntermidate2 = new Pose(144 - 45, 105, Math.toRadians(90));
+//    public static final Pose RedFarToWallIntermidate1 = new Pose(144 - 45, 60, Math.toRadians(90));
+//    public static final Pose RedFarToWallIntermidate2 = new Pose(144 - 45, 105, Math.toRadians(90));
 
-    public static final Pose RedPark = new Pose(37.686591276252024, 32.568659127625196, Math.toRadians(180));
+    public static final Pose RedPark = new Pose(113.26, 32.68, Math.toRadians(90));
 
 
 
@@ -67,7 +67,7 @@ public class PositionsAndPaths {
     public static final Pose BlueFarToWallIntermidate1 = new Pose(45, 60, Math.toRadians(90));
     public static final Pose BlueFarToWallIntermidate2 = new Pose(45, 105, Math.toRadians(90));
 
-    public static final Pose BluePark = new Pose(144-37.686591276252024, 32.568659127625196, Math.toRadians(0));
+    public static final Pose BluePark = new Pose(144-113.26, 32.68, Math.toRadians(90));
 
 
     public static ShootingPosition RedWall = new ShootingPosition(RedShootWall, 1160);
@@ -147,13 +147,13 @@ public class PositionsAndPaths {
         RedShootPosToRedBallDepotStart3        = buildPath(f, RedShootTriangleTip, RedBallDepotStart3);
         RedBallDepotStart3ToRedBallDepotEnd3   = buildPath(f, RedBallDepotStart3, RedBallDepotEnd3);
         RedBallDepotEnd3ToRedShootPos          = buildPath(f, RedBallDepotEnd3, RedShootTriangleTip);
-        RedShootPosToRedSweepStart             = buildPath(f, RedShootTriangleTip, RedSweepStart);
-        RedSweepStartToRedSweepEnd             = buildPath(f, RedSweepStart, RedSweepEnd);
-        RedSweepEndToRedShootPos               = buildPath(f, RedSweepEnd, RedShootTriangleTip);
+//        RedShootPosToRedSweepStart             = buildPath(f, RedShootTriangleTip, RedSweepStart);
+//        RedSweepStartToRedSweepEnd             = buildPath(f, RedSweepStart, RedSweepEnd);
+//        RedSweepEndToRedShootPos               = buildPath(f, RedSweepEnd, RedShootTriangleTip);
         RedShootTrianglePosToRedBasicEnd       = buildPath(f, RedShootTriangleTip, RedBasicEnd);
         RedShootWallPosToRedBasicEnd           = buildPath(f, RedShootWall, RedBasicEnd);
         RedShootTrianglePosToBallDepot1Pickup  = buildLongPath(f, RedShootTriangleTip, RedBallDepotStart1, RedBallDepotEnd1);
-        RedFarStartPosToRedShootWallPos        = buildLongPath(f, RedStartPosFar, RedFarToWallIntermidate1, RedFarToWallIntermidate2, RedShootTriangleTip);
+//        RedFarStartPosToRedShootWallPos        = buildLongPath(f, RedStartPosFar, RedFarToWallIntermidate1, RedFarToWallIntermidate2, RedShootTriangleTip);
 
         // ---- BLUE PATHS ----
         BlueStartPosToBlueShootTrianglePos       = buildPath(f, BlueStartPos, BlueShootTrianglePos);
