@@ -47,7 +47,10 @@ public class PedroTeleOpManager {
     }
 
     public double robotDistanceFromPos(Pose pose){
-        return Math.pow(Math.pow(pose.getX(), 2) + Math.pow(pose.getY(), 2), 1/2);
+        double botx = follower.getPose().getX();
+        double boty = follower.getPose().getX();
+
+        return Math.pow(Math.pow(Math.abs(pose.getX()-boty), 2) + Math.pow(Math.abs(pose.getY()-botx), 2), 1/2);
     }
     public void alignToGoal () {
         double botX = follower.getPose().getX();
