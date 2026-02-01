@@ -33,13 +33,21 @@ public class PedroTeleOpManager {
         );
     }
 
-    public ShootingPosition getClosestPose(){
-        double closestPos = robotDistanceFromPos(shootingPosArray[0].getShootingPose());
+    public ShootingPosition getClosestShootingPosition(){
+        ShootingPosition[] shootingPosArray;
+        if (Storage_endOfAutonColor.equals("Red")) {
+            shootingPosArray = redShootingPosArray;
+        } else {
+            shootingPosArray = blueShootingPosArray;
+        }
+
+        double closestDist = robotDistanceFromPos(shootingPosArray[0].getShootingPose());
         ShootingPosition closestShootingPosition = shootingPosArray[0];
+
         for(ShootingPosition shootingPos : shootingPosArray){
             double shootPosDistance = robotDistanceFromPos(shootingPos.getShootingPose());
-            if (shootPosDistance < closestPos){
-                closestPos = shootPosDistance;
+            if (shootPosDistance < closestDist){
+                closestDist = shootPosDistance;
                 closestShootingPosition = shootingPos;
             }
         }
@@ -47,10 +55,9 @@ public class PedroTeleOpManager {
     }
 
     public double robotDistanceFromPos(Pose pose){
-        double botx = follower.getPose().getX();
-        double boty = follower.getPose().getX();
-
-        return Math.pow(Math.pow(Math.abs(pose.getX()-boty), 2) + Math.pow(Math.abs(pose.getY()-botx), 2), 1/2);
+        double botX = follower.getPose().getX();
+        double botY = follower.getPose().getY(); // Fixed: was getX()
+        return Math.hypot(pose.getX() - botX, pose.getY() - botY);
     }
     public void alignToGoal () {
         double botX = follower.getPose().getX();

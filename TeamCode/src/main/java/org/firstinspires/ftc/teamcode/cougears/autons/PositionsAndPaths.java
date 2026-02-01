@@ -76,14 +76,14 @@ public class PositionsAndPaths {
     public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1180);
     public static ShootingPosition RedTriangleClose = new ShootingPosition(RedShootTriangleClose, 1280);
     public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1450);
-    public static ShootingPosition[] redShootingPosArray = {RedWall, RedCenterZone, RedTriangleClose, RedTriangleTip, RedFar};
+    public static ShootingPosition[] redShootingPosArray = new ShootingPosition[]{RedWall, RedCenterZone, RedTriangleClose, RedTriangleTip, RedFar};
 
     public static ShootingPosition BlueWall = new ShootingPosition(BlueShootWall, 1160);
     public static ShootingPosition BlueCenterZone = new ShootingPosition(BlueShootCenterZone, 1160);
     public static ShootingPosition BlueTriangleTip = new ShootingPosition(BlueShootTriangleTip, 1180);
     public static ShootingPosition BlueTriangleClose = new ShootingPosition(BlueShootTriangleClose, 1280);
     public static ShootingPosition BlueFar = new ShootingPosition(BlueShootFar, 1450);
-    public static ShootingPosition[] blueShootingPosArray = {BlueWall, BlueCenterZone, BlueTriangleClose, BlueTriangleTip, BlueFar};
+    public static ShootingPosition[] blueShootingPosArray = new ShootingPosition[]{BlueWall, BlueCenterZone, BlueTriangleClose, BlueTriangleTip, BlueFar};
 
 
     // ==========================================================

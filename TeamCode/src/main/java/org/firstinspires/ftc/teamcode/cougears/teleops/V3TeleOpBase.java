@@ -13,15 +13,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.goalUtils;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 
 public class V3TeleOpBase extends BotBase {
-
-    goalUtils goal;
+    PedroTeleOpManager PTM = new PedroTeleOpManager(HM);
     //Initializing motors
     public DcMotorEx FW, Intake, Transfer;
     public Servo Blocker;
@@ -78,8 +78,11 @@ public class V3TeleOpBase extends BotBase {
 
 
     //****** FLYWHEELS ******
-    public void spinUpClose() {
-        FW.setVelocity(RedFar.getShootingVelocity());
+    public void prespinFW(){
+        FW.setVelocity(1000);
+    }
+    public void spinUpToShootingPosition() {
+        FW.setVelocity(PTM.getClosestShootingPosition().getShootingVelocity());
     }
     public void killFW() {
         FW.setPower(0);
@@ -131,6 +134,9 @@ public class V3TeleOpBase extends BotBase {
         slowed = !slowed;
     }
 
+    public void moveBotToClosestShootingPosition(){
+        PTM.moveToPos(PTM.getClosestShootingPosition().getShootingPose());
+    }
     public void RafiDrive(Gamepad gamepad1) {
 
         // --- Speed scaling ---

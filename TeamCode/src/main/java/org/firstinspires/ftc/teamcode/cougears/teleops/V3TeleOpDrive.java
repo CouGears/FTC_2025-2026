@@ -39,24 +39,13 @@ public class V3TeleOpDrive extends LinearOpMode {
                 bot.RafiDrive(gamepad1);
                 telemetry.addData("Slowed", "%b", bot.slowed);
             }
-
-            if (bot.isPressed(1, Button.Y)) {
-                PTM.switchGoal();
-            }
             telemetry.addData("Assigned Goal", "%s", PTM.getGoal());
 
             //****** AUTON MOVING ******
             if (bot.isHeld(1, Button.DPAD_DOWN)){
-                if (PTM.getGoal().equals("Red"))
-                    PTM.moveToPos(RedTriangleTip.getShootingPose());
-                else if (PTM.getGoal().equals("Blue"))
-                    PTM.moveToPos(BlueShootTrianglePos);
+                bot.moveBotToClosestShootingPosition();
                 PTM.updatePosAndMotors();
             }
-            if (bot.isHeld(1, Button.DPAD_UP)) {
-                PTM.alignToGoal();
-            }
-
 
             //****** INTAKE ******
             if (bot.isPressed(1, Button.X)) {
@@ -70,7 +59,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             //****** FLYWHEEL (Controller 2)******
             // BUTTONS: L_TRIGGER, L_BUMPER, R_TRIGGER, R_BUMPER
             if (bot.isHeld(2, Button.L_TRIGGER)) {
-                bot.spinUpClose();
+                //bot.spinUpClose();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", RedTriangleTip.getShootingVelocity());
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
