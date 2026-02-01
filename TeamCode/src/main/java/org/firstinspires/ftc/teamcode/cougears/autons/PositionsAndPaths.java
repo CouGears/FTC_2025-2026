@@ -67,7 +67,8 @@ public class PositionsAndPaths {
     // --- Gate, Park, and Utility ---
     public static final Pose BlueGateInit        = new Pose(144 - 128, 72.4, Math.toRadians(180 - 90));
     public static final Pose BlueGateOpen        = new Pose(144 - 131.6, 72.4, Math.toRadians(180 - 90));
-    public static final Pose BlueBasicEnd        = new Pose(144 - 105, 77.15, Math.toRadians(180 - 45));
+    public static final Pose BlueBasicEndClose = new Pose(144 - 105, 77.15, Math.toRadians(180 - 45));
+    public static final Pose BlueBasicEndFar     = new Pose(144 - 96.07,  25.71, Math.toRadians(45));
     public static final Pose BluePark            = new Pose(144 - 113.26, 32.68, Math.toRadians(180 - 90));
 
 
@@ -93,6 +94,13 @@ public class PositionsAndPaths {
     public static ShootingPosition BlueTriangleTip = new ShootingPosition(BlueShootTriangleTip, 1280, "Blue");
     public static ShootingPosition BlueTriangleClose = new ShootingPosition(BlueShootTriangleClose, 1180, "Blue");
     public static ShootingPosition BlueFar = new ShootingPosition(BlueShootFar, 1450, "Blue");
+    public static HashMap<String, ShootingPosition> blueShootingPosHashMap= new HashMap<String, ShootingPosition>() {{
+        put("BlueWall", BlueWall);
+        put("BlueCenterZone", BlueCenterZone);
+        put("BlueTriangleTip", BlueTriangleTip);
+        put("BlueTriangleClose", BlueTriangleClose);
+        put("BlueFar", BlueFar);
+    }};
     public static ShootingPosition[] blueShootingPosArray = new ShootingPosition[]{BlueWall, BlueCenterZone, BlueTriangleClose, BlueTriangleTip, BlueFar};
 
 
@@ -186,8 +194,8 @@ public class PositionsAndPaths {
         BlueShootPosToBlueBallDepotStart3        = buildPath(f, BlueShootTriangleTip, BlueBallDepotStart3);
         BlueBallDepotStart3ToBlueBallDepotEnd3   = buildPath(f, BlueBallDepotStart3, BlueBallDepotEnd3);
         BlueBallDepotEnd3ToBlueShootPos          = buildPath(f, BlueBallDepotEnd3, BlueShootTriangleTip);
-        BlueShootTrianglePosToBlueBasicEnd       = buildPath(f, BlueShootTriangleTip, BlueBasicEnd);
-        BlueShootWallPosToBlueBasicEnd           = buildPath(f, BlueShootWall, BlueBasicEnd);
+        BlueShootTrianglePosToBlueBasicEnd       = buildPath(f, BlueShootTriangleTip, BlueBasicEndClose);
+        BlueShootWallPosToBlueBasicEnd           = buildPath(f, BlueShootWall, BlueBasicEndClose);
         BlueShootTrianglePosToBallDepot1Pickup   = buildLongPath(f, BlueShootTriangleTip, BlueBallDepotStart1, BlueBallDepotEnd1);
 
     }
