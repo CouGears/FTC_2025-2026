@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.cougears.autons.Blue.BlueFar_Preloads;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -38,7 +39,10 @@ public class RedClose_BD1 extends OpMode {
     pathStep currStep = pathStep.SHOOT_BALLS;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, endPos); } //CHANGE IF BLUE
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) {
+            bot.moveToPose(follower, endPos);
+            setPathStep(pathStep.END);
+        }
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot

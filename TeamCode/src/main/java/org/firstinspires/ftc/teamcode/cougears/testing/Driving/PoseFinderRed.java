@@ -1,17 +1,15 @@
 package org.firstinspires.ftc.teamcode.cougears.testing.Driving;
 
 
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import org.firstinspires.ftc.teamcode.cougears.teleops.V3TeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 @TeleOp(group="Testing")
-public class PoseFinder extends LinearOpMode {
+public class PoseFinderRed extends LinearOpMode {
     V3TeleOpBase bot = null;
     @Override
     public void runOpMode() throws InterruptedException {

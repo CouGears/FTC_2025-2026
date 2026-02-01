@@ -151,7 +151,6 @@ public class V3AutonBase {
             case END:
                 if (shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
                 killTransfer();
-                killFW();
                 closeBlocker();
                 shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
                 return true;

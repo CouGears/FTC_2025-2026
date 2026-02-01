@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.cougears.autons.Blue;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.BlueBasicEndClose;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.BlueStartPos;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEndClose;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPos;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.blueShootingPosHashMap;
@@ -25,6 +26,8 @@ public class BlueClose_BD2 extends OpMode {
 
     public ShootingPosition shootPos = blueShootingPosHashMap.get("BlueTriangleClose");
     public Pose endPos   = BlueBasicEndClose;
+    public Pose startPos = BlueStartPos;
+
     public int BDCounter = 0;
     public final int numBDToPickup = 2;
     public boolean incrimentedBDCounter = false;
@@ -39,7 +42,10 @@ public class BlueClose_BD2 extends OpMode {
     pathStep currStep = pathStep.SHOOT_BALLS;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, endPos); } //CHANGE IF BLUE
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) {
+            bot.moveToPose(follower, endPos);
+            setPathStep(pathStep.END);
+        }
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
@@ -87,15 +93,16 @@ public class BlueClose_BD2 extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        follower.setPose(RedStartPos);
+        follower.setPose(startPos);
         buildPaths(follower);
         bot = new V3AutonBase(hardwareMap, telemetry);
         bot.botInit();
-        bot.startIntake();
     }
 
     @Override
     public void start() {
+        bot.startIntake();
+
         opModeTimer.resetTimer();
         setPathStep(pathStep.SHOOT_BALLS);
     }

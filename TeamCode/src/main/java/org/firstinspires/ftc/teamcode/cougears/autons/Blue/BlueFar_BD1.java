@@ -35,7 +35,10 @@ public class BlueFar_BD1 extends OpMode {
     pathStep currStep = pathStep.SHOOT_BALLS;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, endPos); } //CHANGE IF BLUE
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) {
+            bot.moveToPose(follower, endPos);
+            setPathStep(pathStep.END);
+        }
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
@@ -83,15 +86,16 @@ public class BlueFar_BD1 extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        follower.setPose(RedStartPosFar);
+        follower.setPose(BlueStartPosFar);
         buildPaths(follower);
         bot = new V3AutonBase(hardwareMap, telemetry);
         bot.botInit();
-        bot.startIntake();
     }
 
     @Override
     public void start() {
+        bot.startIntake();
+
         opModeTimer.resetTimer();
         setPathStep(pathStep.SHOOT_BALLS);
     }

@@ -9,6 +9,8 @@ import com.pedropathing.paths.PathChain;
 import java.util.HashMap;
 
 public class PositionsAndPaths {
+    public static final double posError = -6.5;
+    public static final double headingError = 10;
 
     // ==========================================================
     //                      RED POSITIONS
@@ -38,7 +40,7 @@ public class PositionsAndPaths {
     public static final Pose RedGateOpen        = new Pose(131.6, 72.4,  Math.toRadians(90));
     public static final Pose RedBasicEndClose   = new Pose(105,  77.15, Math.toRadians(45));
     public static final Pose RedBasicEndFar     = new Pose(96.07,  25.71, Math.toRadians(45));
-    public static final Pose RedPark            = new Pose(113.26, 32.68, Math.toRadians(90));
+    public static final Pose RedPark            = new Pose(44.649, 17.33, Math.toRadians(0));
 
 
     // ==========================================================
@@ -46,30 +48,30 @@ public class PositionsAndPaths {
     // ==========================================================
 
     // --- Starting Poses ---
-    public static final Pose BlueStartPos         = new Pose(144 - (144 - 19), 119.2, Math.toRadians(180 - 45));
-    public static final Pose BlueStartPosFar      = new Pose(144 - 96.07, 9.71, Math.toRadians(180 - 90));
+    public static final Pose BlueStartPos         = new Pose(12.5, 113.13, Math.toRadians(180 + headingError - 45));
+    public static final Pose BlueStartPosFar      = new Pose(144 + posError  - 96.07, 9.71, Math.toRadians(180 + headingError - 90));
 
     // --- Shooting Poses ---
-    public static final Pose BlueShootTriangleClose = new Pose(144 - 91.55, 85.3, Math.toRadians(180 - 50.6));
-    public static final Pose BlueShootTriangleTip   = new Pose(144 - 78.7, 59.2, Math.toRadians(180 - 53.93));
-    public static final Pose BlueShootWall          = new Pose(144 - 80.3, 121.1, Math.toRadians(180 - 12.8));
-    public static final Pose BlueShootCenterZone    = new Pose(144 - 80.12, 105.27, Math.toRadians(180 - 29.9));
-    public static final Pose BlueShootFar           = new Pose(144 - 94.5, 18.64, Math.toRadians(180 - 71.2));
+    public static final Pose BlueShootTriangleClose = new Pose(144 + posError  - 91.55, 85.3, Math.toRadians(180 + headingError - 50.6));
+    public static final Pose BlueShootTriangleTip   = new Pose(144 + posError  - 78.7, 59.2, Math.toRadians(180 + headingError - 53.93));
+    public static final Pose BlueShootWall          = new Pose(144 + posError  - 80.3, 121.1, Math.toRadians(180 + headingError - 12.8));
+    public static final Pose BlueShootCenterZone    = new Pose(144 + posError  - 80.12, 105.27, Math.toRadians(180 + headingError - 29.9));
+    public static final Pose BlueShootFar           = new Pose(144 + posError  - 94.5, 18.64, Math.toRadians(180 + headingError - 71.2));
 
     // --- Ball Depot Poses (Pickup & Scoring) ---
-    public static final Pose BlueBallDepotStart1 = new Pose(144 - 108.1, 27.63 + 48, Math.toRadians(180 - 0));
-    public static final Pose BlueBallDepotStart2 = new Pose(144 - 108.1, 27.63 + 24, Math.toRadians(180 - 0));
-    public static final Pose BlueBallDepotStart3 = new Pose(144 - 108.1, 27.63,      Math.toRadians(180 - 0));
-    public static final Pose BlueBallDepotEnd1   = new Pose(144 - 132.25, 27.63 + 48, Math.toRadians(180 - 0));
-    public static final Pose BlueBallDepotEnd2   = new Pose(144 - 132.25, 27.63 + 24, Math.toRadians(180 - 0));
-    public static final Pose BlueBallDepotEnd3   = new Pose(144 - 132.25, 27.63,      Math.toRadians(180 - 0));
+    public static final Pose BlueBallDepotStart1 = new Pose(144 + posError  - 108.1, 27.63 + 48, Math.toRadians(180 + headingError - 0));
+    public static final Pose BlueBallDepotStart2 = new Pose(144 + posError  - 108.1, 27.63 + 24, Math.toRadians(180 + headingError - 0));
+    public static final Pose BlueBallDepotStart3 = new Pose(144 + posError  - 108.1, 27.63,      Math.toRadians(180 + headingError - 0));
+    public static final Pose BlueBallDepotEnd1   = new Pose(144 + posError  - 132.25, 27.63 + 48, Math.toRadians(180 + headingError - 0));
+    public static final Pose BlueBallDepotEnd2   = new Pose(144 + posError  - 132.25, 27.63 + 24, Math.toRadians(180 + headingError - 0));
+    public static final Pose BlueBallDepotEnd3   = new Pose(144 + posError  - 132.25, 27.63,      Math.toRadians(180 + headingError - 0));
 
     // --- Gate, Park, and Utility ---
-    public static final Pose BlueGateInit        = new Pose(144 - 128, 72.4, Math.toRadians(180 - 90));
-    public static final Pose BlueGateOpen        = new Pose(144 - 131.6, 72.4, Math.toRadians(180 - 90));
-    public static final Pose BlueBasicEndClose = new Pose(144 - 105, 77.15, Math.toRadians(180 - 45));
-    public static final Pose BlueBasicEndFar     = new Pose(144 - 96.07,  25.71, Math.toRadians(45));
-    public static final Pose BluePark            = new Pose(144 - 113.26, 32.68, Math.toRadians(180 - 90));
+    public static final Pose BlueGateInit        = new Pose(144 + posError  - 128, 72.4, Math.toRadians(180 + headingError - 90));
+    public static final Pose BlueGateOpen        = new Pose(144 + posError  - 131.6, 72.4, Math.toRadians(180 + headingError - 90));
+    public static final Pose BlueBasicEndClose = new Pose(144 + posError  - 105, 77.15, Math.toRadians(180 + headingError - 45));
+    public static final Pose BlueBasicEndFar     = new Pose(144 + posError  - 96.07,  25.71, Math.toRadians(45));
+    public static final Pose BluePark            = new Pose(101.517, 28.384, Math.toRadians(180));
 
 
     // ==========================================================
@@ -93,7 +95,7 @@ public class PositionsAndPaths {
     public static ShootingPosition BlueCenterZone = new ShootingPosition(BlueShootCenterZone, 1160, "Blue");
     public static ShootingPosition BlueTriangleTip = new ShootingPosition(BlueShootTriangleTip, 1280, "Blue");
     public static ShootingPosition BlueTriangleClose = new ShootingPosition(BlueShootTriangleClose, 1180, "Blue");
-    public static ShootingPosition BlueFar = new ShootingPosition(BlueShootFar, 1450, "Blue");
+    public static ShootingPosition BlueFar = new ShootingPosition(BlueShootFar, 1500, "Blue");
     public static HashMap<String, ShootingPosition> blueShootingPosHashMap= new HashMap<String, ShootingPosition>() {{
         put("BlueWall", BlueWall);
         put("BlueCenterZone", BlueCenterZone);
