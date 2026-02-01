@@ -151,6 +151,7 @@ public class V3AutonBase {
                 killIntake();
                 killTransfer();
                 killFW();
+                closeBlocker();
                 shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
                 return true;
         }

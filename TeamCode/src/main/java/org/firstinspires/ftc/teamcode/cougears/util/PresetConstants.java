@@ -25,7 +25,7 @@ public class PresetConstants {
     public static double FW_ejectionVel = -1000;
 
     //Servos
-    public static double[] Servo_blockerPos = {.3,.6};
+    public static double[] Servo_blockerPos = {.6,.3};
 
     //Autons
     public static int Auton_numberOfRepeatShots = 5;

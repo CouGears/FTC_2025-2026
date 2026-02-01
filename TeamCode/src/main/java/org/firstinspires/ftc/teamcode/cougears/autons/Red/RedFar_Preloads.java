@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Disabled // ***DELETE ME***
 @Autonomous (group = "Red")
 public class RedFar_Preloads extends OpMode {
     public Follower follower;

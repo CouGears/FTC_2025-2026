@@ -76,8 +76,8 @@ public class PositionsAndPaths {
     // ==========================================================
     public static ShootingPosition RedWall = new ShootingPosition(RedShootWall, 1160, "Red");
     public static ShootingPosition RedCenterZone = new ShootingPosition(RedShootCenterZone, 1160, "Red");
-    public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1180, "Red");
-    public static ShootingPosition RedTriangleClose = new ShootingPosition(RedShootTriangleClose, 1280, "Red");
+    public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1280, "Red");
+    public static ShootingPosition RedTriangleClose = new ShootingPosition(RedShootTriangleClose, 1180, "Red");
     public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1450, "Red");
     public static HashMap<String, ShootingPosition> redShootingPosHashMap= new HashMap<String, ShootingPosition>() {{
         put("RedWall", RedWall);
@@ -90,8 +90,8 @@ public class PositionsAndPaths {
 
     public static ShootingPosition BlueWall = new ShootingPosition(BlueShootWall, 1160, "Blue");
     public static ShootingPosition BlueCenterZone = new ShootingPosition(BlueShootCenterZone, 1160, "Blue");
-    public static ShootingPosition BlueTriangleTip = new ShootingPosition(BlueShootTriangleTip, 1180, "Blue");
-    public static ShootingPosition BlueTriangleClose = new ShootingPosition(BlueShootTriangleClose, 1280, "Blue");
+    public static ShootingPosition BlueTriangleTip = new ShootingPosition(BlueShootTriangleTip, 1280, "Blue");
+    public static ShootingPosition BlueTriangleClose = new ShootingPosition(BlueShootTriangleClose, 1180, "Blue");
     public static ShootingPosition BlueFar = new ShootingPosition(BlueShootFar, 1450, "Blue");
     public static ShootingPosition[] blueShootingPosArray = new ShootingPosition[]{BlueWall, BlueCenterZone, BlueTriangleClose, BlueTriangleTip, BlueFar};
 

@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Disabled // ***DELETE ME***
 @Autonomous (group = "Red")
 public class RedClose_BD1 extends OpMode {
     public Follower follower;

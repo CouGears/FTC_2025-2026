@@ -60,7 +60,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             // BUTTONS: L_TRIGGER, L_BUMPER, R_TRIGGER, R_BUMPER
             if (bot.isHeld(2, Button.L_TRIGGER)) {
                 bot.FWSpinTo(PTM.getClosestShootingPosition().getShootingVelocity());
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", RedTriangleTip.getShootingVelocity());
+//                telemetry.addData("Flywheel", "AIMING FOR  vel %i", PTM.getClosestShootingPosition().getShootingVelocity());
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
                 bot.ejectFW();
