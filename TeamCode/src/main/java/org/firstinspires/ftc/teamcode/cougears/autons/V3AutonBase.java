@@ -121,26 +121,30 @@ public class V3AutonBase {
         blockerTimer = new Timer();
         shootSequenceTimer = new Timer();
         ShootingPosition shootingPosition = null;
+
         if (autonColor.equals("Red")){
             shootingPosition = RedTriangleClose;
         } else {
             shootingPosition = BlueTriangleClose;
         }
+
         FWSpinTo(shootingPosition.getShootingVelocity());
+
         if (follower.isBusy()) return false;
         moveToPose(follower, shootingPosition.getShootingPose());
-        if (!(FWUpToSpeed(shootingPosition.getShootingVelocity()-50))){
-            return false;
-        }
+
+        if (!(FWUpToSpeed(shootingPosition.getShootingVelocity()-50))) return false;
         openBlocker();
         blockerTimer.resetTimer();
-        if (!(blockerTimer.getElapsedTime() > Auton_gateWait)){
-            return false;
-        }
+
+        if (blockerTimer.getElapsedTime() < Auton_gateWait) return false;
         startTransfer();
         startIntake();
-        if(!(shootSequenceTimer() > Auton_ballShootSequenceTime)) return false;
 
+        if(shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
+        killIntake();
+        killTransfer();
+        killFW();
         return true;
     }
     public boolean autonPickUpBalls(String autonColor, int depotNum, Follower follower){
@@ -180,16 +184,17 @@ public class V3AutonBase {
 
         if (follower.isBusy()) return false;
         moveToPose(follower, targetDepotStart);
+
         startIntake();
+
         if (follower.isBusy()) return false;
         moveToPose(follower, targetDepotEnd);
 
         killIntake();
-        if (!follower.isBusy()) {
-            follower.followPath(goFromEndToStart);
-        } else {
-            return false;
-        }
+
+        if (follower.isBusy()) return false;
+        moveToPose(follower, targetDepotStart);
+
         return true;
     }
 
