@@ -117,26 +117,47 @@ public class V3AutonBase {
                         .build()
         );
     }
+
+    public enum shootingSequence {
+        GO_TO_POSITION,
+        OPEN_BLOCKER,
+        SHOOT,
+        END
+
+    }
+    shootingSequence savedStep = shootingSequence.GO_TO_POSITION;
     public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower){
         blockerTimer = new Timer();
         shootSequenceTimer = new Timer();
-
-        FWSpinTo(shootPos.getShootingVelocity()); // Make sure we are up to vel
-        moveToPose(follower, shootPos.getShootingPose());
-        if (follower.isBusy()) return false; //Cant move past this until we get to pos
-
-        if (!(FWUpToSpeed(shootPos.getShootingVelocity()-50))) return false;
-        openBlocker();
-        blockerTimer.resetTimer();
-
-        if (blockerTimer.getElapsedTime() < Auton_gateWait) return false;
-        startTransfer();
-        startIntake();
-
-        if(shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
-        killIntake();
-        killTransfer();
-        killFW();
+        shootingSequence stepIterator = savedStep;
+        switch (stepIterator) {
+            case GO_TO_POSITION:
+                FWSpinTo(shootPos.getShootingVelocity())
+                ; // Make sure we are up to vel
+                moveToPose(follower, shootPos.getShootingPose());
+                if (follower.isBusy()) return false; //Cant move past this until we get to pos
+                savedStep = shootingSequence.OPEN_BLOCKER;
+                return false;
+            case OPEN_BLOCKER:
+                if (!(FWUpToSpeed(shootPos.getShootingVelocity() - 50))) return false;
+                openBlocker();
+                blockerTimer.resetTimer();
+                savedStep = shootingSequence.SHOOT;
+                return false;
+            case SHOOT:
+                if (blockerTimer.getElapsedTime() < Auton_gateWait) return false;
+                startTransfer();
+                startIntake();
+                savedStep = shootingSequence.END;
+                return false;
+            case END:
+                if (shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
+                killIntake();
+                killTransfer();
+                killFW();
+                savedStep = shootingSequence.GO_TO_POSITION;
+                return true;
+        }
         return true;
     }
     public boolean pickUpBalls(String autonColor, int depotNum, Follower follower){
