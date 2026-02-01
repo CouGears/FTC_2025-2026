@@ -165,10 +165,9 @@ public class V3AutonBase {
 
     }
     pickUpBalls pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
-
+    Pose targetDepotStart = null;
+    Pose targetDepotEnd = null;
     public boolean handlePickUpBalls(String autonColor, int depotNum, Follower follower) {
-        Pose targetDepotStart = RedBallDepotStart1;
-        Pose targetDepotEnd = RedBallDepotEnd1;
         switch (pickUpBallsSavedStep) {
             case FIND_DEPOT:
                 if (autonColor.equals("Red")) {
