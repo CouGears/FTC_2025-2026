@@ -33,7 +33,7 @@ public class RedClose_Preloads extends OpMode {
         if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, endPos); } //CHANGE IF BLUE
         switch (currStep) {
             case START_CLOSETRIANGLE_SHOOT_BALLS:
-                if (bot.handleShootingSequence(shootPos, follower)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
+                if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
                     setPathStep(pathStep.CLOSETRIANGLE_BASICEND);
                 }
                 break;

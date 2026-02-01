@@ -41,7 +41,7 @@ public class RedClose_BD1 extends OpMode {
         if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, endPos); } //CHANGE IF BLUE
         switch (currStep) {
             case SHOOT_BALLS:
-                if (bot.handleShootingSequence(shootPos, follower)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
+                if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
                     if (BDCounter < numBDToPickup) {
                         setPathStep(pathStep.BD_PICKUP);
                         incrimentedBDCounter = false;
@@ -51,12 +51,12 @@ public class RedClose_BD1 extends OpMode {
                 }
                 break;
             case BD_PICKUP:
-                if (incrimentedBDCounter){
+                if (!incrimentedBDCounter){
                     BDCounter++;
-                    incrimentedBDCounter = false;
+                    incrimentedBDCounter = true;
                 }
 
-                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower)){
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
@@ -89,6 +89,7 @@ public class RedClose_BD1 extends OpMode {
         buildPaths(follower);
         bot = new V3AutonBase(hardwareMap, telemetry);
         bot.botInit();
+        bot.startIntake();
     }
 
     @Override

@@ -31,6 +31,8 @@ public class V3AutonBase {
     public V3AutonBase(HardwareMap HardwareMap, Telemetry Telemetry) {
         HM = HardwareMap;
         tele = Telemetry;
+        blockerTimer = new Timer();
+        shootSequenceTimer = new Timer();
     }
 
     public boolean botInit() {
@@ -123,9 +125,8 @@ public class V3AutonBase {
 
     }
     shootingSequence shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
-    public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower){
-        blockerTimer = new Timer();
-        shootSequenceTimer = new Timer();
+    public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower, Telemetry tele){
+        tele.addData("Curr Step in handleShootingSequence:", "%s", shootingSequenceSavedStep);
         switch (shootingSequenceSavedStep) {
             case GO_TO_POSITION:
                 FWSpinTo(shootPos.getShootingVelocity()); // Make sure we are up to vel
@@ -145,10 +146,10 @@ public class V3AutonBase {
                 startTransfer();
                 startIntake();
                 shootingSequenceSavedStep = shootingSequence.END;
+                shootSequenceTimer.resetTimer();
                 break;
             case END:
                 if (shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
-                killIntake();
                 killTransfer();
                 killFW();
                 closeBlocker();
@@ -162,13 +163,14 @@ public class V3AutonBase {
         FIND_DEPOT,
         MOVE_TO_START,
         PICK_UP_BALLS,
-        MOVE_BACK_TO_START
-
+        MOVE_BACK_TO_START,
+        END
     }
     pickUpBalls pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
     Pose targetDepotStart = null;
     Pose targetDepotEnd = null;
-    public boolean handlePickUpBalls(String autonColor, int depotNum, Follower follower) {
+    public boolean handlePickUpBalls(String autonColor, int depotNum, Follower follower, Telemetry tele) {
+        tele.addData("Curr Step in handlePickUpBalls:", "%s", pickUpBallsSavedStep);
         switch (pickUpBallsSavedStep) {
             case FIND_DEPOT:
                 if (autonColor.equals("Red")) {
@@ -217,10 +219,13 @@ public class V3AutonBase {
                 break;
             case MOVE_BACK_TO_START:
                 if (follower.isBusy()) return false;
-                killIntake();
                 moveToPose(follower, targetDepotStart);
+                pickUpBallsSavedStep = pickUpBalls.END;
+                break;
+            case END:
+                if (follower.isBusy()) return  false;
                 pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
-                return true;
+                return  true;
         }
         return false;
     }

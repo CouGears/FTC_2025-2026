@@ -32,10 +32,10 @@ public class PresetConstants {
 
     public static double Auton_spinupWait = 2000;
     public static double Auton_firstShotExtraSpinupWait = 2000;
-    public static double Auton_gateWait = 750;
+    public static double Auton_gateWait = 500;
     public static double Auton_ballTransferWait = 1000;
     public static double Auton_transferResetWait = 750;
-    public static double Auton_ballShootSequenceTime = 4000;
+    public static double Auton_ballShootSequenceTime = 1500;
     public static double Auton_pickupSpeed = .4;
 
     public static int Pedro_redGoalXPos = 3657;

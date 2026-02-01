@@ -16,7 +16,7 @@ public class PositionsAndPaths {
 
     // --- Starting Poses ---
     public static final Pose RedStartPos         = new Pose(144 - 19, 119.2, Math.toRadians(45));
-    public static final Pose RedStartPosFar      = new Pose(96.07,   9.71, Math.toRadians(90));
+    public static final Pose RedStartPosFar      = new Pose(94.07,   9.71, Math.toRadians(90));
 
     // --- Shooting Poses ---
     public static final Pose RedShootTriangleClose = new Pose(91.55,  85.3, Math.toRadians(50.6));
@@ -37,7 +37,7 @@ public class PositionsAndPaths {
     public static final Pose RedGateInit        = new Pose(128, 72.4,  Math.toRadians(90));
     public static final Pose RedGateOpen        = new Pose(131.6, 72.4,  Math.toRadians(90));
     public static final Pose RedBasicEndClose   = new Pose(105,  77.15, Math.toRadians(45));
-    public static final Pose RedBasicEndFar     = new Pose(96.07,  19.71, Math.toRadians(45));
+    public static final Pose RedBasicEndFar     = new Pose(96.07,  25.71, Math.toRadians(45));
     public static final Pose RedPark            = new Pose(113.26, 32.68, Math.toRadians(90));
 
 
@@ -78,7 +78,7 @@ public class PositionsAndPaths {
     public static ShootingPosition RedCenterZone = new ShootingPosition(RedShootCenterZone, 1160, "Red");
     public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1280, "Red");
     public static ShootingPosition RedTriangleClose = new ShootingPosition(RedShootTriangleClose, 1180, "Red");
-    public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1450, "Red");
+    public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1500, "Red");
     public static HashMap<String, ShootingPosition> redShootingPosHashMap= new HashMap<String, ShootingPosition>() {{
         put("RedWall", RedWall);
         put("RedCenterZone", RedCenterZone);
