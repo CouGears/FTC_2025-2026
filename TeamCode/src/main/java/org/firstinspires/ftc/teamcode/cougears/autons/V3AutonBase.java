@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.cougears.autons;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Drive_intakePower;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Drive_transferPower;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_ejectionVel;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Servo_blockerPos;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.util.Timer;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,6 +25,8 @@ public class V3AutonBase {
     public Servo Blocker;
     //initializing toggles
     public boolean IntakeSpinning;
+
+    public Timer blockerTimer, shootSequenceTimer;
 
     HardwareMap HM;
     Telemetry tele;
@@ -114,6 +117,82 @@ public class V3AutonBase {
                         .build()
         );
     }
+    public boolean autonShoot(String autonColor, Follower follower){
+        blockerTimer = new Timer();
+        shootSequenceTimer = new Timer();
+        ShootingPosition shootingPosition = null;
+        if (autonColor.equals("Red")){
+            shootingPosition = RedTriangleClose;
+        } else {
+            shootingPosition = BlueTriangleClose;
+        }
+        FWSpinTo(shootingPosition.getShootingVelocity());
+        if (follower.isBusy()) return false;
+        moveToPose(follower, shootingPosition.getShootingPose());
+        if (!(FWUpToSpeed(shootingPosition.getShootingVelocity()-50))){
+            return false;
+        }
+        openBlocker();
+        blockerTimer.resetTimer();
+        if (!(blockerTimer.getElapsedTime() > Auton_gateWait)){
+            return false;
+        }
+        startTransfer();
+        startIntake();
+        if(!(shootSequenceTimer() > Auton_ballShootSequenceTime)) return false;
+
+        return true;
+    }
+    public boolean autonPickUpBalls(String autonColor, int depotNum, Follower follower){
+        Pose targetDepotStart = null;
+        Pose targetDepotEnd = null;
+        if (autonColor.equals("Red")){
+            switch (depotNum){
+                case 1:
+                    targetDepotStart = RedBallDepotStart1;
+                    targetDepotEnd = RedBallDepotEnd1;
+                    break;
+                case 2:
+                    targetDepotStart = RedBallDepotStart2;
+                    targetDepotEnd = RedBallDepotEnd2;
+                    break;
+                case 3:
+                    targetDepotStart = RedBallDepotStart3;
+                    targetDepotEnd = RedBallDepotEnd3;
+                    break;
+            }
+        } else {
+            switch (depotNum){
+                case 1:
+                    targetDepotStart = BlueBallDepotStart1;
+                    targetDepotEnd = BlueBallDepotEnd1;
+                    break;
+                case 2:
+                    targetDepotStart = BlueBallDepotStart2;
+                    targetDepotEnd = BlueBallDepotEnd2;
+                    break;
+                case 3:
+                    targetDepotStart = BlueBallDepotStart3;
+                    targetDepotEnd = BlueBallDepotEnd3;
+                    break;
+            }
+        }
+
+        if (follower.isBusy()) return false;
+        moveToPose(follower, targetDepotStart);
+        startIntake();
+        if (follower.isBusy()) return false;
+        moveToPose(follower, targetDepotEnd);
+
+        killIntake();
+        if (!follower.isBusy()) {
+            follower.followPath(goFromEndToStart);
+        } else {
+            return false;
+        }
+        return true;
+    }
+
 
     //****** OTHER ******
     public void endAuton(Follower follower, String color){
