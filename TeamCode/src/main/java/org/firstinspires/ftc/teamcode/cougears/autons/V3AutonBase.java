@@ -125,90 +125,107 @@ public class V3AutonBase {
         END
 
     }
-    shootingSequence savedStep = shootingSequence.GO_TO_POSITION;
+    shootingSequence shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
     public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower){
         blockerTimer = new Timer();
         shootSequenceTimer = new Timer();
-        shootingSequence stepIterator = savedStep;
-        switch (stepIterator) {
+        switch (shootingSequenceSavedStep) {
             case GO_TO_POSITION:
-                FWSpinTo(shootPos.getShootingVelocity())
-                ; // Make sure we are up to vel
-                moveToPose(follower, shootPos.getShootingPose());
+                FWSpinTo(shootPos.getShootingVelocity()); // Make sure we are up to vel
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
-                savedStep = shootingSequence.OPEN_BLOCKER;
-                return false;
+                moveToPose(follower, shootPos.getShootingPose());
+                shootingSequenceSavedStep = shootingSequence.OPEN_BLOCKER;
+                break;
             case OPEN_BLOCKER:
+                if (follower.isBusy()) return false; //Cant move past this until we get to pos
                 if (!(FWUpToSpeed(shootPos.getShootingVelocity() - 50))) return false;
                 openBlocker();
                 blockerTimer.resetTimer();
-                savedStep = shootingSequence.SHOOT;
-                return false;
+                shootingSequenceSavedStep = shootingSequence.SHOOT;
+                break;
             case SHOOT:
                 if (blockerTimer.getElapsedTime() < Auton_gateWait) return false;
                 startTransfer();
                 startIntake();
-                savedStep = shootingSequence.END;
-                return false;
+                shootingSequenceSavedStep = shootingSequence.END;
+                break;
             case END:
                 if (shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
                 killIntake();
                 killTransfer();
                 killFW();
-                savedStep = shootingSequence.GO_TO_POSITION;
+                shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
                 return true;
         }
-        return true;
+        return false;
     }
-    public boolean pickUpBalls(String autonColor, int depotNum, Follower follower){
+
+    public enum pickUpBalls {
+        FIND_DEPOT,
+        MOVE_TO_START,
+        PICK_UP_BALLS,
+        MOVE_BACK_TO_START
+        
+    }
+    pickUpBalls pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
+    
+    public boolean handlePickUpBalls(String autonColor, int depotNum, Follower follower) {
         Pose targetDepotStart = null;
         Pose targetDepotEnd = null;
-        if (autonColor.equals("Red")){
-            switch (depotNum){
-                case 1:
-                    targetDepotStart = RedBallDepotStart1;
-                    targetDepotEnd = RedBallDepotEnd1;
-                    break;
-                case 2:
-                    targetDepotStart = RedBallDepotStart2;
-                    targetDepotEnd = RedBallDepotEnd2;
-                    break;
-                case 3:
-                    targetDepotStart = RedBallDepotStart3;
-                    targetDepotEnd = RedBallDepotEnd3;
-                    break;
-            }
-        } else {
-            switch (depotNum){
-                case 1:
-                    targetDepotStart = BlueBallDepotStart1;
-                    targetDepotEnd = BlueBallDepotEnd1;
-                    break;
-                case 2:
-                    targetDepotStart = BlueBallDepotStart2;
-                    targetDepotEnd = BlueBallDepotEnd2;
-                    break;
-                case 3:
-                    targetDepotStart = BlueBallDepotStart3;
-                    targetDepotEnd = BlueBallDepotEnd3;
-                    break;
-            }
+        switch (pickUpBallsSavedStep) {
+            case FIND_DEPOT:
+                if (autonColor.equals("Red")) {
+                    switch (depotNum) {
+                        case 1:
+                            targetDepotStart = RedBallDepotStart1;
+                            targetDepotEnd = RedBallDepotEnd1;
+                            break;
+                        case 2:
+                            targetDepotStart = RedBallDepotStart2;
+                            targetDepotEnd = RedBallDepotEnd2;
+                            break;
+                        case 3:
+                            targetDepotStart = RedBallDepotStart3;
+                            targetDepotEnd = RedBallDepotEnd3;
+                            break;
+                    }
+                } else {
+                    switch (depotNum) {
+                        case 1:
+                            targetDepotStart = BlueBallDepotStart1;
+                            targetDepotEnd = BlueBallDepotEnd1;
+                            break;
+                        case 2:
+                            targetDepotStart = BlueBallDepotStart2;
+                            targetDepotEnd = BlueBallDepotEnd2;
+                            break;
+                        case 3:
+                            targetDepotStart = BlueBallDepotStart3;
+                            targetDepotEnd = BlueBallDepotEnd3;
+                            break;
+                    }
+                }
+                pickUpBallsSavedStep = pickUpBalls.MOVE_TO_START;
+                break;
+            case MOVE_TO_START:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, targetDepotStart);
+                pickUpBallsSavedStep = pickUpBalls.PICK_UP_BALLS;
+                break;
+            case PICK_UP_BALLS:
+                startIntake();
+                if (follower.isBusy()) return false;
+                moveToPose(follower, targetDepotEnd);
+                pickUpBallsSavedStep = pickUpBalls.MOVE_BACK_TO_START;
+                break;
+            case MOVE_BACK_TO_START:
+                killIntake();
+                if (follower.isBusy()) return false;
+                moveToPose(follower, targetDepotStart);
+                pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
+                return true;
         }
-
-        if (follower.isBusy()) return false;
-        moveToPose(follower, targetDepotStart);
-
-        startIntake();
-
-        if (follower.isBusy()) return false;
-        moveToPose(follower, targetDepotEnd);
-
-        killIntake();
-
-        if (follower.isBusy()) return false;
-        moveToPose(follower, targetDepotStart);
-
-        return true;
+        return false;
     }
 
 
