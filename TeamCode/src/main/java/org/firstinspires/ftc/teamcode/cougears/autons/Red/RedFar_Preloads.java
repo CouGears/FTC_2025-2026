@@ -91,6 +91,7 @@ public class RedFar_Preloads extends OpMode {
 
     @Override
     public void start() {
+        bot.startIntake();
         opModeTimer.resetTimer();
         setPathStep(pathStep.SHOOT_BALLS);
     }

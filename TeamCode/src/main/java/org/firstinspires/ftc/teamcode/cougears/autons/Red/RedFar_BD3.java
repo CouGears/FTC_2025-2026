@@ -89,11 +89,11 @@ public class RedFar_BD3 extends OpMode {
         buildPaths(follower);
         bot = new V3AutonBase(hardwareMap, telemetry);
         bot.botInit();
-        bot.startIntake();
     }
 
     @Override
     public void start() {
+        bot.startIntake();
         opModeTimer.resetTimer();
         setPathStep(pathStep.SHOOT_BALLS);
     }
