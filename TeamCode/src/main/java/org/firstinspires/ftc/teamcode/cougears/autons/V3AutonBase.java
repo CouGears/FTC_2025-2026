@@ -6,10 +6,7 @@ import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*
 import com.pedropathing.follower.Follower;
 import com.pedropathing.util.Timer;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathChain;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -165,10 +162,10 @@ public class V3AutonBase {
         MOVE_TO_START,
         PICK_UP_BALLS,
         MOVE_BACK_TO_START
-        
+
     }
     pickUpBalls pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
-    
+
     public boolean handlePickUpBalls(String autonColor, int depotNum, Follower follower) {
         Pose targetDepotStart = null;
         Pose targetDepotEnd = null;

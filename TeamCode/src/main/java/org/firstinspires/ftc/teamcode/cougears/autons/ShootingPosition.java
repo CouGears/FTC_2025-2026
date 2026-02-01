@@ -5,9 +5,11 @@ import com.pedropathing.geometry.Pose;
 public class ShootingPosition {
     private Pose shootingPose;
     private int velocity;
-    public ShootingPosition(Pose shootingPose, int velocity){
+    private String color;
+    public ShootingPosition(Pose shootingPose, int velocity, String color){
         this.shootingPose = shootingPose;
         this.velocity = velocity;
+        this.color = color;
     }
 
     public Pose getShootingPose(){
@@ -16,6 +18,8 @@ public class ShootingPosition {
     public int getShootingVelocity(){
         return velocity;
     }
-
+    public String getShootingColor(){
+        return color;
+    }
 
 }

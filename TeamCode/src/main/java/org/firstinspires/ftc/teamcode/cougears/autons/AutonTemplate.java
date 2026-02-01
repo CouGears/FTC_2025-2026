@@ -28,7 +28,7 @@ public class AutonTemplate extends OpMode {
     pathStep currStep = pathStep.INIT_STEP;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd); } //CHANGE IF BLUE
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEndClose); } //CHANGE IF BLUE
         switch (currStep) {
             case INIT_STEP:
                 bot.FWSpinTo(shootPos.getShootingVelocity()); //Change to where you want to shoot from

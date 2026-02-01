@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.cougears.autons.Red;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEnd;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEndFar;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPos;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.buildPaths;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.redShootingPosHashMap;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -17,49 +18,57 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Disabled // ***DELETE ME***
 @Autonomous (group = "Red")
-public class RedClose_BD3 extends OpMode {
+public class RedFar_Preloads extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V3AutonBase bot;
 
-    public ShootingPosition shootPos = redShootingPosHashMap.get("RedTriangleClose");
-    public int BDCounter = 0;
-    public final int numBDToPickup = 3;
+    public ShootingPosition shootPos = redShootingPosHashMap.get("RedFar");
+    public Pose endPos   = RedBasicEndFar;
+
+    public int BDCounter = 4;
+    public final int numBDToPickup = 0;
+    public boolean decrimentedBDCounter = false;
 
 
     public enum pathStep {
         SHOOT_BALLS,
         BD_PICKUP,
-        CLOSETRIANGLE_BASICEND,
+        CLOSETRIANGLE_BASICENDFAR,
         END
     }
     pathStep currStep = pathStep.SHOOT_BALLS;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd); } //CHANGE IF BLUE
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, endPos); } //CHANGE IF BLUE
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
-                    if (BDCounter < numBDToPickup) {
+                    if (BDCounter > 4 - numBDToPickup) {
                         setPathStep(pathStep.BD_PICKUP);
+                        decrimentedBDCounter = false;
                     } else {
-                        setPathStep(pathStep.CLOSETRIANGLE_BASICEND);
+                        setPathStep(pathStep.CLOSETRIANGLE_BASICENDFAR);
                     }
                 }
                 break;
             case BD_PICKUP:
-                BDCounter++;
-                if (bot.pickUpBalls("Red", BDCounter, follower)){
+                if (!decrimentedBDCounter){
+                    BDCounter--;
+                    decrimentedBDCounter = true;
+                }
+
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower)){
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
-            case CLOSETRIANGLE_BASICEND:
-                bot.moveToPose(follower, RedBasicEnd);
+            case CLOSETRIANGLE_BASICENDFAR:
+                bot.moveToPose(follower, endPos);
                 setPathStep(pathStep.END);
                 break;
             case END:
                 if (!follower.isBusy()) {
-                    bot.endAuton(follower, "Red");
+                    bot.endAuton(follower, shootPos.getShootingColor());
                 }
                 break;
             default:

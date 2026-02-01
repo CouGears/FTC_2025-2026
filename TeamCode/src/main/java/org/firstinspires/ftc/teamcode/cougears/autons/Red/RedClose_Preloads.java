@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.cougears.autons.Red;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -20,6 +21,7 @@ public class RedClose_Preloads extends OpMode {
     public V3AutonBase bot;
 
     public ShootingPosition shootPos = redShootingPosHashMap.get("RedTriangleClose");
+    public Pose endPos   = RedBasicEndClose;
 
     public enum pathStep {
         START_CLOSETRIANGLE_SHOOT_BALLS,
@@ -29,7 +31,7 @@ public class RedClose_Preloads extends OpMode {
     pathStep currStep = pathStep.START_CLOSETRIANGLE_SHOOT_BALLS;
 
     public void stepUpdate() {
-        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, RedBasicEnd); } //CHANGE IF BLUE
+        if (opModeTimer.getElapsedTimeSeconds() >= 28) { bot.moveToPose(follower, endPos); } //CHANGE IF BLUE
         switch (currStep) {
             case START_CLOSETRIANGLE_SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
@@ -37,11 +39,11 @@ public class RedClose_Preloads extends OpMode {
                 }
                 break;
             case CLOSETRIANGLE_BASICEND:
-                bot.moveToPose(follower, RedBasicEnd);
+                bot.moveToPose(follower, endPos);
                 break;
             case END:
                 if (!follower.isBusy()) {
-                    bot.endAuton(follower, "Red");
+                    bot.endAuton(follower, shootPos.getShootingColor());
                 }
                 break;
             default:
