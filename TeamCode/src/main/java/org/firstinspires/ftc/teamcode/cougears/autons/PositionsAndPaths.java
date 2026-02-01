@@ -6,6 +6,9 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class PositionsAndPaths {
 
     // ==========================================================
@@ -76,6 +79,13 @@ public class PositionsAndPaths {
     public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1180);
     public static ShootingPosition RedTriangleClose = new ShootingPosition(RedShootTriangleClose, 1280);
     public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1450);
+    public static HashMap<String, ShootingPosition> redShootingPosHashMap= new HashMap<String, ShootingPosition>() {{
+        put("RedWall", RedWall);
+        put("RedCenterZone", RedCenterZone);
+        put("RedTriangleTip", RedTriangleTip);
+        put("RedTriangleClose", RedTriangleClose);
+        put("RedFar", RedFar);
+    }};
     public static ShootingPosition[] redShootingPosArray = new ShootingPosition[]{RedWall, RedCenterZone, RedTriangleClose, RedTriangleTip, RedFar};
 
     public static ShootingPosition BlueWall = new ShootingPosition(BlueShootWall, 1160);

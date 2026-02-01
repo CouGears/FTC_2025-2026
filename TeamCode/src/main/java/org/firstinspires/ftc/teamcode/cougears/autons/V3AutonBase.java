@@ -117,23 +117,15 @@ public class V3AutonBase {
                         .build()
         );
     }
-    public boolean autonShoot(String autonColor, Follower follower){
+    public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower){
         blockerTimer = new Timer();
         shootSequenceTimer = new Timer();
-        ShootingPosition shootingPosition = null;
 
-        if (autonColor.equals("Red")){
-            shootingPosition = RedTriangleClose;
-        } else {
-            shootingPosition = BlueTriangleClose;
-        }
+        FWSpinTo(shootPos.getShootingVelocity()); // Make sure we are up to vel
+        moveToPose(follower, shootPos.getShootingPose());
+        if (follower.isBusy()) return false; //Cant move past this until we get to pos
 
-        FWSpinTo(shootingPosition.getShootingVelocity());
-
-        if (follower.isBusy()) return false;
-        moveToPose(follower, shootingPosition.getShootingPose());
-
-        if (!(FWUpToSpeed(shootingPosition.getShootingVelocity()-50))) return false;
+        if (!(FWUpToSpeed(shootPos.getShootingVelocity()-50))) return false;
         openBlocker();
         blockerTimer.resetTimer();
 
@@ -147,7 +139,7 @@ public class V3AutonBase {
         killFW();
         return true;
     }
-    public boolean autonPickUpBalls(String autonColor, int depotNum, Follower follower){
+    public boolean pickUpBalls(String autonColor, int depotNum, Follower follower){
         Pose targetDepotStart = null;
         Pose targetDepotEnd = null;
         if (autonColor.equals("Red")){
