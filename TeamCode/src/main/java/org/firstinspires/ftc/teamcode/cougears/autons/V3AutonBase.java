@@ -1,29 +1,22 @@
 package org.firstinspires.ftc.teamcode.cougears.autons;
 
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Drive_intakePower;
-import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Drive_slowMultiplier;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Drive_transferPower;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_PIDF;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_ejectionVel;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Servo_blockerPos;
 
 import com.pedropathing.follower.Follower;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
-import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 
 
-public class V3AutonOpBase {
+public class V3AutonBase {
     //Initializing motors
     public DcMotorEx FW, Intake, Transfer;
     public Servo Blocker;
@@ -33,7 +26,7 @@ public class V3AutonOpBase {
     HardwareMap HM;
     Telemetry tele;
 
-    public V3AutonOpBase(HardwareMap HardwareMap, Telemetry Telemetry) {
+    public V3AutonBase(HardwareMap HardwareMap, Telemetry Telemetry) {
         HM = HardwareMap;
         tele = Telemetry;
     }
