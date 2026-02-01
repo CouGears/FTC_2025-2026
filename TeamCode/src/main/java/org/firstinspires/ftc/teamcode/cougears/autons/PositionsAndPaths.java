@@ -6,7 +6,6 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PositionsAndPaths {
@@ -37,7 +36,8 @@ public class PositionsAndPaths {
     // --- Gate, Park, and Utility ---
     public static final Pose RedGateInit        = new Pose(128, 72.4,  Math.toRadians(90));
     public static final Pose RedGateOpen        = new Pose(131.6, 72.4,  Math.toRadians(90));
-    public static final Pose RedBasicEnd        = new Pose(105,  77.15, Math.toRadians(45));
+    public static final Pose RedBasicEndClose   = new Pose(105,  77.15, Math.toRadians(45));
+    public static final Pose RedBasicEndFar     = new Pose(96.07,  19.71, Math.toRadians(45));
     public static final Pose RedPark            = new Pose(113.26, 32.68, Math.toRadians(90));
 
 
@@ -74,11 +74,11 @@ public class PositionsAndPaths {
     // ==========================================================
     //                    SHOOTING DATA
     // ==========================================================
-    public static ShootingPosition RedWall = new ShootingPosition(RedShootWall, 1160);
-    public static ShootingPosition RedCenterZone = new ShootingPosition(RedShootCenterZone, 1160);
-    public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1180);
-    public static ShootingPosition RedTriangleClose = new ShootingPosition(RedShootTriangleClose, 1280);
-    public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1450);
+    public static ShootingPosition RedWall = new ShootingPosition(RedShootWall, 1160, "Red");
+    public static ShootingPosition RedCenterZone = new ShootingPosition(RedShootCenterZone, 1160, "Red");
+    public static ShootingPosition RedTriangleTip = new ShootingPosition(RedShootTriangleTip, 1180, "Red");
+    public static ShootingPosition RedTriangleClose = new ShootingPosition(RedShootTriangleClose, 1280, "Red");
+    public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1450, "Red");
     public static HashMap<String, ShootingPosition> redShootingPosHashMap= new HashMap<String, ShootingPosition>() {{
         put("RedWall", RedWall);
         put("RedCenterZone", RedCenterZone);
@@ -88,11 +88,11 @@ public class PositionsAndPaths {
     }};
     public static ShootingPosition[] redShootingPosArray = new ShootingPosition[]{RedWall, RedCenterZone, RedTriangleClose, RedTriangleTip, RedFar};
 
-    public static ShootingPosition BlueWall = new ShootingPosition(BlueShootWall, 1160);
-    public static ShootingPosition BlueCenterZone = new ShootingPosition(BlueShootCenterZone, 1160);
-    public static ShootingPosition BlueTriangleTip = new ShootingPosition(BlueShootTriangleTip, 1180);
-    public static ShootingPosition BlueTriangleClose = new ShootingPosition(BlueShootTriangleClose, 1280);
-    public static ShootingPosition BlueFar = new ShootingPosition(BlueShootFar, 1450);
+    public static ShootingPosition BlueWall = new ShootingPosition(BlueShootWall, 1160, "Blue");
+    public static ShootingPosition BlueCenterZone = new ShootingPosition(BlueShootCenterZone, 1160, "Blue");
+    public static ShootingPosition BlueTriangleTip = new ShootingPosition(BlueShootTriangleTip, 1180, "Blue");
+    public static ShootingPosition BlueTriangleClose = new ShootingPosition(BlueShootTriangleClose, 1280, "Blue");
+    public static ShootingPosition BlueFar = new ShootingPosition(BlueShootFar, 1450, "Blue");
     public static ShootingPosition[] blueShootingPosArray = new ShootingPosition[]{BlueWall, BlueCenterZone, BlueTriangleClose, BlueTriangleTip, BlueFar};
 
 
@@ -167,8 +167,8 @@ public class PositionsAndPaths {
         RedShootPosToRedBallDepotStart3        = buildPath(f, RedShootTriangleTip, RedBallDepotStart3);
         RedBallDepotStart3ToRedBallDepotEnd3   = buildPath(f, RedBallDepotStart3, RedBallDepotEnd3);
         RedBallDepotEnd3ToRedShootPos          = buildPath(f, RedBallDepotEnd3, RedShootTriangleTip);
-        RedShootTrianglePosToRedBasicEnd       = buildPath(f, RedShootTriangleTip, RedBasicEnd);
-        RedShootWallPosToRedBasicEnd           = buildPath(f, RedShootWall, RedBasicEnd);
+        RedShootTrianglePosToRedBasicEnd       = buildPath(f, RedShootTriangleTip, RedBasicEndClose);
+        RedShootWallPosToRedBasicEnd           = buildPath(f, RedShootWall, RedBasicEndClose);
         RedShootTrianglePosToBallDepot1Pickup  = buildLongPath(f, RedShootTriangleTip, RedBallDepotStart1, RedBallDepotEnd1);
 
         // ---- BLUE PATHS ----
