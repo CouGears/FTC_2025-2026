@@ -7,6 +7,8 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.FW_ej
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Servo_blockerPos;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -103,8 +105,15 @@ public class V3AutonBase {
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}
 
-    //****** SHOOTING ******
-
+    //****** AUTON ******
+    public void moveToPose(Follower f, Pose targetPose){
+        f.followPath(
+                f.pathBuilder()
+                        .addPath(new BezierLine(f.getPose(), targetPose))
+                        .setLinearHeadingInterpolation(f.getHeading(), targetPose.getHeading())
+                        .build()
+        );
+    }
 
     //****** OTHER ******
     public void endAuton(Follower follower, String color){
