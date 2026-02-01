@@ -69,6 +69,7 @@ public class BlueFar_BD3 extends OpMode {
             case END:
                 if (!follower.isBusy()) {
                     bot.endAuton(follower, shootPos.getShootingColor());
+                    terminateOpModeNow();
                 }
                 break;
             default:

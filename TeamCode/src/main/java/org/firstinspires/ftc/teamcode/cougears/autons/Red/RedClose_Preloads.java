@@ -43,6 +43,7 @@ public class RedClose_Preloads extends OpMode {
             case END:
                 if (!follower.isBusy()) {
                     bot.endAuton(follower, shootPos.getShootingColor());
+                    terminateOpModeNow();
                 }
                 break;
             default:

@@ -67,6 +67,7 @@ public class RedFar_BD2 extends OpMode {
             case END:
                 if (!follower.isBusy()) {
                     bot.endAuton(follower, shootPos.getShootingColor());
+                    terminateOpModeNow();
                 }
                 break;
             default:

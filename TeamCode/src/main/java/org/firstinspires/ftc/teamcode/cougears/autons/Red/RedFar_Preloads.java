@@ -65,6 +65,7 @@ public class RedFar_Preloads extends OpMode {
             case END:
                 if (!follower.isBusy()) {
                     bot.endAuton(follower, shootPos.getShootingColor());
+                    terminateOpModeNow();
                 }
                 break;
             default:
