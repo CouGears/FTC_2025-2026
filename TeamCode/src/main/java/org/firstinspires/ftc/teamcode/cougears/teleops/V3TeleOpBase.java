@@ -78,12 +78,7 @@ public class V3TeleOpBase extends BotBase {
 
 
     //****** FLYWHEELS ******
-    public void prespinFW(){
-        FW.setVelocity(1000);
-    }
-    public void spinUpToShootingPosition() {
-        FW.setVelocity(PTM.getClosestShootingPosition().getShootingVelocity());
-    }
+
     public void killFW() {
         FW.setPower(0);
     }
@@ -92,6 +87,9 @@ public class V3TeleOpBase extends BotBase {
     }
     public boolean FWUpToSpeed (double speed) {
         return FW.getVelocity() >= speed;
+    }
+    public void FWSpinTo(double speed){
+        FW.setVelocity(speed);
     }
 
     public void openBlocker(){
@@ -132,10 +130,6 @@ public class V3TeleOpBase extends BotBase {
 
     public void toggleSlow(){
         slowed = !slowed;
-    }
-
-    public void moveBotToClosestShootingPosition(){
-        PTM.moveToPos(PTM.getClosestShootingPosition().getShootingPose());
     }
     public void RafiDrive(Gamepad gamepad1) {
 
