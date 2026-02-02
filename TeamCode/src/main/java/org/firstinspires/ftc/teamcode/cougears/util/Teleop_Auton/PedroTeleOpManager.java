@@ -25,6 +25,13 @@ public class PedroTeleOpManager {
         follower.setPose(setPose);
     }
     public void moveToPos(Pose targetPos) {
+        double xyPoseError = 0.5;
+        double headingPoseError = Math.toRadians(5);
+        if (Math.abs(follower.getPose().getX()-targetPos.getX()) < xyPoseError &&
+                Math.abs(follower.getPose().getY()-targetPos.getY()) < xyPoseError &&
+                Math.abs(follower.getPose().getHeading()-targetPos.getHeading()) < headingPoseError){
+            return;
+        }
         follower.followPath(
                 follower.pathBuilder()
                         .addPath(new BezierLine(follower.getPose(), targetPos))
