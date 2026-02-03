@@ -38,7 +38,6 @@ public class AutonTemplate extends OpMode {
             case SHOOT_BALLS:
                 if (!follower.isBusy()) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
 //                bot.handleShootingSequence(); Rafi is finishing this up
-                    follower.followPath(RedStartPosToRedShootTrianglePos);
                     setPathStep(pathStep.END);
                 }
                 break; // Break must be outside the if
