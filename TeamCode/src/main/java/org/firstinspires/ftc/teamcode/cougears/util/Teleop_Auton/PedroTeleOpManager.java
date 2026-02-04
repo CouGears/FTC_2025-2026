@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+
 
 public class PedroTeleOpManager {
     // Auton Moving
@@ -25,11 +27,9 @@ public class PedroTeleOpManager {
         follower.setPose(setPose);
     }
     public void moveToPos(Pose targetPos) {
-        double xyPoseError = 0.5;
-        double headingPoseError = Math.toRadians(5);
-        if (Math.abs(follower.getPose().getX()-targetPos.getX()) < xyPoseError &&
-                Math.abs(follower.getPose().getY()-targetPos.getY()) < xyPoseError &&
-                Math.abs(follower.getPose().getHeading()-targetPos.getHeading()) < headingPoseError){
+        if (Math.abs(follower.getPose().getX()-targetPos.getX()) < xyPoseErrorPTM &&
+                Math.abs(follower.getPose().getY()-targetPos.getY()) < xyPoseErrorPTM &&
+                Math.abs(follower.getPose().getHeading()-targetPos.getHeading()) < headingPoseErrorPTM){
             return;
         }
         follower.followPath(
@@ -100,6 +100,23 @@ public class PedroTeleOpManager {
             moveToPos(RedPark);
         } else {
             moveToPos(BluePark);
+        }
+    }
+
+    public void openGate(){
+        Pose gateInit;
+        Pose gateOpen;
+        if (goal.equals("Red")){
+            gateInit = RedGateInit;
+            gateOpen = RedGateOpen;
+        } else {
+            gateInit = BlueGateInit;
+            gateOpen = BlueGateOpen;
+        }
+        if (Math.abs(follower.getPose().getX()-gateInit.getX()) < xyPoseErrorPTM &&
+                Math.abs(follower.getPose().getY()-gateInit.getY()) < xyPoseErrorPTM &&
+                Math.abs(follower.getPose().getHeading()-gateInit.getHeading()) < headingPoseErrorPTM){
+            moveToPos(gateOpen);
         }
     }
 

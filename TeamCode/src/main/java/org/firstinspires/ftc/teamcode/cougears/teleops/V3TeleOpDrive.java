@@ -55,11 +55,7 @@ public class V3TeleOpDrive extends LinearOpMode {
                 PTM.updatePosAndMotors();
             }
             if (bot.isHeld(1, Button.DPAD_LEFT)){
-                if (PTM.getGoal().equals("Red")){
-                    PTM.moveToPos(RedGateInit);
-                } else {
-                    PTM.moveToPos(BlueGateInit);
-                }
+                PTM.openGate();
                 PTM.updatePosAndMotors();
             }
 

@@ -39,12 +39,8 @@ public class PresetConstants {
     public static double Auton_ballShootSequenceTime = 1500;
     public static double Auton_pickupSpeed = .4;
 
-    public static int Pedro_redGoalXPos = 3657;
-    public static int Pedro_redGoalYPos = 3657;
-    public static int Pedro_blueGoalXPos = 0;
-    public static int Pedro_blueGoalYPos = 3657;
-    public static int BlueAutonTurretStartDeg = 135;
-    public static int RedAutonTurretStartDeg = 45;
+    public static double xyPoseErrorPTM = 0.5;
+    public static double headingPoseErrorPTM = Math.toRadians(5);
 
     // NAMES
     public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "Intake"};
