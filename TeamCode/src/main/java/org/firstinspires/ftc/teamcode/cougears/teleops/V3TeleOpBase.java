@@ -131,7 +131,7 @@ public class V3TeleOpBase extends BotBase {
     public void toggleSlow(){
         slowed = !slowed;
     }
-    public void RafiDrive(Gamepad gamepad1) {
+    public void RafiDrive(Gamepad gamepad1, boolean switchSticks) {
 
         // --- Speed scaling ---
         if (!slowed) {
@@ -144,10 +144,17 @@ public class V3TeleOpBase extends BotBase {
         // --- Update odometry ---
         pinpoint.update();
 
+        double forward, strafe, turnInput;
         // --- Driver inputs ---
-        double forward = gamepad1.right_stick_y * speedMultiplier;
-        double strafe  = gamepad1.right_stick_x * speedMultiplier;
-        double turnInput = gamepad1.left_stick_x * speedMultiplier;
+        if (!switchSticks) {
+            forward = gamepad1.right_stick_y * speedMultiplier;
+            strafe = gamepad1.right_stick_x * speedMultiplier;
+            turnInput = gamepad1.left_stick_x * speedMultiplier;
+        } else {
+            forward = gamepad1.left_stick_y * speedMultiplier;
+            strafe = gamepad1.left_stick_x * speedMultiplier;
+            turnInput = gamepad1.right_stick_x * speedMultiplier;
+        }
 
         double turn;
 

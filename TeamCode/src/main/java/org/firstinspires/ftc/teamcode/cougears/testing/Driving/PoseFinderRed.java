@@ -18,7 +18,7 @@ public class PoseFinderRed extends LinearOpMode {
         bot.botInit();
         waitForStart();
         while(opModeIsActive()){
-            bot.RafiDrive(gamepad1);
+            bot.RafiDrive(gamepad1, false);
             telemetry.addData("x", "%.5f", PTM.getCurrPos().getX());
             telemetry.addData("y", "%.5f", PTM.getCurrPos().getY());
             telemetry.addData("Heading", "%.5f", Math.toDegrees(PTM.getCurrPos().getHeading()));

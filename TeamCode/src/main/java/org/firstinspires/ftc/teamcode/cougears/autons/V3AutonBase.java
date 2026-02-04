@@ -212,6 +212,7 @@ public class V3AutonBase {
                 break;
             case PICK_UP_BALLS:
                 startIntake();
+                startTransfer();
                 if (follower.isBusy()) return false;
                 moveToPose(follower, targetDepotEnd);
                 pickUpBallsSavedStep = pickUpBalls.MOVE_BACK_TO_START;
@@ -224,6 +225,7 @@ public class V3AutonBase {
             case END:
                 if (follower.isBusy()) return  false;
                 pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
+                killTransfer();
                 return  true;
         }
         return false;

@@ -36,7 +36,7 @@ public class V3TeleOpDrive extends LinearOpMode {
                 if (bot.isPressed(1, Button.B)) {
                     bot.toggleSlow();
                 }
-                bot.RafiDrive(gamepad1);
+                bot.RafiDrive(gamepad1, Drive_switchedJoysticks);
                 telemetry.addData("Slowed", "%b", bot.slowed);
             }
             telemetry.addData("Assigned Goal", "%s", PTM.getGoal());
@@ -96,6 +96,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             }
             if (bot.isHeld(2, Button.R_BUMPER)){
                 bot.startTransfer();
+                bot.startIntake();
             } else {
                 bot.killTransfer();
             }

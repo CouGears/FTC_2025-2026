@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.cougears.testing.Driving;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.BlueStartPos;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPos;
-
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -20,7 +20,7 @@ public class PoseFinderBlue extends LinearOpMode {
         bot.botInit();
         waitForStart();
         while(opModeIsActive()){
-            bot.RafiDrive(gamepad1);
+            bot.RafiDrive(gamepad1, Drive_switchedJoysticks);
             telemetry.addData("x", "%.5f", PTM.getCurrPos().getX());
             telemetry.addData("y", "%.5f", PTM.getCurrPos().getY());
             telemetry.addData("Heading", "%.5f", Math.toDegrees(PTM.getCurrPos().getHeading()));

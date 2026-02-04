@@ -36,7 +36,7 @@ public class PositionsAndPaths {
     public static Pose RedBallDepotStart3 = new Pose(108.1, 27.63,       Math.toRadians(0));
     public static Pose RedBallDepotEnd1   = new Pose(131.25, 27.63 + 48,  Math.toRadians(0));
     public static Pose RedBallDepotEnd2   = new Pose(138.25, 27.63 + 24,  Math.toRadians(0));
-    public static Pose RedBallDepotEnd3   = new Pose(138.25, 27.63,       Math.toRadians(0));
+    public static Pose RedBallDepotEnd3   = new Pose(140.25, 27.63,       Math.toRadians(0));
 
     // --- Gate, Park, and Utility ---
     public static Pose RedGateInit        = new Pose(128, 72.4,  Math.toRadians(90));

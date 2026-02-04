@@ -20,12 +20,13 @@ public class PresetConstants {
     public static double Drive_slowMultiplier = .25;
     public static double Drive_intakePower = .6;
     public static double Drive_transferPower = 0.85 ;
+    public static boolean Drive_switchedJoysticks = false;
     //FW
     public static double[] FW_PIDF = {214, 0, 0, 18};
     public static double FW_ejectionVel = -1000;
 
     //Servos
-    public static double[] Servo_blockerPos = {.6,.3};
+    public static double[] Servo_blockerPos = {.75,.4};
 
     //Autons
     public static int Auton_numberOfRepeatShots = 5;
