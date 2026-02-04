@@ -20,7 +20,7 @@ public class PositionsAndPaths {
     // ==========================================================
 
     // --- Starting Poses ---
-    public static Pose RedStartPos         = new Pose(144 - 19, 119.2, Math.toRadians(45));
+    public static Pose RedStartPos         = new Pose(144 - 19, 119.2, Math.toRadians(38));
     public static Pose RedStartPosFar      = new Pose(94.07,   9.71, Math.toRadians(90));
 
     // --- Shooting Poses ---
