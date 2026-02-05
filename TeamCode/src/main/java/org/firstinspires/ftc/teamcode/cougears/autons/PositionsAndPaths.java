@@ -20,27 +20,31 @@ public class PositionsAndPaths {
     // ==========================================================
 
     // --- Starting Poses ---
-    public static Pose RedStartPos         = new Pose(144 - 19, 119.2, Math.toRadians(45));
+    public static Pose RedStartPos         = new Pose(105.16333333, 130.81666667, Math.toRadians(-90));
     public static Pose RedStartPosFar      = new Pose(94.07,   9.71, Math.toRadians(90));
+    public static Pose RedAnchorPoint      = new Pose(135.53125, 8.625, Math.toRadians(0));
 
     // --- Shooting Poses ---
-    public static Pose RedShootTriangleClose = new Pose(91.55,  85.3, Math.toRadians(45));
-    public static Pose RedShootTriangleTip   = new Pose(78.7,  59.2, Math.toRadians(53.93));
+    public static Pose RedShootTriangleClose = new Pose(96.31,  99.16, Math.toRadians(34.3));
+    // 82.80,116.28,20.38/83.62,115.30,20.42/82,15,115.14,19.23/81.90,11.41,19.93
+    public static Pose RedShootTriangleTip   = new Pose(77.08,  76.9, Math.toRadians(39));
     public static Pose RedShootWall          = new Pose(80.3,  121.1, Math.toRadians(12.8));
-    public static Pose RedShootCenterZone    = new Pose(80.12,  105.27, Math.toRadians(29.9));
-    public static Pose RedShootFar           = new Pose(94.5,  18.64, Math.toRadians(71.2));
+    public static Pose RedShootCenterZone    = new Pose(88.87,  120.3, Math.toRadians(14.37));
+    public static Pose RedShootFar           = new Pose(81.9,  130.7, Math.toRadians(64.48));
 
     // --- Ball Depot Poses (Pickup & Scoring) ---
-    public static Pose RedBallDepotStart1 = new Pose(108.1, 27.63 + 48,  Math.toRadians(0));
-    public static Pose RedBallDepotStart2 = new Pose(108.1, 27.63 + 24,  Math.toRadians(0));
-    public static Pose RedBallDepotStart3 = new Pose(108.1, 27.63,       Math.toRadians(0));
-    public static Pose RedBallDepotEnd1   = new Pose(131.25, 27.63 + 48,  Math.toRadians(0));
-    public static Pose RedBallDepotEnd2   = new Pose(138.25, 27.63 + 24,  Math.toRadians(0));
-    public static Pose RedBallDepotEnd3   = new Pose(140.25, 27.63,       Math.toRadians(0));
+    public static Pose RedBallDepotStart1 = new Pose(99.5,  37.12 + 48,  Math.toRadians(0));
+    public static Pose RedBallDepotStart2 = new Pose(99.5,  37.12 + 24,  Math.toRadians(0));
+    public static Pose RedBallDepotStart3 = new Pose(99.5,  37.12,       Math.toRadians(0));
+    public static Pose RedBallDepotEnd1   = new Pose(131.05, 37.12 + 48,  Math.toRadians(0));
+    public static Pose RedBallDepotEnd2   = new Pose(135.05, 37.12 + 24,  Math.toRadians(0));
+    public static Pose RedBallDepotEnd3   = new Pose(135.05, 37.12,       Math.toRadians(0));
 
     // --- Gate, Park, and Utility ---
-    public static Pose RedGateInit        = new Pose(128, 72.4,  Math.toRadians(90));
-    public static Pose RedGateOpen        = new Pose(131.6, 72.4,  Math.toRadians(90));
+    public static Pose RedGateInit        = new Pose(116.94, 66.3,  Math.toRadians(-90));
+    public static Pose RedGateOpen        = new Pose(120.3, 66.3,   Math.toRadians(-90));
+    public static Pose RedGatePickupOpen  = new Pose(134.67, 65.5,  Math.toRadians(28.27));
+    public static Pose RedGatePickupInit  = new Pose(127.73, 65.5,  Math.toRadians(28.27));
     public static Pose RedBasicEndClose   = new Pose(105,  77.15, Math.toRadians(45));
     public static Pose RedBasicEndFar     = new Pose(94.5 + 20,  18.64, Math.toRadians(45));
     public static Pose RedPark            = new Pose(44.649, 17.33, Math.toRadians(0));
@@ -74,7 +78,7 @@ public class PositionsAndPaths {
     public static Pose BlueGateOpen        = new Pose(144 + posError  - 131.6, 72.4+5, Math.toRadians(180 + headingError - 90));
     public static Pose BlueBasicEndClose   = new Pose(144 + posError  - 105, 77.15, Math.toRadians(180 + headingError - 45));
     public static Pose BlueBasicEndFar     = new Pose(144 + posError  - 105,  15, Math.toRadians(45));
-    public static Pose BluePark            = new Pose(101.517, 28.384, Math.toRadians(180));
+    public static Pose BluePark            = new Pose(101.79, 143.91, Math.toRadians(90));
 
 
     // ==========================================================

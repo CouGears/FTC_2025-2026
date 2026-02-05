@@ -27,7 +27,7 @@ public class PoseFinder extends OpMode {
 
     @Override
     public void init_loop() {
-        telemetry.addLine("Press A to start from Red, B to start from Blue");
+        telemetry.addLine("Press A to start from Red, B to start from Blue, X for Red Anchor");
         telemetry.addData("Currently selected starting pos", "%s", startingPoseName);
         if (gamepad1.a){
             startingPos = RedStartPos;
@@ -35,6 +35,9 @@ public class PoseFinder extends OpMode {
         } else if (gamepad1.b) {
             startingPos = BlueStartPos;
             startingPoseName = "Blue Start";
+        } else if (gamepad1.x) {
+            startingPos = RedAnchorPoint;
+            startingPoseName = "Red Anchor Point";
         }
         telemetry.update();
         super.init_loop();
@@ -42,7 +45,7 @@ public class PoseFinder extends OpMode {
 
     @Override
     public void start() {
-        PTM = new PedroTeleOpManager(hardwareMap, RedStartPos);
+        PTM = new PedroTeleOpManager(hardwareMap, startingPos);
         super.start();
     }
 
