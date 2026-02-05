@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.util.Timer;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierLine;
@@ -117,6 +118,20 @@ public class V3AutonBase {
         );
     }
 
+    // CANNOT BE CALLED EVERY LOOP
+    public void moveToPose(Follower f, Pose... targetPoses) {
+        PathBuilder PB = f.pathBuilder();
+        Pose lastPose = f.getPose();
+        double lastHeading = f.getHeading();
+        for (Pose targetPose : targetPoses) {
+            PB.addPath(new BezierLine(lastPose, targetPose))
+                    .setLinearHeadingInterpolation(lastHeading, targetPose.getHeading());
+            lastPose = targetPose;
+            lastHeading = targetPose.getHeading();
+        }
+        f.followPath(PB.build());
+    }
+
     public enum shootingSequence {
         GO_TO_POSITION,
         OPEN_BLOCKER,
@@ -160,9 +175,7 @@ public class V3AutonBase {
 
     public enum pickUpBalls {
         FIND_DEPOT,
-        MOVE_TO_START,
-        PICK_UP_BALLS,
-        MOVE_BACK_TO_START,
+        PICKUP,
         END
     }
     pickUpBalls pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
@@ -203,30 +216,19 @@ public class V3AutonBase {
                             break;
                     }
                 }
-                pickUpBallsSavedStep = pickUpBalls.MOVE_TO_START;
+                pickUpBallsSavedStep = pickUpBalls.PICKUP;
                 break;
-            case MOVE_TO_START:
+            case PICKUP:
                 if (follower.isBusy()) return false;
-                moveToPose(follower, targetDepotStart);
-                pickUpBallsSavedStep = pickUpBalls.PICK_UP_BALLS;
-                break;
-            case PICK_UP_BALLS:
-                startIntake();
                 startTransfer();
-                if (follower.isBusy()) return false;
-                moveToPose(follower, targetDepotEnd);
-                pickUpBallsSavedStep = pickUpBalls.MOVE_BACK_TO_START;
-                break;
-            case MOVE_BACK_TO_START:
-                if (follower.isBusy()) return false;
-                moveToPose(follower, targetDepotStart);
-                pickUpBallsSavedStep = pickUpBalls.END;
+                startIntake();
+                moveToPose(follower, targetDepotStart, targetDepotEnd, follower.getPose());
                 break;
             case END:
                 if (follower.isBusy()) return  false;
                 pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
                 killTransfer();
-                return  true;
+                return true;
         }
         return false;
     }
