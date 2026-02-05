@@ -20,6 +20,7 @@ public class PresetConstants {
     public static double[] FW_PIDF = {5.5, 0, 4, 6.9}; // Nice
     public static double FW_shootVel = 1600;
     public static double FW_shootVelFar = 1800;
+
     public static double FW_ejectionVel = -1000;
 
 

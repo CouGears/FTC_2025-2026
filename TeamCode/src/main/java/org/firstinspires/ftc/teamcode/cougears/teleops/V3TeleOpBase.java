@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,15 +13,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.cougears.legacy_examples.V2Bot.goalUtils;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 
 public class V3TeleOpBase extends BotBase {
-
-    goalUtils goal;
+    PedroTeleOpManager PTM = new PedroTeleOpManager(HM);
     //Initializing motors
     public DcMotorEx FW, Intake, Transfer;
     public Servo Blocker;
@@ -77,9 +78,7 @@ public class V3TeleOpBase extends BotBase {
 
 
     //****** FLYWHEELS ******
-    public void spinUpClose() {
-        FW.setVelocity(FW_shootVel);
-    }
+
     public void killFW() {
         FW.setPower(0);
     }
@@ -88,6 +87,9 @@ public class V3TeleOpBase extends BotBase {
     }
     public boolean FWUpToSpeed (double speed) {
         return FW.getVelocity() >= speed;
+    }
+    public void FWSpinTo(double speed){
+        FW.setVelocity(speed);
     }
 
     public void openBlocker(){
@@ -129,8 +131,7 @@ public class V3TeleOpBase extends BotBase {
     public void toggleSlow(){
         slowed = !slowed;
     }
-
-    public void RafiDrive(Gamepad gamepad1) {
+    public void RafiDrive(Gamepad gamepad1, boolean switchSticks) {
 
         // --- Speed scaling ---
         if (!slowed) {
@@ -143,10 +144,17 @@ public class V3TeleOpBase extends BotBase {
         // --- Update odometry ---
         pinpoint.update();
 
+        double forward, strafe, turnInput;
         // --- Driver inputs ---
-        double forward = gamepad1.right_stick_y * speedMultiplier;
-        double strafe  = gamepad1.right_stick_x * speedMultiplier;
-        double turnInput = gamepad1.left_stick_x * speedMultiplier;
+        if (!switchSticks) {
+            forward = gamepad1.right_stick_y * speedMultiplier;
+            strafe = gamepad1.right_stick_x * speedMultiplier;
+            turnInput = gamepad1.left_stick_x * speedMultiplier;
+        } else {
+            forward = gamepad1.left_stick_y * speedMultiplier;
+            strafe = gamepad1.left_stick_x * speedMultiplier;
+            turnInput = gamepad1.right_stick_x * speedMultiplier;
+        }
 
         double turn;
 

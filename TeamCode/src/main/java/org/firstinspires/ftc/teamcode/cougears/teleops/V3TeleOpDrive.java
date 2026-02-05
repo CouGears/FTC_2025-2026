@@ -28,7 +28,7 @@ public class V3TeleOpDrive extends LinearOpMode {
         while (opModeIsActive()) {
             //****** DRIVE (Controller 1)******
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
-            if (!bot.isHeld(1, Button.DPAD_DOWN) && PTM.follower.isBusy()){
+            if (!(bot.isHeld(1, Button.DPAD_DOWN) || bot.isHeld(1, Button.DPAD_LEFT) || bot.isHeld(1, Button.DPAD_RIGHT)) && PTM.follower.isBusy()){
                 PTM.breakFollower();
             }
             if (!PTM.isBusy()) {
@@ -36,27 +36,28 @@ public class V3TeleOpDrive extends LinearOpMode {
                 if (bot.isPressed(1, Button.B)) {
                     bot.toggleSlow();
                 }
-                bot.RafiDrive(gamepad1);
+                bot.RafiDrive(gamepad1, Drive_switchedJoysticks);
                 telemetry.addData("Slowed", "%b", bot.slowed);
-            }
-
-            if (bot.isPressed(1, Button.Y)) {
-                PTM.switchGoal();
             }
             telemetry.addData("Assigned Goal", "%s", PTM.getGoal());
 
             //****** AUTON MOVING ******
             if (bot.isHeld(1, Button.DPAD_DOWN)){
-                if (PTM.getGoal().equals("Red"))
-                    PTM.moveToPos(RedShootTrianglePos);
-                else if (PTM.getGoal().equals("Blue"))
-                    PTM.moveToPos(BlueShootTrianglePos);
+                PTM.moveToPos(PTM.getClosestShootingPosition().getShootingPose());
                 PTM.updatePosAndMotors();
             }
-            if (bot.isHeld(1, Button.DPAD_UP)) {
-                PTM.alignToGoal();
+            if (bot.isHeld(1, Button.DPAD_RIGHT)){
+                if (PTM.getGoal().equals("Red")){
+                    PTM.moveToPos(RedPark);
+                } else {
+                    PTM.moveToPos(BluePark);
+                }
+                PTM.updatePosAndMotors();
             }
-
+            if (bot.isHeld(1, Button.DPAD_LEFT)){
+                PTM.openGate();
+                PTM.updatePosAndMotors();
+            }
 
             //****** INTAKE ******
             if (bot.isPressed(1, Button.X)) {
@@ -70,11 +71,13 @@ public class V3TeleOpDrive extends LinearOpMode {
             //****** FLYWHEEL (Controller 2)******
             // BUTTONS: L_TRIGGER, L_BUMPER, R_TRIGGER, R_BUMPER
             if (bot.isHeld(2, Button.L_TRIGGER)) {
-                bot.spinUpClose();
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_shootVel);
+                bot.FWSpinTo(PTM.getClosestShootingPosition().getShootingVelocity());
+                telemetry.addData("Flywheel", "AIMING FOR  vel %d", PTM.getClosestShootingPosition().getShootingVelocity());
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
                 bot.ejectFW();
+                bot.ejectTransfer();
+                bot.ejectIntake();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_ejectionVel);
             } else {
                 bot.killFW();
@@ -84,22 +87,16 @@ public class V3TeleOpDrive extends LinearOpMode {
             //****** SHOOT SEQUENCE (Controller 2)******
             if (bot.isHeld(2, Button.R_TRIGGER)) {
                 bot.openBlocker();
-                if ((bot.blockerIsOpen() && bot.FWUpToSpeed(FW_shootVel)) || bot.isHeld(2, Button.R_BUMPER)){
-                    bot.startTransfer();
-                }
-                else
-                    bot.killTransfer();
+            } else {
+                bot.closeBlocker();
+            }
+            if (bot.isHeld(2, Button.R_BUMPER)){
+                bot.startTransfer();
+                bot.startIntake();
+            } else {
+                bot.killTransfer();
             }
 
-            //****** EJECT BALLS (Controller 1 & 2)******
-            if (bot.isPressed(2, Button.R_STICKPRESS) || bot.isPressed(1, Button.R_STICKPRESS)) {
-                bot.ejectIntake();
-                bot.createTimer("Eject");
-            }
-            if (bot.timerExpired_MSeconds("Eject", 1500)){
-                bot.startIntake();
-                bot.deleteTimer("Eject");
-            }
 
             bot.update();
             sleep(10);
