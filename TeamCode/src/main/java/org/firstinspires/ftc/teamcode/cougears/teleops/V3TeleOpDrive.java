@@ -93,7 +93,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (bot.isHeld(2, Button.R_BUMPER)){
                 bot.startTransfer();
                 bot.startIntake();
-            } else {
+            } else if (!bot.IntakeSpinning) {
                 bot.killTransfer();
             }
 

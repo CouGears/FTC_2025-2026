@@ -103,7 +103,7 @@ public class PedroTeleOpManager {
         }
     }
 
-    boolean wentToInit = false;
+    public boolean wentToInit = false;
     public void openGate(){
         Pose gateInit;
         Pose gateOpen;

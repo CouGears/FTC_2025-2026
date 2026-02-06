@@ -103,10 +103,12 @@ public class V3TeleOpBase extends BotBase {
     //****** INTAKE ******
     public void startIntake() {
         Intake.setPower(Drive_intakePower);
+        Transfer.setPower(Drive_baseTransferPower);
         IntakeSpinning = true;
     }
     public void killIntake() {
         Intake.setPower(0);
+        Transfer.setPower(0);
         IntakeSpinning = false;
     }
     public void ejectIntake() {
