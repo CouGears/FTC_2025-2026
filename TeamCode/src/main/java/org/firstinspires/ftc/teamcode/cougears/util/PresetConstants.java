@@ -21,6 +21,7 @@ public class PresetConstants {
     public static double Drive_intakePower = .6;
     public static double Drive_baseTransferPower = .1;
     public static double Drive_transferPower = 0.85 ;
+
     public static boolean Drive_switchedJoysticks = false;
     //FW
     public static double[] FW_PIDF = {214, 0, 0, 18};
@@ -34,10 +35,13 @@ public class PresetConstants {
 
     public static double Auton_spinupWait = 2000;
     public static double Auton_firstShotExtraSpinupWait = 2000;
-    public static double Auton_gateWait = 500;
+    public static double Auton_gateWait = 200;
     public static double Auton_ballTransferWait = 1000;
     public static double Auton_transferResetWait = 750;
-    public static double Auton_ballShootSequenceTime = 1500;
+    public static double Auton_gateIntakeWait = 3500;
+
+
+    public static double Auton_ballShootSequenceTime = 1200;
     public static double Auton_pickupSpeed = .4;
 
     public static double xyPoseErrorPTM = 0.5;

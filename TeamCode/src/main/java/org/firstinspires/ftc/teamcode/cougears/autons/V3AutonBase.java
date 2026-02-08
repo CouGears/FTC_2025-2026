@@ -24,7 +24,7 @@ public class V3AutonBase {
     //initializing toggles
     public boolean IntakeSpinning;
 
-    public Timer blockerTimer, shootSequenceTimer;
+    public Timer blockerTimer, shootSequenceTimer, gateIntakeTimer;
 
     HardwareMap HM;
     Telemetry tele;
@@ -34,6 +34,7 @@ public class V3AutonBase {
         tele = Telemetry;
         blockerTimer = new Timer();
         shootSequenceTimer = new Timer();
+        gateIntakeTimer = new Timer();
     }
 
     public boolean botInit() {
@@ -175,7 +176,9 @@ public class V3AutonBase {
 
     public enum pickUpBalls {
         FIND_DEPOT,
-        PICKUP,
+        MOVE_TO_START,
+        PICK_UP_BALLS,
+        MOVE_BACK_TO_START,
         END
     }
     pickUpBalls pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
@@ -216,18 +219,98 @@ public class V3AutonBase {
                             break;
                     }
                 }
-                pickUpBallsSavedStep = pickUpBalls.PICKUP;
+                pickUpBallsSavedStep = pickUpBalls.MOVE_TO_START;
                 break;
-            case PICKUP:
+            case MOVE_TO_START:
                 if (follower.isBusy()) return false;
-                startTransfer();
+                moveToPose(follower, targetDepotStart);
+                pickUpBallsSavedStep = pickUpBalls.PICK_UP_BALLS;
+                break;
+            case PICK_UP_BALLS:
                 startIntake();
-                moveToPose(follower, targetDepotStart, targetDepotEnd, follower.getPose());
+                startTransfer();
+                if (follower.isBusy()) return false;
+                moveToPose(follower, targetDepotEnd);
+                pickUpBallsSavedStep = pickUpBalls.MOVE_BACK_TO_START;
+                break;
+            case MOVE_BACK_TO_START:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, targetDepotStart);
+                pickUpBallsSavedStep = pickUpBalls.END;
                 break;
             case END:
                 if (follower.isBusy()) return  false;
                 pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
                 killTransfer();
+                return true;
+        }
+        return false;
+    }
+
+    public enum gateIntake {
+        FIND_GATE,
+        PREINIT,
+        GO_TO_INIT,
+        PICK_UP_BALLS,
+        RETURN_TO_INIT,
+        RETURN_TO_PREINIT
+    }
+    gateIntake gateIntakeSavedStep = gateIntake.FIND_GATE;
+    Pose gateInit = null;
+    Pose gateOpen = null;
+    Pose preInit = null;
+    boolean wentToGateOpen = false;
+
+    public boolean handleGateIntake(String autonColor, Follower follower, Telemetry tele){
+        switch (gateIntakeSavedStep){
+            case FIND_GATE:
+                wentToGateOpen = false;
+                if (autonColor.equals("Red")){
+                    gateInit = RedGatePickupInit;
+                    gateOpen = RedGatePickupOpen;
+                    preInit = RedBallDepotStart2;
+                } else {
+                    gateInit = BlueGatePickupInit;
+                    gateOpen = BlueGatePickupOpen;
+                    preInit = BlueBallDepotStart2;
+
+                }
+                gateIntakeSavedStep = gateIntake.PREINIT;
+                break;
+            case PREINIT:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, preInit);
+                gateIntakeSavedStep = gateIntake.GO_TO_INIT;
+                break;
+            case GO_TO_INIT:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, gateInit);
+                gateIntakeSavedStep = gateIntake.PICK_UP_BALLS;
+                gateIntakeTimer.resetTimer();
+                break;
+            case PICK_UP_BALLS:
+                if (follower.isBusy()) return false;
+                startTransfer();
+                startIntake();
+                if (!wentToGateOpen) {
+                    moveToPose(follower, gateOpen);
+                    wentToGateOpen = true;
+                }
+                if (gateIntakeTimer.getElapsedTime() > Auton_gateIntakeWait) {
+                    gateIntakeSavedStep = gateIntake.RETURN_TO_INIT;
+                }
+                break;
+            case RETURN_TO_INIT:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, gateInit);
+                killIntake();
+                killTransfer();
+                gateIntakeSavedStep = gateIntake.RETURN_TO_PREINIT;
+                break;
+            case RETURN_TO_PREINIT:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, preInit);
+                gateIntakeSavedStep = gateIntake.FIND_GATE;
                 return true;
         }
         return false;
