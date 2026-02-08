@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 
@@ -103,12 +104,10 @@ public class V3TeleOpBase extends BotBase {
     //****** INTAKE ******
     public void startIntake() {
         Intake.setPower(Drive_intakePower);
-        Transfer.setPower(Drive_baseTransferPower);
         IntakeSpinning = true;
     }
     public void killIntake() {
         Intake.setPower(0);
-        Transfer.setPower(0);
         IntakeSpinning = false;
     }
     public void ejectIntake() {
@@ -116,6 +115,7 @@ public class V3TeleOpBase extends BotBase {
         IntakeSpinning = false; // So next time you press X it starts spinning in
     }
     //****** Transfer ******
+    public void startTransferSlow() { Transfer.setPower(Drive_baseTransferPower);}
     public void startTransfer() { Transfer.setPower(Drive_transferPower);}
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}

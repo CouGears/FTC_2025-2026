@@ -20,10 +20,14 @@ public class V3TeleOpDrive extends LinearOpMode {
         // Initialize motors
         bot.botInit();
         // Wait for the game to start (driver presses PLAY)
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-        waitForStart();
-
+        while (!opModeIsActive()) {
+            telemetry.addData("Status", "Initialized");
+            telemetry.addData("Switched Joysticks", "%s", Drive_switchedJoysticks);
+            telemetry.addLine("Press X to change");
+            if (gamepad1.xWasPressed())
+                Drive_switchedJoysticks = !Drive_switchedJoysticks;
+            telemetry.update();
+        }
 
         while (opModeIsActive()) {
             //****** DRIVE (Controller 1)******
@@ -62,10 +66,13 @@ public class V3TeleOpDrive extends LinearOpMode {
             //****** INTAKE ******
             if (bot.isPressed(1, Button.X)) {
                 bot.deleteTimer("RejectIntake");
-                if (!bot.IntakeSpinning)
+                if (!bot.IntakeSpinning) {
+                    bot.startTransfer();
                     bot.startIntake();
-                else
+                } else {
+                    bot.killTransfer();
                     bot.killIntake();
+                }
             }
 
             //****** FLYWHEEL (Controller 2)******
@@ -86,10 +93,12 @@ public class V3TeleOpDrive extends LinearOpMode {
 
             //****** SHOOT SEQUENCE (Controller 2)******
             if (bot.isHeld(2, Button.R_TRIGGER)) {
+                if (!bot.isHeld(2, Button.R_BUMPER)) {bot.killTransfer();}
                 bot.openBlocker();
             } else {
                 bot.closeBlocker();
             }
+
             if (bot.isHeld(2, Button.R_BUMPER)){
                 bot.startTransfer();
                 bot.startIntake();
