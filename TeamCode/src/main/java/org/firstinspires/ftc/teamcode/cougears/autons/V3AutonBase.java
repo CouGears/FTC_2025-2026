@@ -24,7 +24,7 @@ public class V3AutonBase {
     //initializing toggles
     public boolean IntakeSpinning;
 
-    public Timer blockerTimer, shootSequenceTimer, gateIntakeTimer;
+    public Timer blockerTimer, shootSequenceTimer, gateIntakeTimer, openGateTimer;
 
     HardwareMap HM;
     Telemetry tele;
@@ -35,6 +35,7 @@ public class V3AutonBase {
         blockerTimer = new Timer();
         shootSequenceTimer = new Timer();
         gateIntakeTimer = new Timer();
+        openGateTimer = new Timer();
     }
 
     public boolean botInit() {
@@ -320,19 +321,21 @@ public class V3AutonBase {
         FIND_GATE,
         GO_TO_INIT,
         OPEN_GATE,
-        RETURN_TO_INIT
+        RETURN_TO_INIT,
+        RETURN_TO_PREINIT
     }
-    gateOpenSequence gateOpenSequenceSavedStep = gateOpenSequence.OPEN_GATE;
+    gateOpenSequence gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
     public boolean handleOpenGate(String autonColor, Follower follower, Telemetry tele){
         switch (gateOpenSequenceSavedStep) {
             case FIND_GATE:
-                wentToGateOpen = false;
-                if (autonColor.equals("Red")) {
+                if (autonColor.equals("Red")){
                     gateInit = RedGateInit;
                     gateOpen = RedGateOpen;
+                    preInit = RedBallDepotStart2;
                 } else {
                     gateInit = BlueGateInit;
-                    gateOpen = BlueGateOpen;
+                    gateOpen = RedGateOpen;
+                    preInit = BlueBallDepotStart2;
                 }
                 gateOpenSequenceSavedStep = gateOpenSequence.GO_TO_INIT;
                 break;
@@ -345,11 +348,18 @@ public class V3AutonBase {
                 if (follower.isBusy()) return false;
                 moveToPose(follower, gateOpen);
                 gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_INIT;
+                openGateTimer.resetTimer();
                 break;
             case RETURN_TO_INIT:
                 if (follower.isBusy()) return false;
+                if(openGateTimer.getElapsedTime()<Auton_gateOpenWait) return false;
                 moveToPose(follower, gateInit);
-                gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
+                gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_PREINIT;
+                break;
+            case RETURN_TO_PREINIT:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, preInit);
+                gateIntakeSavedStep = gateIntake.FIND_GATE;
                 return true;
         }
         return false;

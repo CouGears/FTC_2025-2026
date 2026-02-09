@@ -24,7 +24,6 @@ public class RedCloseFullAuton extends OpMode {
     public ShootingPosition shootPos = redShootingPosHashMap.get("RedTriangleClose");
     public Pose endPos   = RedBasicEndClose;
     public int BDCounter = 2;
-    public boolean openedGate = false;
 
 
 
@@ -49,11 +48,7 @@ public class RedCloseFullAuton extends OpMode {
                 if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
                     if (BDCounter == 2){
                         setPathStep(pathStep.BD_PICKUP2);
-                    }
-                    else if (BDCounter == 1 && !openedGate) {
-                        setPathStep(pathStep.OPEN_GATE);
-                        openedGate = true;
-                    } else if (openedGate && BDCounter == 1){
+                    } else if (BDCounter == 1){
                         setPathStep(pathStep.BD_PICKUP1);
                     } else if (BDCounter == 3){
                         setPathStep(pathStep.BD_PICKUP3);
@@ -64,7 +59,7 @@ public class RedCloseFullAuton extends OpMode {
                 break;
             case BD_PICKUP2:
                 if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower, telemetry)){
-                    setPathStep(pathStep.SHOOT_BALLS);
+                    setPathStep(pathStep.OPEN_GATE);
                     BDCounter = 1;
                 }
                 break;

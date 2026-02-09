@@ -38,19 +38,19 @@ public class PositionsAndPaths {
 
     // --- Ball Depot Poses (Pickup & Scoring) ---
     public static Pose RedBallDepotStart1 = new Pose(102.325,  84.29,  Math.toRadians(0));
-    public static Pose RedBallDepotStart2 = new Pose(102.325,  59.534,  Math.toRadians(0));
+    public static Pose RedBallDepotStart2 = new Pose(102.325,  59.834,  Math.toRadians(0));
     public static Pose RedBallDepotStart3 = new Pose(102.325,  37.12,   Math.toRadians(0));
     //106.58,35.73/105.44,35.20/106.52,35.38/106.76,35.66/
     public static Pose RedBallDepotEnd1   = new Pose(126.1075, 84.29,  Math.toRadians(0));
     //127.21/128.12/128.10/129.000/
-    public static Pose RedBallDepotEnd2   = new Pose(133.105, 59.534,  Math.toRadians(0));
+    public static Pose RedBallDepotEnd2   = new Pose(133.105, 59.834,  Math.toRadians(0));
     public static Pose RedBallDepotEnd3   = new Pose(133.105, 37.12,   Math.toRadians(0));
     //132.9/131.26/133.06/131.2/
 
     // --- Gate, Park, and Utility ---
-    public static Pose RedGateInit        = new Pose(114.1825, 62.7775,  Math.toRadians(-90));
+    public static Pose RedGateInit        = new Pose(115, 62.5,  Math.toRadians(-90));
     //115.51,63.12/114.93,62.85/113.57,62.62/112.72,62.52/
-    public static Pose RedGateOpen        = new Pose(119.195, 62.7775,   Math.toRadians(-90));
+    public static Pose RedGateOpen        = new Pose(119.128, 62.5,   Math.toRadians(-90));
     //120.50/119.95/117.78/118.55/
     public static Pose RedGatePickupOpen  = new Pose(135.241, 65.4,  Math.toRadians(34.97));
     public static Pose RedGatePickupInit  = new Pose(129.43, 61.78,  Math.toRadians(34.97));
