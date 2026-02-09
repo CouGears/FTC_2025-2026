@@ -24,14 +24,14 @@ public class RedCloseFullAuton extends OpMode {
     public ShootingPosition shootPos = redShootingPosHashMap.get("RedTriangleClose");
     public Pose endPos   = RedBasicEndClose;
     public int BDCounter = 2;
-    public int gateCounter = 0;
-    public int gatePickupNum = 2;
+    public boolean openedGate = false;
+
 
 
     public enum pathStep {
         SHOOT_BALLS,
         BD_PICKUP2,
-        GATE_INTAKE,
+        OPEN_GATE,
         BD_PICKUP1,
         BD_PICKUP3,
         CLOSETRIANGLE_BASICEND,
@@ -50,10 +50,10 @@ public class RedCloseFullAuton extends OpMode {
                     if (BDCounter == 2){
                         setPathStep(pathStep.BD_PICKUP2);
                     }
-                    else if (BDCounter == 1 && gateCounter < gatePickupNum) {
-                        setPathStep(pathStep.GATE_INTAKE);
-                        gateCounter++;
-                    } else if (gateCounter == gatePickupNum && BDCounter == 1){
+                    else if (BDCounter == 1 && !openedGate) {
+                        setPathStep(pathStep.OPEN_GATE);
+                        openedGate = true;
+                    } else if (openedGate && BDCounter == 1){
                         setPathStep(pathStep.BD_PICKUP1);
                     } else if (BDCounter == 3){
                         setPathStep(pathStep.BD_PICKUP3);
@@ -80,8 +80,8 @@ public class RedCloseFullAuton extends OpMode {
                     BDCounter = 0;
                 }
                 break;
-            case GATE_INTAKE:
-                if (bot.handleGateIntake(shootPos.getShootingColor(), follower, telemetry)){
+            case OPEN_GATE:
+                if (bot.handleOpenGate(shootPos.getShootingColor(), follower, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                     BDCounter = 1;
                 }

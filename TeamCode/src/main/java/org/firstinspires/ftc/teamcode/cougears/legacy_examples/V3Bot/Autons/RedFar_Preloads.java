@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Red;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V3Bot.Autons;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
@@ -6,10 +6,8 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.cougears.autons.Blue.BlueFar_Preloads;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;

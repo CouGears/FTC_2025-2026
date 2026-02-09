@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Red;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V3Bot.Autons;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEndFar;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPosFar;
@@ -11,13 +11,12 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.cougears.autons.Blue.BlueFar_Preloads;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous (group = "Red")
-public class RedFar_BD2 extends OpMode {
+public class RedFar_BD3 extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V3AutonBase bot;
@@ -26,7 +25,7 @@ public class RedFar_BD2 extends OpMode {
     public Pose endPos   = RedBasicEndFar;
 
     public int BDCounter = 4;
-    public final int numBDToPickup = 2;
+    public final int numBDToPickup = 3;
     public boolean decrimentedBDCounter = false;
 
 

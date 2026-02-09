@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Red;
+package org.firstinspires.ftc.teamcode.cougears.legacy_examples.V3Bot.Autons;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEndClose;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPos;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEndFar;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPosFar;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.buildPaths;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.redShootingPosHashMap;
 
@@ -11,28 +11,28 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.cougears.autons.Blue.BlueFar_Preloads;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous (group = "Red")
-public class RedClose_BD2 extends OpMode {
+public class RedFar_BD1 extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V3AutonBase bot;
 
-    public ShootingPosition shootPos = redShootingPosHashMap.get("RedTriangleClose");
-    public Pose endPos   = RedBasicEndClose;
-    public int BDCounter = 0;
-    public final int numBDToPickup = 2;
-    public boolean incrimentedBDCounter = false;
+    public ShootingPosition shootPos = redShootingPosHashMap.get("RedFar");
+    public Pose endPos   = RedBasicEndFar;
+
+    public int BDCounter = 4;
+    public final int numBDToPickup = 1;
+    public boolean decrimentedBDCounter = false;
 
 
     public enum pathStep {
         SHOOT_BALLS,
         BD_PICKUP,
-        CLOSETRIANGLE_BASICEND,
+        CLOSETRIANGLE_BASICENDFAR,
         END
     }
     pathStep currStep = pathStep.SHOOT_BALLS;
@@ -45,25 +45,25 @@ public class RedClose_BD2 extends OpMode {
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
-                    if (BDCounter < numBDToPickup) {
+                    if (BDCounter > 4 - numBDToPickup) {
                         setPathStep(pathStep.BD_PICKUP);
-                        incrimentedBDCounter = false;
+                        decrimentedBDCounter = false;
                     } else {
-                        setPathStep(pathStep.CLOSETRIANGLE_BASICEND);
+                        setPathStep(pathStep.CLOSETRIANGLE_BASICENDFAR);
                     }
                 }
                 break;
             case BD_PICKUP:
-                if (!incrimentedBDCounter){
-                    BDCounter++;
-                    incrimentedBDCounter = true;
+                if (!decrimentedBDCounter){
+                    BDCounter--;
+                    decrimentedBDCounter = true;
                 }
 
                 if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
-            case CLOSETRIANGLE_BASICEND:
+            case CLOSETRIANGLE_BASICENDFAR:
                 bot.moveToPose(follower, endPos);
                 setPathStep(pathStep.END);
                 break;
@@ -89,7 +89,7 @@ public class RedClose_BD2 extends OpMode {
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
-        follower.setPose(RedStartPos);
+        follower.setPose(RedStartPosFar);
         buildPaths(follower);
         bot = new V3AutonBase(hardwareMap, telemetry);
         bot.botInit();

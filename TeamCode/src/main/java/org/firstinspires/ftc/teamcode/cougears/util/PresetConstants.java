@@ -41,7 +41,7 @@ public class PresetConstants {
     public static double Auton_gateIntakeWait = 3500;
 
 
-    public static double Auton_ballShootSequenceTime = 1200;
+    public static double Auton_ballShootSequenceTime = 2000;
     public static double Auton_pickupSpeed = .4;
 
     public static double xyPoseErrorPTM = 0.5;

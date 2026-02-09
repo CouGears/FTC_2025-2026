@@ -316,6 +316,45 @@ public class V3AutonBase {
         return false;
     }
 
+    public enum gateOpenSequence{
+        FIND_GATE,
+        GO_TO_INIT,
+        OPEN_GATE,
+        RETURN_TO_INIT
+    }
+    gateOpenSequence gateOpenSequenceSavedStep = gateOpenSequence.OPEN_GATE;
+    public boolean handleOpenGate(String autonColor, Follower follower, Telemetry tele){
+        switch (gateOpenSequenceSavedStep) {
+            case FIND_GATE:
+                wentToGateOpen = false;
+                if (autonColor.equals("Red")) {
+                    gateInit = RedGateInit;
+                    gateOpen = RedGateOpen;
+                } else {
+                    gateInit = BlueGateInit;
+                    gateOpen = BlueGateOpen;
+                }
+                gateOpenSequenceSavedStep = gateOpenSequence.GO_TO_INIT;
+                break;
+            case GO_TO_INIT:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, gateInit);
+                gateOpenSequenceSavedStep = gateOpenSequence.OPEN_GATE;
+                break;
+            case OPEN_GATE:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, gateOpen);
+                gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_INIT;
+                break;
+            case RETURN_TO_INIT:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, gateInit);
+                gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
+                return true;
+        }
+        return false;
+    }
+
 
     //****** OTHER ******
     public void endAuton(Follower follower, String color){
