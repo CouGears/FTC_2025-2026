@@ -11,7 +11,6 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.cougears.autons.Blue.BlueFar_Preloads;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -59,7 +58,7 @@ public class RedClose_BD3 extends OpMode {
                     incrimentedBDCounter = true;
                 }
 
-                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower, telemetry)){
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, true, follower, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;

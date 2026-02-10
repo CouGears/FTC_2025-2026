@@ -58,19 +58,19 @@ public class RedCloseFullAuton extends OpMode {
                 }
                 break;
             case BD_PICKUP2:
-                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower, telemetry)){
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, false, follower, telemetry)){
                     setPathStep(pathStep.OPEN_GATE);
                     BDCounter = 1;
                 }
                 break;
             case BD_PICKUP1:
-                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower, telemetry)){
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, true, follower, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                     BDCounter = 3;
                 }
                 break;
             case BD_PICKUP3:
-                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, follower, telemetry)){
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, true,follower, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                     BDCounter = 0;
                 }

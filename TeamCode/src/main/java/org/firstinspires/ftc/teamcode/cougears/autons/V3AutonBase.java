@@ -185,7 +185,7 @@ public class V3AutonBase {
     pickUpBalls pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
     Pose targetDepotStart = null;
     Pose targetDepotEnd = null;
-    public boolean handlePickUpBalls(String autonColor, int depotNum, Follower follower, Telemetry tele) {
+    public boolean handlePickUpBalls(String autonColor, int depotNum, boolean returnToStart, Follower follower, Telemetry tele) {
         tele.addData("Curr Step in handlePickUpBalls:", "%s", pickUpBallsSavedStep);
         switch (pickUpBallsSavedStep) {
             case FIND_DEPOT:
@@ -235,6 +235,10 @@ public class V3AutonBase {
                 pickUpBallsSavedStep = pickUpBalls.MOVE_BACK_TO_START;
                 break;
             case MOVE_BACK_TO_START:
+                if (!returnToStart) {
+                    pickUpBallsSavedStep = pickUpBalls.END;
+                    break;
+                }
                 if (follower.isBusy()) return false;
                 moveToPose(follower, targetDepotStart);
                 pickUpBallsSavedStep = pickUpBalls.END;
@@ -343,16 +347,16 @@ public class V3AutonBase {
                 if (follower.isBusy()) return false;
                 moveToPose(follower, gateInit);
                 gateOpenSequenceSavedStep = gateOpenSequence.OPEN_GATE;
+                openGateTimer.resetTimer();
                 break;
             case OPEN_GATE:
                 if (follower.isBusy()) return false;
                 moveToPose(follower, gateOpen);
+                if(openGateTimer.getElapsedTime()<Auton_gateOpenWait) return false;
                 gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_INIT;
-                openGateTimer.resetTimer();
                 break;
             case RETURN_TO_INIT:
                 if (follower.isBusy()) return false;
-                if(openGateTimer.getElapsedTime()<Auton_gateOpenWait) return false;
                 moveToPose(follower, gateInit);
                 gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_PREINIT;
                 break;
