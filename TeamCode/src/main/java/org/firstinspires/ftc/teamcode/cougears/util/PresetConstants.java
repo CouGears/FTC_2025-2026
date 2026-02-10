@@ -35,8 +35,8 @@ public class PresetConstants {
     public static  double Auton_gateOpenWait = 1500;
     public static double Auton_ballShootSequenceTime = 1500;
 
-    public static double xyPoseErrorPTM = 0.5;
-    public static double headingPoseErrorPTM = Math.toRadians(5);
+    public static double xyPoseErrorPTM = 0.3;
+    public static double headingPoseErrorPTM = Math.toRadians(3);
 
     // NAMES
     public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "Intake, Transfer"};
