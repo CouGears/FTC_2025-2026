@@ -159,7 +159,7 @@ public class V3AutonBase {
                 break;
             case OPEN_BLOCKER:
                 if (!(FWUpToSpeed(shootPos.getShootingVelocity() - 50))) return false;
-                if (isNear(follower, shootPos.getShootingPose())) return false; //Cant move past this until we get to pos
+                if (!isNear(follower, shootPos.getShootingPose())) return false; //Cant move past this until we get to pos
                 openBlocker();
                 blockerTimer.resetTimer();
                 shootingSequenceSavedStep = shootingSequence.SHOOT;
@@ -356,12 +356,12 @@ public class V3AutonBase {
                 openGateTimer.resetTimer();
                 break;
             case OPEN_GATE:
-                if (isNear(follower, gateInit)) return false;                moveToPose(follower, gateOpen);
+                if (!isNear(follower, gateInit)) return false;                moveToPose(follower, gateOpen);
                 if(openGateTimer.getElapsedTime()<Auton_gateOpenWait) return false;
                 gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_INIT;
                 break;
             case RETURN_TO_INIT:
-                if (isNear(follower, gateOpen)) return false;
+                if (!isNear(follower, gateOpen)) return false;
                 moveToPose(follower, gateInit);
                 gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_PREINIT;
                 break;
