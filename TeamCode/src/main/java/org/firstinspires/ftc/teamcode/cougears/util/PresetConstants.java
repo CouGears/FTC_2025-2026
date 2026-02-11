@@ -19,7 +19,7 @@ public class PresetConstants {
     public static boolean Drive_switchedJoysticks = false;
 
     //FW
-    public static double[] FW_PIDF = {214, 0, 0, 18};
+    public static double[] FW_PIDF = {218, 0, 0, 17};
     public static double FW_ejectionVel = -1000;
 
     //Servos

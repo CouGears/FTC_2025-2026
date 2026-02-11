@@ -67,7 +67,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (bot.isPressed(1, Button.X)) {
                 bot.deleteTimer("RejectIntake");
                 if (!bot.IntakeSpinning) {
-                    bot.startTransfer();
+                    bot.startTransferSlow();
                     bot.startIntake();
                 } else {
                     bot.killTransfer();
