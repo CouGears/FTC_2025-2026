@@ -119,11 +119,11 @@ public class V3AutonBase {
                         .build()
         );
     }
-    public boolean isNear(Follower follower, Pose target) {
+    public boolean isNotNear(Follower follower, Pose target) {
         double botX = follower.getPose().getX();
         double botY = follower.getPose().getY(); // Fixed: was getX()
         double distance = Math.hypot(target.getX() - botX, target.getY() - botY);
-        return distance < xyPoseErrorPTM;
+        return !(distance < xyPoseErrorPTM);
     }
 
     // CANNOT BE CALLED EVERY LOOP
@@ -158,8 +158,8 @@ public class V3AutonBase {
                 shootingSequenceSavedStep = shootingSequence.OPEN_BLOCKER;
                 break;
             case OPEN_BLOCKER:
+                if (follower.isBusy()) return false; //Cant move past this until we get to pos
                 if (!(FWUpToSpeed(shootPos.getShootingVelocity() - 50))) return false;
-                if (!isNear(follower, shootPos.getShootingPose())) return false; //Cant move past this until we get to pos
                 openBlocker();
                 blockerTimer.resetTimer();
                 shootingSequenceSavedStep = shootingSequence.SHOOT;
@@ -331,8 +331,7 @@ public class V3AutonBase {
         FIND_GATE,
         GO_TO_INIT,
         OPEN_GATE,
-        RETURN_TO_INIT,
-        RETURN_TO_PREINIT
+        RETURN_TO_INIT
     }
     gateOpenSequence gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
     public boolean handleOpenGate(String autonColor, Follower follower, Telemetry tele){
@@ -341,33 +340,26 @@ public class V3AutonBase {
                 if (autonColor.equals("Red")){
                     gateInit = RedGateInit;
                     gateOpen = RedGateOpen;
-                    preInit = RedBallDepotStart2;
                 } else {
                     gateInit = BlueGateInit;
                     gateOpen = RedGateOpen;
-                    preInit = BlueBallDepotStart2;
                 }
                 gateOpenSequenceSavedStep = gateOpenSequence.GO_TO_INIT;
                 break;
             case GO_TO_INIT:
-                if (follower.isBusy()) return false;
                 moveToPose(follower, gateInit);
                 gateOpenSequenceSavedStep = gateOpenSequence.OPEN_GATE;
                 openGateTimer.resetTimer();
                 break;
             case OPEN_GATE:
-                if (!isNear(follower, gateInit)) return false;                moveToPose(follower, gateOpen);
+                if (follower.isBusy()) return false; //Cant move past this until we get to pos
+                moveToPose(follower, gateOpen);
                 if(openGateTimer.getElapsedTime()<Auton_gateOpenWait) return false;
                 gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_INIT;
                 break;
             case RETURN_TO_INIT:
-                if (!isNear(follower, gateOpen)) return false;
-                moveToPose(follower, gateInit);
-                gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_PREINIT;
-                break;
-            case RETURN_TO_PREINIT:
                 if (follower.isBusy()) return false;
-                moveToPose(follower, preInit);
+                moveToPose(follower, gateInit);
                 gateIntakeSavedStep = gateIntake.FIND_GATE;
                 return true;
         }

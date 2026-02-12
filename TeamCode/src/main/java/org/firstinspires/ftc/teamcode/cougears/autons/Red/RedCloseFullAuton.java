@@ -58,7 +58,7 @@ public class RedCloseFullAuton extends OpMode {
                 }
                 break;
             case BD_PICKUP2:
-                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, true, follower, telemetry)){
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, false, follower, telemetry)){
                     setPathStep(pathStep.OPEN_GATE);
                     BDCounter = 1;
                 }
@@ -88,6 +88,7 @@ public class RedCloseFullAuton extends OpMode {
                 if (!follower.isBusy()) {
                     bot.endAuton(follower, shootPos.getShootingColor());
                     terminateOpModeNow();
+
                 }
                 break;
             default:

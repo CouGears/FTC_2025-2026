@@ -48,7 +48,7 @@ public class PositionsAndPaths {
     //132.9/131.26/133.06/131.2/
 
     // --- Gate, Park, and Utility ---
-    public static Pose RedGateInit        = new Pose(114.1825, 62.7775,  Math.toRadians(-90));
+    public static Pose RedGateInit        = new Pose(119, 59.834,  Math.toRadians(0));
     //115.51,63.12/114.93,62.85/113.57,62.62/112.72,62.52/
     public static Pose RedGateOpen        = new Pose(119.195, 62.7775,   Math.toRadians(-90));
     //120.50/119.95/117.78/118.55/
