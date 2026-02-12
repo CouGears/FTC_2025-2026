@@ -329,30 +329,36 @@ public class V3AutonBase {
 
     public enum gateOpenSequence{
         FIND_GATE,
-        GO_TO_INIT,
         OPEN_GATE,
-        RETURN_TO_INIT
-    }
+        RETURN_TO_INIT,
+        RETURN_TO_PREINIT
+
+        }
     gateOpenSequence gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
-    public boolean handleOpenGate(String autonColor, Follower follower, Telemetry tele){
+    public boolean handleOpenGate(String autonColor, Follower follower, boolean goToPreinit, Telemetry tele){
         switch (gateOpenSequenceSavedStep) {
             case FIND_GATE:
+                wentToGateOpen = false;
                 if (autonColor.equals("Red")){
                     gateInit = RedGateInit;
                     gateOpen = RedGateOpen;
+                    preInit = RedBallDepotStart2;
+
                 } else {
                     gateInit = BlueGateInit;
                     gateOpen = RedGateOpen;
+                    preInit = BlueBallDepotStart2;
+
                 }
-                gateOpenSequenceSavedStep = gateOpenSequence.GO_TO_INIT;
-                break;
-            case GO_TO_INIT:
-                moveToPose(follower, gateInit);
                 gateOpenSequenceSavedStep = gateOpenSequence.OPEN_GATE;
                 openGateTimer.resetTimer();
                 break;
             case OPEN_GATE:
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
+                if (!wentToGateOpen) {
+                    moveToPose(follower, gateInit, gateOpen);
+                    wentToGateOpen = true;
+                }
                 moveToPose(follower, gateOpen);
                 if(openGateTimer.getElapsedTime()<Auton_gateOpenWait) return false;
                 gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_INIT;
@@ -360,6 +366,15 @@ public class V3AutonBase {
             case RETURN_TO_INIT:
                 if (follower.isBusy()) return false;
                 moveToPose(follower, gateInit);
+                if (!goToPreinit) {
+                    gateIntakeSavedStep = gateIntake.FIND_GATE;
+                    return true;
+                }
+                gateIntakeSavedStep = gateIntake.RETURN_TO_PREINIT;
+                break;
+            case RETURN_TO_PREINIT:
+                if (follower.isBusy()) return false;
+                moveToPose(follower, preInit);
                 gateIntakeSavedStep = gateIntake.FIND_GATE;
                 return true;
         }

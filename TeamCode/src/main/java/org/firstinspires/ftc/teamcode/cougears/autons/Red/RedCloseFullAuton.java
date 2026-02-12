@@ -76,7 +76,7 @@ public class RedCloseFullAuton extends OpMode {
                 }
                 break;
             case OPEN_GATE:
-                if (bot.handleOpenGate(shootPos.getShootingColor(), follower, telemetry)){
+                if (bot.handleOpenGate(shootPos.getShootingColor(), follower, true, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
