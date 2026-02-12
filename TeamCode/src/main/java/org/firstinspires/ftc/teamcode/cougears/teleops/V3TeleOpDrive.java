@@ -46,20 +46,20 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("Assigned Goal", "%s", PTM.getGoal());
 
             //****** AUTON MOVING ******
-            if (bot.isHeld(1, Button.DPAD_DOWN)){
+            if (bot.isHeld(1, Button.DPAD_DOWN) && !PTM.isBusy()){
                 PTM.moveToPos(PTM.getClosestShootingPosition().getShootingPose());
-                PTM.updatePosAndMotors();
             }
-            if (bot.isHeld(1, Button.DPAD_RIGHT)){
+            if (bot.isHeld(1, Button.DPAD_RIGHT) && !PTM.isBusy()){
                 if (PTM.getGoal().equals("Red")){
                     PTM.moveToPos(RedPark);
                 } else {
                     PTM.moveToPos(BluePark);
                 }
-                PTM.updatePosAndMotors();
             }
-            if (bot.isHeld(1, Button.DPAD_LEFT)){
+            if (bot.isHeld(1, Button.DPAD_LEFT) && !PTM.isBusy()){
                 PTM.openGate();
+            }
+            if (PTM.isBusy()){
                 PTM.updatePosAndMotors();
             }
 
