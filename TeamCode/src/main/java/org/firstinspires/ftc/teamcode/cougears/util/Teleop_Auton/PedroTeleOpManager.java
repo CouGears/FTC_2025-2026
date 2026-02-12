@@ -108,10 +108,10 @@ public class PedroTeleOpManager {
         Pose gateInit;
         Pose gateOpen;
         if (goal.equals("Red")){
-            gateInit = RedGateInit;
+            gateInit = Driver_RedGateInit;
             gateOpen = RedGateOpen;
         } else {
-            gateInit = BlueGateInit;
+            gateInit = Driver_BlueGateInit;
             gateOpen = BlueGateOpen;
         }
         if (!wentToInit){

@@ -14,7 +14,7 @@ public class PresetConstants {
     // DRIVE
     public static double Drive_slowMultiplier = .25;
     public static double Drive_intakePower = .6;
-    public static double Drive_baseTransferPower = .1;
+    public static double Drive_baseTransferPower = .5;
     public static double Drive_transferPower = 0.85 ;
     public static boolean Drive_switchedJoysticks = false;
 

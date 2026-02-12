@@ -50,6 +50,8 @@ public class PositionsAndPaths {
     // --- Gate, Park, and Utility ---
     public static Pose RedGateInit        = new Pose(119, 59.834,  Math.toRadians(0));
     //115.51,63.12/114.93,62.85/113.57,62.62/112.72,62.52/
+    public static Pose Driver_RedGateInit        = new Pose(114.1825, 75.7775,  Math.toRadians(-90));
+
     public static Pose RedGateOpen        = new Pose(119.195, 62.7775,   Math.toRadians(-90));
     //120.50/119.95/117.78/118.55/
     public static Pose RedGatePickupOpen  = new Pose(135.241, 65.4,  Math.toRadians(34.97));
@@ -87,7 +89,8 @@ public class PositionsAndPaths {
     public static Pose BlueBallDepotEnd3   = new Pose(10.895  + posError, 37.12,   Math.toRadians(180));
 
     // --- Gate, Park, and Utility ---
-    public static Pose BlueGateInit        = new Pose(29.8175  + posError, 62.7775,  Math.toRadians(270)); // or -90
+    public static Pose BlueGateInit        = new Pose(25 + posError, 59.834,  Math.toRadians(0));
+    public static Pose Driver_BlueGateInit = new Pose(29.8175 + posError, 75.7775,  Math.toRadians(-90));
     public static Pose BlueGateOpen        = new Pose(24.805  + posError, 62.7775,   Math.toRadians(270)); // or -90
     public static Pose BlueGatePickupOpen  = new Pose(8.759  + posError, 65.4,  Math.toRadians(145.03));
     public static Pose BlueGatePickupInit  = new Pose(14.57  + posError, 61.78,  Math.toRadians(145.03));

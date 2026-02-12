@@ -32,7 +32,7 @@ public class V3TeleOpDrive extends LinearOpMode {
         while (opModeIsActive()) {
             //****** DRIVE (Controller 1)******
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
-            if (!(bot.isHeld(1, Button.DPAD_DOWN) || bot.isHeld(1, Button.DPAD_LEFT) || bot.isHeld(1, Button.DPAD_RIGHT)) && PTM.follower.isBusy()){
+            if (bot.GPM_1.joystickInputFound() && PTM.isBusy()){
                 PTM.breakFollower();
             }
             if (!PTM.isBusy()) {
@@ -46,7 +46,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("Assigned Goal", "%s", PTM.getGoal());
 
             //****** AUTON MOVING ******
-            if (bot.isHeld(1, Button.DPAD_DOWN) && !PTM.isBusy()){
+            if (bot.isPressed(1, Button.DPAD_DOWN) && !PTM.isBusy()){
                 PTM.moveToPos(PTM.getClosestShootingPosition().getShootingPose());
             }
             if (bot.isHeld(1, Button.DPAD_RIGHT) && !PTM.isBusy()){

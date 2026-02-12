@@ -11,6 +11,7 @@ public class GamepadManager {
     public Gamepad lastGamepadState = null;
     private HashMap<Button, ElapsedTime> buttonCooldown;
     private final double cooldownDuration = 250;
+    public final double deadZone = .1;
 
     public enum Button {
         A, B, X, Y,
@@ -33,6 +34,15 @@ public class GamepadManager {
         } catch (Exception e){
             // _/(0_0)\_ idk just dont do anything. It should work.
         }
+    }
+
+    public boolean joystickInputFound() {
+        if (linkedGamepad != null) {
+            if (linkedGamepad.right_stick_y > deadZone || linkedGamepad.right_stick_x > deadZone || linkedGamepad.left_stick_y > deadZone || linkedGamepad.left_stick_x > deadZone){
+                return true;
+            }
+        }
+        return false;
     }
 
     // Take in one of the button enums and return if it is pressed now and wasnt before
