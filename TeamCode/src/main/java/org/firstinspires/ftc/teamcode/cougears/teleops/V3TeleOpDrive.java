@@ -48,12 +48,22 @@ public class V3TeleOpDrive extends LinearOpMode {
             //****** AUTON MOVING ******
             if (bot.isPressed(1, Button.DPAD_DOWN) && !PTM.isBusy()){
                 PTM.moveToPos(PTM.getClosestShootingPosition().getShootingPose());
+                telemetry.addData("BotPos", "Traveling to X %.2f", PTM.getClosestShootingPosition().getShootingPose().getX());
+                telemetry.addData("BotPos", "Traveling to Y %.2f", PTM.getClosestShootingPosition().getShootingPose().getY());
+                telemetry.addData("BotPos", "Traveling to Heading %.2f", PTM.getClosestShootingPosition().getShootingPose().getY());
+
+
             }
             if (bot.isHeld(1, Button.DPAD_RIGHT) && !PTM.isBusy()){
                 if (PTM.getGoal().equals("Red")){
                     PTM.moveToPos(RedPark);
+                    telemetry.addData("BotPos", "Traveling to X %.2f", RedPark.getX());
+                    telemetry.addData("BotPos", "Traveling to Y %.2f", RedPark.getY());
+
                 } else {
                     PTM.moveToPos(BluePark);
+                    telemetry.addData("BotPos", "Traveling to X %.2f", BluePark.getX());
+                    telemetry.addData("BotPos", "Traveling to Y %.2f", BluePark.getY());
                 }
             }
             if (bot.isHeld(1, Button.DPAD_LEFT) && !PTM.isBusy()){
@@ -62,6 +72,10 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (PTM.isBusy()){
                 PTM.updatePosAndMotors();
             }
+            telemetry.addData("BotPos", "Positioned at X %.2f", PTM.getCurrPos().getX());
+            telemetry.addData("BotPos", "Positioned at Y %.2f", PTM.getCurrPos().getY());
+            telemetry.addData("BotPos", "Positioned at Heading %.2f", PTM.getCurrPos().getY());
+
 
             //****** INTAKE ******
             if (bot.isPressed(1, Button.X)) {
@@ -79,7 +93,6 @@ public class V3TeleOpDrive extends LinearOpMode {
             // BUTTONS: L_TRIGGER, L_BUMPER, R_TRIGGER, R_BUMPER
             if (bot.isHeld(2, Button.L_TRIGGER)) {
                 bot.FWSpinTo(PTM.getClosestShootingPosition().getShootingVelocity());
-                telemetry.addData("Flywheel", "AIMING FOR  vel %d", PTM.getClosestShootingPosition().getShootingVelocity());
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
                 bot.ejectFW();
@@ -90,6 +103,9 @@ public class V3TeleOpDrive extends LinearOpMode {
                 bot.killFW();
             }
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
+            telemetry.addData("Flywheel", "AIMING FOR  vel %d", PTM.getClosestShootingPosition().getShootingVelocity());
+
+
 
             //****** SHOOT SEQUENCE (Controller 2)******
             if (bot.isHeld(2, Button.R_TRIGGER)) {

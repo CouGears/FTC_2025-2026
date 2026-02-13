@@ -33,7 +33,7 @@ public class PositionsAndPaths {
     public static Pose RedShootCenterZone    = new Pose(82.6175,  120.3, Math.toRadians(19.99));
     // 82.80,116.28,20.38/83.62,115.30,20.42/82.15,115.14,19.23/81.90,11.41,19.93
 
-    public static Pose RedShootFar           = new Pose(86.0075,  28.3925, Math.toRadians(64.9225));
+    public static Pose RedShootFar           = new Pose(86.0075,  28.3925, Math.toRadians(65.9225));
     //85.19,28.72,64.96/85.42,28.83,63.77/87.12,27.97,65.66/86.30,28.05,65.30
 
     // --- Ball Depot Poses (Pickup & Scoring) ---
