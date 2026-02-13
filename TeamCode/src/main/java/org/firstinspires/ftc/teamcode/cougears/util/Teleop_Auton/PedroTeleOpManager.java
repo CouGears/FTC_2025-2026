@@ -125,9 +125,7 @@ public class PedroTeleOpManager {
         if (wentToInit){
             moveToPos(gateOpen);
         }
-        if (Math.abs(follower.getPose().getX()-gateInit.getX()) > Math.abs(gateInit.getX()-gateOpen.getX()) ||
-                Math.abs(follower.getPose().getY()-gateInit.getY()) > Math.abs(gateInit.getY()-gateOpen.getY()) ||
-                Math.abs(follower.getPose().getHeading()-gateInit.getHeading()) > Math.abs(gateInit.getHeading()-gateOpen.getHeading())){
+        if (!isBusy()){
             wentToInit = false;
         }
     }

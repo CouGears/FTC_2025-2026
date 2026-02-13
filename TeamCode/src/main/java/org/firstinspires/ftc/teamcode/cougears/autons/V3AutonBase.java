@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.util.Timer;
 import com.pedropathing.geometry.Pose;
@@ -132,7 +133,7 @@ public class V3AutonBase {
         Pose lastPose = f.getPose();
         double lastHeading = f.getHeading();
         for (Pose targetPose : targetPoses) {
-            PB.addPath(new BezierLine(lastPose, targetPose))
+            PB.addPath(new BezierCurve(lastPose, targetPose))
                     .setLinearHeadingInterpolation(lastHeading, targetPose.getHeading());
             lastPose = targetPose;
             lastHeading = targetPose.getHeading();
@@ -336,6 +337,7 @@ public class V3AutonBase {
         }
     gateOpenSequence gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
     public boolean handleOpenGate(String autonColor, Follower follower, boolean goToPreinit, Telemetry tele){
+        tele.addData("Curr Step in handleOpenGate:", "%s", gateOpenSequenceSavedStep);
         switch (gateOpenSequenceSavedStep) {
             case FIND_GATE:
                 wentToGateOpen = false;
@@ -354,24 +356,22 @@ public class V3AutonBase {
                 openGateTimer.resetTimer();
                 break;
             case OPEN_GATE:
-                if (follower.isBusy()) return false; //Cant move past this until we get to pos
                 if (!wentToGateOpen) {
                     moveToPose(follower, gateInit, gateOpen);
                     wentToGateOpen = true;
+                    openGateTimer.resetTimer();
                 }
-                moveToPose(follower, gateOpen);
-                if(openGateTimer.getElapsedTime()<Auton_gateOpenWait) return false;
-                gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_INIT;
-                break;
-            case RETURN_TO_INIT:
+
                 if (follower.isBusy()) return false;
-                moveToPose(follower, gateInit);
+                if (openGateTimer.getElapsedTime() < Auton_gateOpenWait) return false;
+
                 if (!goToPreinit) {
-                    gateIntakeSavedStep = gateIntake.FIND_GATE;
+                    gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
                     return true;
+                } else {
+                    gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_PREINIT;
+                    break;
                 }
-                gateIntakeSavedStep = gateIntake.RETURN_TO_PREINIT;
-                break;
             case RETURN_TO_PREINIT:
                 if (follower.isBusy()) return false;
                 moveToPose(follower, preInit);
