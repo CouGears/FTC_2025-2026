@@ -123,7 +123,7 @@ public class PedroTeleOpManager {
             wentToInit = true;
         }
         if (wentToInit){
-            moveToPos(gateOpen);
+            moveToPos(Driver_RedGateOpen);
         }
         if (!isBusy()){
             wentToInit = false;

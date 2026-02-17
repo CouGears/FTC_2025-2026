@@ -160,7 +160,7 @@ public class V3AutonBase {
                 break;
             case OPEN_BLOCKER:
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
-                if (!(FWUpToSpeed(shootPos.getShootingVelocity() - 50))) return false;
+                if (!(FWUpToSpeed(shootPos.getShootingVelocity() - 100))) return false;
                 openBlocker();
                 blockerTimer.resetTimer();
                 shootingSequenceSavedStep = shootingSequence.SHOOT;
@@ -361,8 +361,7 @@ public class V3AutonBase {
                     wentToGateOpen = true;
                     openGateTimer.resetTimer();
                 }
-
-                if (follower.isBusy()) return false;
+                moveToPose(follower, gateOpen);
                 if (openGateTimer.getElapsedTime() < Auton_gateOpenWait) return false;
 
                 if (!goToPreinit) {
@@ -382,13 +381,16 @@ public class V3AutonBase {
     }
 
 
+
     //****** OTHER ******
-    public void endAuton(Follower follower, String color){
+    public boolean endAuton(Follower follower, String color){
+        if (follower.isBusy()) return false;
         FW.setPower(0);
         Intake.setPower(0);
         Transfer.setPower(0);
         Storage.Storage_endOfAutonPose = follower.getPose();
         Storage.Storage_endOfAutonColor = color;
+        return true;
     }
 
 }

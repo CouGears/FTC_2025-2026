@@ -43,6 +43,7 @@ public class RedCloseFullAuton extends OpMode {
             bot.moveToPose(follower, endPos);
             setPathStep(pathStep.END);
         }
+        telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
@@ -85,10 +86,8 @@ public class RedCloseFullAuton extends OpMode {
                 setPathStep(pathStep.END);
                 break;
             case END:
-                if (!follower.isBusy()) {
-                    bot.endAuton(follower, shootPos.getShootingColor());
+                if (bot.endAuton(follower, "Red")){
                     terminateOpModeNow();
-
                 }
                 break;
             default:
