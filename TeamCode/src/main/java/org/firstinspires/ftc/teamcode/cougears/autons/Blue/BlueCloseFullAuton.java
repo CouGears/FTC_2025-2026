@@ -13,21 +13,23 @@ import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous (group = "Blue")
-public class BlueClose_BD3 extends OpMode {
+public class BlueCloseFullAuton extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V3AutonBase bot;
 
     public ShootingPosition shootPos = blueShootingPosHashMap.get("BlueTriangleClose");
     public Pose endPos   = BlueBasicEndClose;
-    public int BDCounter = 0;
-    public final int numBDToPickup = 3;
-    public boolean incrimentedBDCounter = false;
+    public int BDCounter = 2;
+
 
 
     public enum pathStep {
         SHOOT_BALLS,
-        BD_PICKUP,
+        BD_PICKUP2,
+        OPEN_GATE,
+        BD_PICKUP1,
+        BD_PICKUP3,
         CLOSETRIANGLE_BASICEND,
         END
     }
@@ -38,24 +40,41 @@ public class BlueClose_BD3 extends OpMode {
             bot.moveToPose(follower, endPos);
             setPathStep(pathStep.END);
         }
+        telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
-                    if (BDCounter < numBDToPickup) {
-                        setPathStep(pathStep.BD_PICKUP);
-                        incrimentedBDCounter = false;
+                    if (BDCounter == 2){
+                        setPathStep(pathStep.BD_PICKUP2);
+                    } else if (BDCounter == 1){
+                        setPathStep(pathStep.BD_PICKUP1);
+                    } else if (BDCounter == 3){
+                        setPathStep(pathStep.BD_PICKUP3);
                     } else {
                         setPathStep(pathStep.CLOSETRIANGLE_BASICEND);
                     }
                 }
                 break;
-            case BD_PICKUP:
-                if (!incrimentedBDCounter){
-                    BDCounter++;
-                    incrimentedBDCounter = true;
+            case BD_PICKUP2:
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, false, follower, telemetry)){
+                    setPathStep(pathStep.OPEN_GATE);
+                    BDCounter = 1;
                 }
-
-                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, true, follower, telemetry)){
+                break;
+            case BD_PICKUP1:
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, false, follower, telemetry)){
+                    setPathStep(pathStep.SHOOT_BALLS);
+                    BDCounter = 3;
+                }
+                break;
+            case BD_PICKUP3:
+                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, false,follower, telemetry)){
+                    setPathStep(pathStep.SHOOT_BALLS);
+                    BDCounter = 0;
+                }
+                break;
+            case OPEN_GATE:
+                if (bot.handleOpenGate(shootPos.getShootingColor(), follower, true, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
@@ -64,8 +83,7 @@ public class BlueClose_BD3 extends OpMode {
                 setPathStep(pathStep.END);
                 break;
             case END:
-                if (!follower.isBusy()) {
-                    bot.endAuton(follower, shootPos.getShootingColor());
+                if (bot.endAuton(follower, "Blue")){
                     terminateOpModeNow();
                 }
                 break;

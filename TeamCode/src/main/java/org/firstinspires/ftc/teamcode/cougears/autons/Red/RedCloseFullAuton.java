@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.cougears.autons.Red;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEndClose;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPos;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.buildPaths;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.redShootingPosHashMap;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
