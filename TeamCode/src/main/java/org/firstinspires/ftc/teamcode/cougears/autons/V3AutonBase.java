@@ -348,7 +348,7 @@ public class V3AutonBase {
 
                 } else {
                     gateInit = BlueGateInit;
-                    gateOpen = RedGateOpen;
+                    gateOpen = BlueGateOpen;
                     preInit = BlueBallDepotStart2;
 
                 }
