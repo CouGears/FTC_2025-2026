@@ -160,13 +160,13 @@ public class V3AutonBase {
                 break;
             case OPEN_BLOCKER:
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
-                if (!(FWUpToSpeed(shootPos.getShootingVelocity() - 100))) return false;
+                if (!(FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance))) return false;
                 openBlocker();
                 blockerTimer.resetTimer();
                 shootingSequenceSavedStep = shootingSequence.SHOOT;
                 break;
             case SHOOT:
-                if (blockerTimer.getElapsedTime() < Auton_gateWait) return false;
+                if (blockerTimer.getElapsedTime() < Auton_blockerWait) return false;
                 startTransfer();
                 startIntake();
                 shootingSequenceSavedStep = shootingSequence.END;
