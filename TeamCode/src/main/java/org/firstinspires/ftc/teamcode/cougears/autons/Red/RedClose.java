@@ -13,24 +13,24 @@ import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous (group = "Red")
-public class RedFar extends OpMode {
+public class RedClose extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V3AutonBase bot;
 
-    public Pose startPos   = RedStartPosFar;
-    public ShootingPosition shootPos = redShootingPosHashMap.get("RedFar");
-    public Pose endPos   = RedBasicEndFar;
+    public Pose startPos   = RedStartPos;
+    public ShootingPosition shootPos = redShootingPosHashMap.get("RedTriangleClose");
+    public Pose endPos   = RedBasicEndClose;
 
-    public int BDCounter = 4;
+    public int BDCounter = 0;
     public  int numBDToPickup = 0;
-    public boolean decrimentedBDCounter = false;
+    public boolean incrimentedBDCounter = false;
 
 
     public enum pathStep {
         SHOOT_BALLS,
         BD_PICKUP,
-        CLOSETRIANGLE_BASICENDFAR,
+        CLOSETRIANGLE_BASICENDCLOSE,
         END
     }
     pathStep currStep = pathStep.SHOOT_BALLS;
@@ -42,25 +42,25 @@ public class RedFar extends OpMode {
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry)) {
-                    if (BDCounter > 4 - numBDToPickup) {
+                    if (BDCounter < numBDToPickup) {
                         setPathStep(pathStep.BD_PICKUP);
-                        decrimentedBDCounter = false;
+                        incrimentedBDCounter = false;
                     } else {
-                        setPathStep(pathStep.CLOSETRIANGLE_BASICENDFAR);
+                        setPathStep(pathStep.CLOSETRIANGLE_BASICENDCLOSE);
                     }
                 }
                 break;
             case BD_PICKUP:
-                if (!decrimentedBDCounter){
-                    BDCounter--;
-                    decrimentedBDCounter = true;
+                if (!incrimentedBDCounter){
+                    BDCounter++;
+                    incrimentedBDCounter = true;
                 }
 
                 if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, true, follower, telemetry)){
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
-            case CLOSETRIANGLE_BASICENDFAR:
+            case CLOSETRIANGLE_BASICENDCLOSE:
                 bot.moveToPose(follower, endPos);
                 setPathStep(pathStep.END);
                 break;
