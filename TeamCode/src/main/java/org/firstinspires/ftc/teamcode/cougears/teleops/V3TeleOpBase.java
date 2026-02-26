@@ -117,6 +117,8 @@ public class V3TeleOpBase extends BotBase {
     //****** Transfer ******
     public void startTransferSlow() { Transfer.setPower(Drive_baseTransferPower);}
     public void startTransfer() { Transfer.setPower(Drive_transferPower);}
+    public void startTransferFar() { Transfer.setPower(Drive_transferPowerFar);}
+
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}
 

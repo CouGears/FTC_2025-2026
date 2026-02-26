@@ -116,8 +116,13 @@ public class V3TeleOpDrive extends LinearOpMode {
             }
 
             if (bot.isHeld(2, Button.R_BUMPER)){
-                bot.startTransfer();
-                bot.startIntake();
+                if (PTM.getClosestShootingPosition().equals(redShootingPosHashMap.get("RedFar"))){
+                    bot.startTransferFar();
+                    bot.startIntake();
+                } else {
+                    bot.startTransfer();
+                    bot.startIntake();
+                }
             } else if (!bot.IntakeSpinning) {
                 bot.killTransfer();
             }

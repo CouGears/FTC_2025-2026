@@ -16,6 +16,8 @@ public class PresetConstants {
     public static double Drive_intakePower = .6;
     public static double Drive_baseTransferPower = .5;
     public static double Drive_transferPower = 0.85 ;
+    public static double Drive_transferPowerFar = 0.7 ;
+
     public static boolean Drive_switchedJoysticks = false;
 
     //FW
