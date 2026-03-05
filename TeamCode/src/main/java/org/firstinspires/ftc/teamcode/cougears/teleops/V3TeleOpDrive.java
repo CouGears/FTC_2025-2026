@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
+
+
 @TeleOp(name="V3Teleop", group="Drive")
 
 public class V3TeleOpDrive extends LinearOpMode {
@@ -68,6 +70,9 @@ public class V3TeleOpDrive extends LinearOpMode {
             }
             if (bot.isHeld(1, Button.DPAD_LEFT) && !PTM.isBusy()){
                 PTM.openGate();
+            }
+            if (bot.isHeld(1, Button.DPAD_UP) && !PTM.isBusy()){
+                PTM.goToHumanLoadZone();
             }
             if (PTM.isBusy()){
                 PTM.updatePosAndMotors();

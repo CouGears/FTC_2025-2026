@@ -109,10 +109,10 @@ public class PedroTeleOpManager {
         Pose gateOpen;
         if (goal.equals("Red")){
             gateInit = Driver_RedGateInit;
-            gateOpen = RedGateOpen;
+            gateOpen = Driver_RedGateOpen;
         } else {
             gateInit = Driver_BlueGateInit;
-            gateOpen = BlueGateOpen;
+            gateOpen = Driver_BlueGateOpen;
         }
         if (!wentToInit){
             moveToPos(gateInit);
@@ -123,13 +123,37 @@ public class PedroTeleOpManager {
             wentToInit = true;
         }
         if (wentToInit){
-            moveToPos(Driver_RedGateOpen);
+            moveToPos(gateOpen);
         }
         if (!isBusy()){
             wentToInit = false;
         }
     }
-
+    public void goToHumanLoadZone(){
+        Pose humanInit;
+        Pose humanPosition;
+        if (goal.equals("Red")){
+            humanInit = RedHumanZoneInit;
+            humanPosition = RedHumanZone;
+        } else {
+            humanInit = BlueHumanZoneInit;
+            humanPosition = BlueHumanZone;
+        }
+        if (!wentToInit){
+            moveToPos(humanInit);
+        }
+        if (Math.abs(follower.getPose().getX()-humanInit.getX()) < xyPoseErrorPTM &&
+                Math.abs(follower.getPose().getY()-humanInit.getY()) < xyPoseErrorPTM &&
+                Math.abs(follower.getPose().getHeading()-humanInit.getHeading()) < headingPoseErrorPTM){
+            wentToInit = true;
+        }
+        if (wentToInit){
+            moveToPos(humanPosition);
+        }
+        if (!isBusy()){
+            wentToInit = false;
+        }
+    }
     public void updatePosAndMotors() { follower.update(); }
     public void updatePos() { follower.updatePose();}
     public boolean isBusy() { return follower.isBusy(); }
