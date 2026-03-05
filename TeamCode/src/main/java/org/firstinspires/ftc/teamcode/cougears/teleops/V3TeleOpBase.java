@@ -45,6 +45,10 @@ public class V3TeleOpBase extends BotBase {
         super(HardwareMap, Telemetry, gamepad1, gamepad2);
     }
 
+    public void setTelemetry(Telemetry t) {
+        this.tele = t;
+    }
+
     public boolean botInit() {
         super.botInit();
         try {

@@ -28,7 +28,7 @@ public class BotBase {
     private static final double MIN_SPEED = -1.0;
 
     public final HardwareMap HM;
-    public final Telemetry tele;
+    public Telemetry tele;
 
     public final GamepadManager GPM_1, GPM_2;
 

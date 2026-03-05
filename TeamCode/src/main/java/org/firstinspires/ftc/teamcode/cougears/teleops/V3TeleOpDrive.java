@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
+import org.firstinspires.ftc.teamcode.cougears.util.PanelsFeatures;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 
@@ -19,7 +20,8 @@ public class V3TeleOpDrive extends LinearOpMode {
     public void runOpMode() {
         V3TeleOpBase bot = new V3TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         PedroTeleOpManager PTM = new PedroTeleOpManager(hardwareMap);
-        // Initialize motors
+        PanelsFeatures panels = new PanelsFeatures(PTM.follower, telemetry);
+        bot.setTelemetry(panels.getTelemetry());
         bot.botInit();
         // Wait for the game to start (driver presses PLAY)
         while (!opModeIsActive()) {
@@ -45,6 +47,7 @@ public class V3TeleOpDrive extends LinearOpMode {
                 bot.RafiDrive(gamepad1, Drive_switchedJoysticks);
                 telemetry.addData("Slowed", "%b", bot.slowed);
             }
+
             telemetry.addData("Assigned Goal", "%s", PTM.getGoal());
 
             //****** AUTON MOVING ******
@@ -57,16 +60,7 @@ public class V3TeleOpDrive extends LinearOpMode {
 
             }
             if (bot.isHeld(1, Button.DPAD_RIGHT) && !PTM.isBusy()){
-                if (PTM.getGoal().equals("Red")){
-                    PTM.moveToPos(RedPark);
-                    telemetry.addData("BotPos", "Traveling to X %.2f", RedPark.getX());
-                    telemetry.addData("BotPos", "Traveling to Y %.2f", RedPark.getY());
-
-                } else {
-                    PTM.moveToPos(BluePark);
-                    telemetry.addData("BotPos", "Traveling to X %.2f", BluePark.getX());
-                    telemetry.addData("BotPos", "Traveling to Y %.2f", BluePark.getY());
-                }
+                PTM.parkRobot();
             }
             if (bot.isHeld(1, Button.DPAD_LEFT) && !PTM.isBusy()){
                 PTM.openGate();
@@ -134,6 +128,7 @@ public class V3TeleOpDrive extends LinearOpMode {
 
 
             bot.update();
+            panels.update();
             sleep(10);
         }
         bot.endTeleOp();
