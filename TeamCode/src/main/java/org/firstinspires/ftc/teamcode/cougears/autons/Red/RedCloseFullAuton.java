@@ -83,7 +83,8 @@ public class RedCloseFullAuton extends OpMode {
                 setPathStep(pathStep.END);
                 break;
             case END:
-                if (bot.endAuton(follower, "Red")){
+                if (!follower.isBusy()) {
+                    bot.endAuton(follower, shootPos.getShootingColor());
                     terminateOpModeNow();
                 }
                 break;

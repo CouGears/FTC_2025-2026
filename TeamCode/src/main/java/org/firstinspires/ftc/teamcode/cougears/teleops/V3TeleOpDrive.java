@@ -52,7 +52,7 @@ public class V3TeleOpDrive extends LinearOpMode {
                 PTM.moveToPos(PTM.getClosestShootingPosition().getShootingPose());
                 telemetry.addData("BotPos", "Traveling to X %.2f", PTM.getClosestShootingPosition().getShootingPose().getX());
                 telemetry.addData("BotPos", "Traveling to Y %.2f", PTM.getClosestShootingPosition().getShootingPose().getY());
-                telemetry.addData("BotPos", "Traveling to Heading %.2f", PTM.getClosestShootingPosition().getShootingPose().getY());
+                telemetry.addData("BotPos", "Traveling to Heading %.2f", Math.toDegrees(PTM.getClosestShootingPosition().getShootingPose().getHeading()));
 
 
             }
@@ -79,7 +79,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             }
             telemetry.addData("BotPos", "Positioned at X %.2f", PTM.getCurrPos().getX());
             telemetry.addData("BotPos", "Positioned at Y %.2f", PTM.getCurrPos().getY());
-            telemetry.addData("BotPos", "Positioned at Heading %.2f", PTM.getCurrPos().getY());
+            telemetry.addData("BotPos", "Positioned at Heading %.2f", Math.toDegrees(PTM.getCurrPos().getHeading()));
 
 
             //****** INTAKE ******

@@ -3,18 +3,18 @@ package org.firstinspires.ftc.teamcode.cougears.testing.Driving;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import org.firstinspires.ftc.teamcode.cougears.teleops.V3TeleOpBase;
+import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-@TeleOp(name = "PosTester", group = "Testing")
-public class PoseTester extends LinearOpMode {
+@TeleOp(name = "PosTesterRed", group = "Testing")
+public class PoseTesterRed extends LinearOpMode {
 
     public static class NamedPose {
         String name;
@@ -31,6 +31,7 @@ public class PoseTester extends LinearOpMode {
         // Initialize your Robot wrapper class
         V3TeleOpBase bot = new V3TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         bot.botInit();
+        bot.openBlocker();
         PedroTeleOpManager PTM = new PedroTeleOpManager(hardwareMap, RedStartPos);
 
         List<NamedPose> targetPositions = new ArrayList<>();
@@ -107,6 +108,19 @@ public class PoseTester extends LinearOpMode {
             if (gamepad1.b || Math.abs(gamepad1.left_stick_y) > 0.1 || Math.abs(gamepad1.left_stick_x) > 0.1 || Math.abs(gamepad1.right_stick_x) > 0.1) {
                 isAutoDriving = false;
                 PTM.breakFollower();
+            }
+
+            if (bot.isHeld(1, GamepadManager.Button.R_TRIGGER)){
+                bot.FWSpinTo(PTM.getClosestShootingPosition().getShootingVelocity());
+            } else {
+                bot.killFW();
+            }
+            if (bot.isHeld(1, GamepadManager.Button.R_BUMPER)){
+                bot.startTransfer();
+                bot.startIntake();
+            } else {
+                bot.killTransfer();
+                bot.killIntake();
             }
 
             // --- Execution ---
