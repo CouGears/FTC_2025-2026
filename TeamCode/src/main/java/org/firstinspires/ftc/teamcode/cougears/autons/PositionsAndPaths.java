@@ -26,7 +26,7 @@ public class PositionsAndPaths {
     public static Pose RedAnchorPoint      = new Pose(135.53125, 8.625, Math.toRadians(0));
 
     // --- Shooting Poses ---
-    public static Pose RedShootTriangleClose = new Pose(96.31,  99.16, Math.toRadians(43.01));
+    public static Pose RedShootTriangleClose = new Pose(90.31,  93.16, Math.toRadians(43.01));
     //93.06,96.54,41.52/92.47,96.48,42.74/92.67,95.31,45.16/91.04,96.21,43.00
     public static Pose RedShootTriangleTip   = new Pose(75.925,  71.235, Math.toRadians(46.455));
     //74.51,71.93,46.10/76.57,72.21,45.20/76.87,69.88,47.31/75.75,70.92,47.21
@@ -44,7 +44,7 @@ public class PositionsAndPaths {
     //106.58,35.73/105.44,35.20/106.52,35.38/106.76,35.66/
     public static Pose RedBallDepotEnd1   = new Pose(126.1075, 84.29,  Math.toRadians(0));
     //127.21/128.12/128.10/129.000/
-    public static Pose RedBallDepotEnd2   = new Pose(133.105, 59.834,  Math.toRadians(0));
+    public static Pose RedBallDepotEnd2   = new Pose(133.105, 57.834,  Math.toRadians(0));
     public static Pose RedBallDepotEnd3   = new Pose(133.105, 37.12,   Math.toRadians(0));
     //132.9/131.26/133.06/131.2/
 
@@ -55,7 +55,7 @@ public class PositionsAndPaths {
     public static Pose Driver_RedGateOpen       = new Pose(123.4, 67.834,  Math.toRadians(-90));
 
 
-    public static Pose RedGateOpen        = new Pose(121.395, 62.7775,   Math.toRadians(-90));
+    public static Pose RedGateOpen        = new Pose(122.895, 62.7775,   Math.toRadians(-90));
     //120.50/119.95/117.78/118.55/
     public static Pose RedGatePickupOpen  = new Pose(135.241, 65.4,  Math.toRadians(34.97));
     public static Pose RedGatePickupInit  = new Pose(129.43, 61.78,  Math.toRadians(34.97));
@@ -75,28 +75,28 @@ public class PositionsAndPaths {
     public static Pose BlueAnchorPoint      = new Pose(8.46875  + posError, 8.625, Math.toRadians(180));
 
     // --- Shooting Poses ---
-    public static Pose BlueShootTriangleClose = new Pose(41.69,  93.16, Math.toRadians(137.5));
-    public static Pose BlueShootTriangleTip   = new Pose(68.075  + posError,  71.235, Math.toRadians(133.545));
-    public static Pose BlueShootWall          = new Pose(63.7  + posError,  121.1, Math.toRadians(167.2));
-    public static Pose BlueShootCenterZone    = new Pose(61.3825  + posError,  120.3, Math.toRadians(160.01));
+    public static Pose BlueShootTriangleClose = new Pose(35.69,  87.16, Math.toRadians(137.5));
+    public static Pose BlueShootTriangleTip   = new Pose(68.075  + posError,  69.235, Math.toRadians(133.545));
+    public static Pose BlueShootWall          = new Pose(63.7  + posError,  119.1, Math.toRadians(167.2));
+    public static Pose BlueShootCenterZone    = new Pose(61.3825  + posError,  118.3, Math.toRadians(160.01));
 
-    public static Pose BlueShootFar           = new Pose(57.9925  + posError,  28.3925, Math.toRadians(115.0775));
+    public static Pose BlueShootFar           = new Pose(57.9925  + posError,  26.3925, Math.toRadians(115.0775));
 
     // --- Ball Depot Poses (Pickup & Scoring) ---
-    public static Pose BlueBallDepotStart1 = new Pose(40.675 + posError,  84.29,  Math.toRadians(180));
-    public static Pose BlueBallDepotStart2 = new Pose(40.675  + posError,  57.834,  Math.toRadians(180));
-    public static Pose BlueBallDepotStart3 = new Pose(40.675  + posError,  37.12,   Math.toRadians(180));
+    public static Pose BlueBallDepotStart1 = new Pose(40.675 + posError,  82.29,  Math.toRadians(180));
+    public static Pose BlueBallDepotStart2 = new Pose(40.675  + posError,  55.834,  Math.toRadians(180));
+    public static Pose BlueBallDepotStart3 = new Pose(40.675  + posError,  35.12,   Math.toRadians(180));
 
-    public static Pose BlueBallDepotEnd1   = new Pose(17.8925  + posError, 84.29,  Math.toRadians(180));
-    public static Pose BlueBallDepotEnd2   = new Pose(10.895  + posError, 57.834,  Math.toRadians(180));
-    public static Pose BlueBallDepotEnd3   = new Pose(10.895  + posError, 37.12,   Math.toRadians(180));
+    public static Pose BlueBallDepotEnd1   = new Pose(17.8925  + posError, 82.29,  Math.toRadians(180));
+    public static Pose BlueBallDepotEnd2   = new Pose(10.895  + posError, 53.834,  Math.toRadians(180));
+    public static Pose BlueBallDepotEnd3   = new Pose(10.895  + posError, 35.12,   Math.toRadians(180));
 
     // --- Gate, Park, and Utility ---
     public static Pose BlueGateInit        = new Pose(5.0, 51.334,  Math.toRadians(315));
     public static Pose Driver_BlueGateInit = new Pose(29.8175 + posError, 75.7775,  Math.toRadians(-90));
     public static Pose Driver_BlueGateOpen = new Pose(23.8175 + posError, 75.7775,  Math.toRadians(-90));
 
-    public static Pose BlueGateOpen        = new Pose(4.0, 54.2775,   Math.toRadians(270)); // or -90
+    public static Pose BlueGateOpen        = new Pose(4.0, 52.7,   Math.toRadians(270)); // or -90
     public static Pose BlueGatePickupOpen  = new Pose(8.759  + posError, 65.4,  Math.toRadians(145.03));
     public static Pose BlueGatePickupInit  = new Pose(14.57  + posError, 61.78,  Math.toRadians(145.03));
     public static Pose BlueBasicEndClose   = new Pose(39  + posError,  77.15, Math.toRadians(135));

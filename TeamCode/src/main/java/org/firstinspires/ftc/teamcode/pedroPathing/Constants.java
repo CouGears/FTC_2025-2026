@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
@@ -18,11 +19,13 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+@Configurable
 public class Constants {
+
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(10.3)
-            .forwardZeroPowerAcceleration(-32.08555567)
-            .lateralZeroPowerAcceleration(-59.65625096)
+            .forwardZeroPowerAcceleration(-24.88458953244806)
+            .lateralZeroPowerAcceleration(-59.39272679442068)
             .translationalPIDFCoefficients(new PIDFCoefficients(.032, 0, .002, .035))
             .headingPIDFCoefficients(new PIDFCoefficients(1, 0, .08, .032))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.001, 0, 0.0005, 0.6, .4))
@@ -52,16 +55,16 @@ public class Constants {
             .leftRearMotorDirection(DcMotorEx.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorEx.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorEx.Direction.FORWARD)
-            .xVelocity(71.87037895)
-            .yVelocity(54.79478875);
+            .xVelocity(79.13283701018086)
+            .yVelocity(60.65817861481914);
 
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-3.5)
-            .strafePodX(-2.25)
+            .forwardPodY(-2)
+            .strafePodX(-3)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
-            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
-            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
+            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD)
+            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
 }
