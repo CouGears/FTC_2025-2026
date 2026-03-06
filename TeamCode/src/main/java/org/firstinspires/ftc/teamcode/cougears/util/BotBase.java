@@ -168,6 +168,9 @@ public class BotBase {
             timers.put(key, new ElapsedTime(startTime));
     }
 
+    public boolean timerExists(String key){
+        return timers.containsKey(key);
+    }
 
     // Need to check if timer exists or nullptr err -E
     public void resetTimer(String key){

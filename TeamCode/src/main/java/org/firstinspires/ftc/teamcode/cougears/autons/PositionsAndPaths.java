@@ -21,8 +21,8 @@ public class PositionsAndPaths {
 
     // --- Starting Poses ---
     public static Pose RedStartPos         = new Pose(104.16333333, 130.81666667, Math.toRadians(-90));
-    public static Pose RedStartPosFar      = new Pose(85.77,   18.73, Math.toRadians(90));
-    //85.12,18.46/85.85,18.42/85.97,18.96/86.14,19.08/
+    public static Pose RedStartPosFar      = new Pose(80.9475,   6.8775, Math.toRadians(90));
+    //79.35,8.01/78.49,7.83/83.19,5.57/82.76,6.1
     public static Pose RedAnchorPoint      = new Pose(135.53125, 8.625, Math.toRadians(0));
 
     // --- Shooting Poses ---
@@ -34,8 +34,8 @@ public class PositionsAndPaths {
     public static Pose RedShootCenterZone    = new Pose(82.6175,  120.3, Math.toRadians(19.99));
     // 82.80,116.28,20.38/83.62,115.30,20.42/82.15,115.14,19.23/81.90,11.41,19.93
 
-    public static Pose RedShootFar           = new Pose(86.0075,  28.3925, Math.toRadians(65.9225));
-    //85.19,28.72,64.96/85.42,28.83,63.77/87.12,27.97,65.66/86.30,28.05,65.30
+    public static Pose RedShootFar           = new Pose(75.855,  12.005, Math.toRadians(66.523));
+    //75.51,11.77/73.35,12.61,66.08/76.90,12.09,66.11/77.66,11.55,67.38/
 
     // --- Ball Depot Poses (Pickup & Scoring) ---
     public static Pose RedBallDepotStart1 = new Pose(94.325,  84.29,  Math.toRadians(0));
@@ -60,7 +60,7 @@ public class PositionsAndPaths {
     public static Pose RedGatePickupOpen  = new Pose(135.241, 65.4,  Math.toRadians(34.97));
     public static Pose RedGatePickupInit  = new Pose(129.43, 61.78,  Math.toRadians(34.97));
     public static Pose RedBasicEndClose   = new Pose(105,  77.15, Math.toRadians(45));
-    public static Pose RedBasicEndFar     = new Pose(94.5 + 20,  18.64, Math.toRadians(45));
+    public static Pose RedBasicEndFar     = new Pose(100,  10.5, Math.toRadians(90));
     public static Pose RedPark            = new Pose(44.649, 17.33, Math.toRadians(0));
 
     public static Pose RedHumanZone        = new Pose(120, 120, 0);

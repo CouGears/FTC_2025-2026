@@ -98,13 +98,18 @@ public class V3TeleOpDrive extends LinearOpMode {
                 bot.ejectTransfer();
                 bot.ejectIntake();
                 telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_ejectionVel);
+                bot.createTimer("RejectIntake");
             } else {
                 bot.killFW();
             }
             telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
             telemetry.addData("Flywheel", "AIMING FOR  vel %d", PTM.getClosestShootingPosition().getShootingVelocity());
 
-
+            if (bot.timerExpired_Seconds("RejectIntake", 2)){
+                bot.startIntake();
+                bot.startTransfer();
+                bot.deleteTimer("RejectIntake");
+            }
 
             //****** SHOOT SEQUENCE (Controller 2)******
             if (bot.isHeld(2, Button.R_TRIGGER)) {
@@ -113,6 +118,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             } else {
                 bot.closeBlocker();
             }
+
 
             if (bot.isHeld(2, Button.R_BUMPER)){
                 if (PTM.getClosestShootingPosition().equals(redShootingPosHashMap.get("RedFar"))){
