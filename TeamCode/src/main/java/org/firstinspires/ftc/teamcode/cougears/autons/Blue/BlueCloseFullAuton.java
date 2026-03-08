@@ -43,7 +43,7 @@ public class BlueCloseFullAuton extends OpMode {
         telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
         switch (currStep) {
             case SHOOT_BALLS:
-                if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
+                if (bot.handleShootingSequence(shootPos, follower, telemetry, false)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
                     if (BDCounter == 2){
                         setPathStep(pathStep.BD_PICKUP2);
                     } else if (BDCounter == 1){

@@ -32,8 +32,8 @@ public class PresetConstants {
     public static double Auton_blockerWait = 200; //time to open gate before shooting
     public static double Auton_gateIntakeWait = 3500;//time to stay at autonGateIntake
     public static double Auton_gateOpenWait = 2500;//time to wait at gate
-    public static double Auton_ballShootSequenceTime = 1000;//time from start shooting to end shooting
-    public static double Auton_startShootingVelocityTolerance = 100;//wait until this velocity before starting to shoot
+    public static double Auton_ballShootSequenceTime = 1100;//time from start shooting to end shooting
+    public static double Auton_startShootingVelocityTolerance = 30;//wait until this velocity before starting to shoot
 
     public static double xyPoseErrorPTM = 0.3;
     public static double headingPoseErrorPTM = Math.toRadians(3);

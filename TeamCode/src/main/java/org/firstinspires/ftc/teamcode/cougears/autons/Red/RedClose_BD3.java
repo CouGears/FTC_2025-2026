@@ -43,7 +43,7 @@ public class RedClose_BD3 extends OpMode {
         }
         switch (currStep) {
             case SHOOT_BALLS:
-                if (bot.handleShootingSequence(shootPos, follower, telemetry)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
+                if (bot.handleShootingSequence(shootPos, follower, telemetry, false)) { // Any step after a step which moves the bot must have this if statement to make sure we dont do anything until the bot is in teh right spot
                     if (BDCounter < numBDToPickup) {
                         setPathStep(pathStep.BD_PICKUP);
                         incrimentedBDCounter = false;

@@ -25,7 +25,7 @@ public class V3AutonBase {
     //initializing toggles
     public boolean IntakeSpinning;
 
-    public Timer blockerTimer, shootSequenceTimer, gateIntakeTimer, openGateTimer;
+    public Timer blockerTimer, shootSequenceTimer, gateIntakeTimer, openGateTimer, farTimer;
 
     HardwareMap HM;
     Telemetry tele;
@@ -37,6 +37,8 @@ public class V3AutonBase {
         shootSequenceTimer = new Timer();
         gateIntakeTimer = new Timer();
         openGateTimer = new Timer();
+        farTimer = new Timer();
+
     }
 
     public boolean botInit() {
@@ -108,6 +110,8 @@ public class V3AutonBase {
     }
     //****** Transfer ******
     public void startTransfer() { Transfer.setPower(Drive_transferPower);}
+    public void startTransferFar() { Transfer.setPower(Drive_transferPowerFar);}
+
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}
 
@@ -149,7 +153,7 @@ public class V3AutonBase {
 
     }
     shootingSequence shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
-    public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower, Telemetry tele){
+    public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower, Telemetry tele, Boolean farShoot){
         tele.addData("Curr Step in handleShootingSequence:", "%s", shootingSequenceSavedStep);
         switch (shootingSequenceSavedStep) {
             case GO_TO_POSITION:
@@ -167,7 +171,15 @@ public class V3AutonBase {
                 break;
             case SHOOT:
                 if (blockerTimer.getElapsedTime() < Auton_blockerWait) return false;
-                startTransfer();
+                if (!(FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance))) return false;
+                if (farShoot) {
+                    farTimer.resetTimer();
+                    if (farTimer.getElapsedTime() < 1000) {
+                        startTransferFar();
+                    }
+                } else {
+                    startTransfer();
+                }
                 startIntake();
                 shootingSequenceSavedStep = shootingSequence.END;
                 shootSequenceTimer.resetTimer();

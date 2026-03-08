@@ -41,7 +41,7 @@ public class RedFar extends OpMode {
         }
         switch (currStep) {
             case SHOOT_BALLS:
-                if (bot.handleShootingSequence(shootPos, follower, telemetry)) {
+                if (bot.handleShootingSequence(shootPos, follower, telemetry, true)) {
                     if (BDCounter > 4 - numBDToPickup) {
                         setPathStep(pathStep.BD_PICKUP);
                         decrimentedBDCounter = false;
