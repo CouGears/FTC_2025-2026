@@ -38,7 +38,7 @@ public class SensorFusionShooting {
 
     fullShootPosAlignSequence fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.FIND_TAG_ID;
 
-    public void handFullShootPosAlignSequence(Follower follower) {
+    public boolean handFullShootPosAlignSequence(Follower follower) {
         int targetTag = redTag;
         double ATbearing = 0.0;
         switch (fullShootPosAlignSequenceSavedStep) {
@@ -51,22 +51,27 @@ public class SensorFusionShooting {
             case GO_TO_POS:
                 ShootingPosition closestPose = PTM.getClosestShootingPosition();
                 PTM.moveToPos(closestPose.getShootingPose());
-                fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.ALIGN_TO_TAG;
+                fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.FIND_TAG_DETAILS;
             case FIND_TAG_DETAILS:
-                if (PTM.isBusy()) return;
+                if (PTM.isBusy()) return false;
                 AprilTagDetection tag = ATM.scanForAT(targetTag);
                 if (tag == null) // BE CAREFUL
-                    return;
+                    return false;
 
                 ATbearing = tag.ftcPose.bearing;
+                fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.ALIGN_TO_TAG;
+
             case ALIGN_TO_TAG:
                 if (Math.abs(ATbearing) <= ATBearingTolerance) {
-                    return;
+                    return false;
                 }
                 double rotatePower = ATbearing*0.05;
                 bot.manualMove(0, 0, -rotatePower);
-                return;
+                return true;
         }
-        return;
+        return false;
+    }
+    public void resetStep(){
+        fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.FIND_TAG_ID;
     }
 }

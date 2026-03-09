@@ -42,6 +42,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (bot.GPM_1.joystickInputFound() && PTM.isBusy()){
                 PTM.breakFollower();
                 breakGoToShootingPos = true;
+                SFS.resetStep();
             }
             if (!PTM.isBusy()) {
                 PTM.updatePos(); // Update w/o motors
@@ -59,7 +60,9 @@ public class V3TeleOpDrive extends LinearOpMode {
                 breakGoToShootingPos = false;
             }
             if (!breakGoToShootingPos){
-                SFS.handFullShootPosAlignSequence(PTM.follower);
+                if (SFS.handFullShootPosAlignSequence(PTM.follower)){
+                    breakGoToShootingPos = true;
+                }
             }
 
             if (bot.isHeld(1, Button.DPAD_RIGHT) && !PTM.isBusy()){
