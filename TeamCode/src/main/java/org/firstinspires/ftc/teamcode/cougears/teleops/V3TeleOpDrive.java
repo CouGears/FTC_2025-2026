@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.PanelsFeatures;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
@@ -22,9 +23,12 @@ public class V3TeleOpDrive extends LinearOpMode {
         V3TeleOpBase bot = new V3TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         PedroTeleOpManager PTM = new PedroTeleOpManager(hardwareMap);
         PanelsFeatures panels = new PanelsFeatures(PTM.follower, telemetry);
-        SensorFusionShooting SFS = new SensorFusionShooting(hardwareMap, telemetry);
+        AprilTagBase ATB = new AprilTagBase(hardwareMap, telemetry);
+        ATB.initAprilTag();
+        SensorFusionShooting SFS = new SensorFusionShooting(hardwareMap, telemetry, ATB, bot);
         bot.setTelemetry(panels.getTelemetry());
         bot.botInit();
+
         boolean breakGoToShootingPos = true;
         // Wait for the game to start (driver presses PLAY)
         while (!opModeIsActive()) {
@@ -60,8 +64,11 @@ public class V3TeleOpDrive extends LinearOpMode {
                 breakGoToShootingPos = false;
             }
             if (!breakGoToShootingPos){
-                if (SFS.handFullShootPosAlignSequence(PTM.follower)){
+                if (SFS.handFullShootPosAlignSequence(PTM)) {
                     breakGoToShootingPos = true;
+                    SFS.resetStep();
+                    PTM.breakFollower();
+
                 }
             }
 
