@@ -5,11 +5,12 @@ import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.PanelsFeatures;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
-
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.SensorFusionShooting;
 
 
 @TeleOp(name="V3Teleop", group="Drive")
@@ -21,8 +22,10 @@ public class V3TeleOpDrive extends LinearOpMode {
         V3TeleOpBase bot = new V3TeleOpBase(hardwareMap, telemetry, gamepad1, gamepad2);
         PedroTeleOpManager PTM = new PedroTeleOpManager(hardwareMap);
         PanelsFeatures panels = new PanelsFeatures(PTM.follower, telemetry);
+        SensorFusionShooting SFS = new SensorFusionShooting(hardwareMap, telemetry);
         bot.setTelemetry(panels.getTelemetry());
         bot.botInit();
+        boolean breakGoToShootingPos = true;
         // Wait for the game to start (driver presses PLAY)
         while (!opModeIsActive()) {
             telemetry.addData("Status", "Initialized");
@@ -38,6 +41,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
             if (bot.GPM_1.joystickInputFound() && PTM.isBusy()){
                 PTM.breakFollower();
+                breakGoToShootingPos = true;
             }
             if (!PTM.isBusy()) {
                 PTM.updatePos(); // Update w/o motors
@@ -52,13 +56,12 @@ public class V3TeleOpDrive extends LinearOpMode {
 
             //****** AUTON MOVING ******
             if (bot.isPressed(1, Button.DPAD_DOWN) && !PTM.isBusy()){
-                PTM.moveToPos(PTM.getClosestShootingPosition().getShootingPose());
-                telemetry.addData("BotPos", "Traveling to X %.2f", PTM.getClosestShootingPosition().getShootingPose().getX());
-                telemetry.addData("BotPos", "Traveling to Y %.2f", PTM.getClosestShootingPosition().getShootingPose().getY());
-                telemetry.addData("BotPos", "Traveling to Heading %.2f", Math.toDegrees(PTM.getClosestShootingPosition().getShootingPose().getHeading()));
-
-
+                breakGoToShootingPos = false;
             }
+            if (!breakGoToShootingPos){
+                SFS.handFullShootPosAlignSequence(PTM.follower);
+            }
+
             if (bot.isHeld(1, Button.DPAD_RIGHT) && !PTM.isBusy()){
                 PTM.parkRobot();
             }

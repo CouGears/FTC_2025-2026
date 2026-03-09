@@ -280,6 +280,8 @@ public class V3AutonBase {
     Pose gateInit = null;
     Pose gateOpen = null;
     Pose preInit = null;
+    Pose unstuckPose = null;
+
     boolean wentToGateOpen = false;
 
     public boolean handleGateIntake(String autonColor, Follower follower, Telemetry tele){
@@ -345,6 +347,7 @@ public class V3AutonBase {
 
         }
     gateOpenSequence gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
+    int unstuckDirection = 0;
     public boolean handleOpenGate(String autonColor, Follower follower, boolean goToPreinit, Telemetry tele){
         tele.addData("Curr Step in handleOpenGate:", "%s", gateOpenSequenceSavedStep);
         switch (gateOpenSequenceSavedStep) {
@@ -354,13 +357,15 @@ public class V3AutonBase {
                     gateInit = RedGateInit;
                     gateOpen = RedGateOpen;
                     preInit = RedBallDepotStart2;
-
+                    unstuckDirection = -1;
                 } else {
                     gateInit = BlueGateInit;
                     gateOpen = BlueGateOpen;
                     preInit = BlueBallDepotStart2;
+                    unstuckDirection = 1;
 
                 }
+                unstuckPose = gateOpen;
                 gateOpenSequenceSavedStep = gateOpenSequence.OPEN_GATE;
                 openGateTimer.resetTimer();
                 break;
@@ -371,6 +376,11 @@ public class V3AutonBase {
                     openGateTimer.resetTimer();
                 }
                 moveToPose(follower, gateOpen);
+                if (follower.isRobotStuck()) {
+                    unstuckPose = new Pose(unstuckPose.getX()+unstuckDirection*unstuckMovementAmount, unstuckPose.getY(), unstuckPose.getHeading());
+                    moveToPose(follower, unstuckPose);
+                    return false;
+                }
                 if (openGateTimer.getElapsedTime() < Auton_gateOpenWait) return false;
 
                 if (!goToPreinit) {

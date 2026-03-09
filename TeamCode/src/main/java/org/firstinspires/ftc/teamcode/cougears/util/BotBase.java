@@ -41,6 +41,13 @@ public class BotBase {
         GPM_2 = new GamepadManager(gamepad2);
     }
 
+    public BotBase (HardwareMap HardwareMap, Telemetry Telemetry) {
+        HM = HardwareMap;
+        tele = Telemetry;
+        GPM_1 = null;
+        GPM_2 = null;
+    }
+
     // ****** MOTORS AND DRIVING ******
     public boolean botInit() {
         try {
