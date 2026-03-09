@@ -119,6 +119,7 @@ public class BlueCloseFullAuton extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        bot.updateStoragePosition(follower);
         stepUpdate();
 
         // Telemetry for debugging
