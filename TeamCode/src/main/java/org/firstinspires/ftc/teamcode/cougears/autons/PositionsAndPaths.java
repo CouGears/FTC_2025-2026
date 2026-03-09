@@ -51,7 +51,7 @@ public class PositionsAndPaths {
     // --- Gate, Park, and Utility ---
     public static Pose RedGateInit        = new Pose(116.4, 57.834,  Math.toRadians(-45.0));
     //115.51,63.12/114.93,62.85/113.57,62.62/112.72,62.52/
-    public static Pose Driver_RedGateInit        = new Pose(120.395, 67.834,  Math.toRadians(-90));
+    public static Pose Driver_RedGateInit        = new Pose(121.395, 67.834,  Math.toRadians(-90));
     public static Pose Driver_RedGateOpen       = new Pose(123.4, 67.834,  Math.toRadians(-90));
 
 
@@ -80,7 +80,7 @@ public class PositionsAndPaths {
 
     // --- Shooting Poses ---
     // RedShootTriangleClose was 0.7606 rad (~43.58 deg) -> Blue is 136.42 deg
-    public static Pose BlueShootTriangleClose = new Pose(47.22125, 91.16, Math.toRadians(136.416));
+    public static Pose BlueShootTriangleClose = new Pose(50.22125, 96.16, Math.toRadians(136.416));
     public static Pose BlueShootTriangleTip   = new Pose(59.60625, 71.235, Math.toRadians(133.545));
     public static Pose BlueShootWall          = new Pose(55.23125, 121.1, Math.toRadians(167.2));
     public static Pose BlueShootCenterZone    = new Pose(52.91375, 120.3, Math.toRadians(160.01));
@@ -123,8 +123,8 @@ public class PositionsAndPaths {
     public static ShootingPosition RedFar = new ShootingPosition(RedShootFar, 1453, "Red");
     public static HashMap<String, ShootingPosition> redShootingPosHashMap= new HashMap<String, ShootingPosition>() {{
         put("RedWall", RedWall);
-        put("RedCenterZone", RedCenterZone);
-        put("RedTriangleTip", RedTriangleTip);
+        //put("RedCenterZone", RedCenterZone);
+        //put("RedTriangleTip", RedTriangleTip);
         put("RedTriangleClose", RedTriangleClose);
         put("RedFar", RedFar);
     }};
@@ -137,8 +137,8 @@ public class PositionsAndPaths {
     public static ShootingPosition BlueFar = new ShootingPosition(BlueShootFar, 1453, "Blue");
     public static HashMap<String, ShootingPosition> blueShootingPosHashMap= new HashMap<String, ShootingPosition>() {{
         put("BlueWall", BlueWall);
-        put("BlueCenterZone", BlueCenterZone);
-        put("BlueTriangleTip", BlueTriangleTip);
+        //put("BlueCenterZone", BlueCenterZone);
+        //put("BlueTriangleTip", BlueTriangleTip);
         put("BlueTriangleClose", BlueTriangleClose);
         put("BlueFar", BlueFar);
     }};

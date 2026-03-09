@@ -173,10 +173,7 @@ public class V3AutonBase {
                 if (blockerTimer.getElapsedTime() < Auton_blockerWait) return false;
                 if (!(FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance))) return false;
                 if (farShoot) {
-                    farTimer.resetTimer();
-                    if (farTimer.getElapsedTime() < 1000) {
-                        startTransferFar();
-                    }
+                    startTransferFar();
                 } else {
                     startTransfer();
                 }
