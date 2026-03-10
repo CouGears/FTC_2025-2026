@@ -399,7 +399,10 @@ public class V3AutonBase {
         return false;
     }
 
+    public void updateStoragePosition(Follower follower){
+        Storage.Storage_endOfAutonPose = follower.getPose();
 
+    }
 
     //****** OTHER ******
     public boolean endAuton(Follower follower, String color){

@@ -42,6 +42,8 @@ public class PresetConstants {
     public static int blueTag = 20;
     public static double ATBearingTolerance = 3;
 
+    public static double DIST_SENSOR_BALL_DISTANCE = 0;
+
     // NAMES
     public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "Intake, Transfer"};
     public static String[] Names_servoNames = {"Transfer"};

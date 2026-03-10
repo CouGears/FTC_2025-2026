@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathBuilder;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
@@ -38,6 +40,19 @@ public class PedroTeleOpManager {
                         .setLinearHeadingInterpolation(follower.getPose().getHeading(), targetPos.getHeading())
                         .build()
         );
+    }
+
+    public void moveToPose(Follower f, Pose... targetPoses) {
+        PathBuilder PB = f.pathBuilder();
+        Pose lastPose = f.getPose();
+        double lastHeading = f.getHeading();
+        for (Pose targetPose : targetPoses) {
+            PB.addPath(new BezierCurve(lastPose, targetPose))
+                    .setLinearHeadingInterpolation(lastHeading, targetPose.getHeading());
+            lastPose = targetPose;
+            lastHeading = targetPose.getHeading();
+        }
+        f.followPath(PB.build());
     }
 
     public ShootingPosition getClosestShootingPosition(){
@@ -102,8 +117,6 @@ public class PedroTeleOpManager {
             moveToPos(BluePark);
         }
     }
-
-    public boolean wentToInit = false;
     public void openGate(){
         Pose gateInit;
         Pose gateOpen;
@@ -114,20 +127,7 @@ public class PedroTeleOpManager {
             gateInit = Driver_BlueGateInit;
             gateOpen = Driver_BlueGateOpen;
         }
-        if (!wentToInit){
-            moveToPos(gateInit);
-        }
-        if (Math.abs(follower.getPose().getX()-gateInit.getX()) < xyPoseErrorPTM &&
-                Math.abs(follower.getPose().getY()-gateInit.getY()) < xyPoseErrorPTM &&
-                Math.abs(follower.getPose().getHeading()-gateInit.getHeading()) < headingPoseErrorPTM){
-            wentToInit = true;
-        }
-        if (wentToInit){
-            moveToPos(gateOpen);
-        }
-        if (!isBusy()){
-            wentToInit = false;
-        }
+        moveToPose(follower, gateInit, gateOpen);
     }
     public void goToHumanLoadZone(){
         Pose humanInit;
@@ -139,21 +139,9 @@ public class PedroTeleOpManager {
             humanInit = BlueHumanZoneInit;
             humanPosition = BlueHumanZone;
         }
-        if (!wentToInit){
-            moveToPos(humanInit);
-        }
-        if (Math.abs(follower.getPose().getX()-humanInit.getX()) < xyPoseErrorPTM &&
-                Math.abs(follower.getPose().getY()-humanInit.getY()) < xyPoseErrorPTM &&
-                Math.abs(follower.getPose().getHeading()-humanInit.getHeading()) < headingPoseErrorPTM){
-            wentToInit = true;
-        }
-        if (wentToInit){
-            moveToPos(humanPosition);
-        }
-        if (!isBusy()){
-            wentToInit = false;
-        }
+        moveToPose(follower, humanInit, humanPosition);
     }
+    public void updateStoragePosition() { Storage.Storage_endOfAutonPose = follower.getPose();}
     public void updatePosAndMotors() { follower.update(); }
     public void updatePos() { follower.updatePose();}
     public boolean isBusy() { return follower.isBusy(); }

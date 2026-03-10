@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.XMultiplier;
+import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.YMultiplier;
+import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.rotationMultiplier;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -13,6 +17,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -26,6 +31,9 @@ public class V3TeleOpBase extends BotBase {
     //Initializing motors
     public DcMotorEx FW, Intake, Transfer;
     public Servo Blocker;
+    public DistanceSensor distSensor;
+
+
     //initializing toggles
     public boolean IntakeSpinning, slowed;
     //intializing speed multplier for slowdrive
@@ -71,6 +79,9 @@ public class V3TeleOpBase extends BotBase {
             Blocker.setPosition(Servo_blockerPos[0]);
 
             pinpoint = HM.get(GoBildaPinpointDriver.class, "pinpoint");
+
+            distSensor = HM.get(DistanceSensor.class, "DistSensor");
+
 
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
@@ -119,7 +130,12 @@ public class V3TeleOpBase extends BotBase {
         IntakeSpinning = false; // So next time you press X it starts spinning in
     }
     //****** Transfer ******
-    public void startTransferSlow() { Transfer.setPower(Drive_baseTransferPower);}
+    public void startTransferSensor() {
+        if (distSensor.getDistance(DistanceUnit.MM) > DIST_SENSOR_BALL_DISTANCE) {
+            Transfer.setPower(Drive_baseTransferPower);
+        }
+
+    }
     public void startTransfer() { Transfer.setPower(Drive_transferPower);}
     public void startTransferFar() { Transfer.setPower(Drive_transferPowerFar);}
 
@@ -155,9 +171,9 @@ public class V3TeleOpBase extends BotBase {
         double forward, strafe, turnInput;
         // --- Driver inputs ---
         if (!switchSticks) {
-            forward = gamepad1.right_stick_y * speedMultiplier;
-            strafe = gamepad1.right_stick_x * speedMultiplier;
-            turnInput = gamepad1.left_stick_x * speedMultiplier;
+            forward = gamepad1.right_stick_y * speedMultiplier * YMultiplier;
+            strafe = gamepad1.right_stick_x * speedMultiplier * XMultiplier;
+            turnInput = gamepad1.left_stick_x * speedMultiplier * rotationMultiplier;
         } else {
             forward = gamepad1.left_stick_y * speedMultiplier;
             strafe = gamepad1.left_stick_x * speedMultiplier;

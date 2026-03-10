@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.cougears.util;
 
+import com.bylazar.camerastream.PanelsCameraStream;
 import com.bylazar.field.FieldManager;
 import com.bylazar.field.PanelsField;
 import com.bylazar.field.Style;
@@ -7,21 +8,29 @@ import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.math.Vector;
 import com.pedropathing.paths.Path;
 import com.pedropathing.util.PoseHistory;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 public class PanelsFeatures {
 
+    // ==================== CONSTANTS ====================
+
     public static final double ROBOT_RADIUS = 9;
+
+    // ==================== FIELDS ====================
+
+    public Follower follower;
+    public JoinedTelemetry joinedTelemetry;
 
     private final Style robotStyle = new Style("", "#3F51B5", 0.75);
     private final Style historyStyle = new Style("", "#4CAF50", 0.75);
     private final FieldManager field = PanelsField.INSTANCE.getField();
-    public Follower follower;
-    public JoinedTelemetry joinedTelemetry;
+    private boolean cameraStreamActive = false;
+
+    // ==================== CONSTRUCTOR ====================
 
     public PanelsFeatures(Follower follower, Telemetry telemetry) {
         this.follower = follower;
@@ -29,9 +38,42 @@ public class PanelsFeatures {
         field.setOffsets(PanelsField.INSTANCE.getPresets().getPEDRO_PATHING());
     }
 
+    // ==================== TELEMETRY ====================
+
     public Telemetry getTelemetry() {
         return joinedTelemetry;
     }
+
+    // ==================== CAMERA STREAM ====================
+
+    private PanelsCameraStream cameraStream;
+
+    public void startCameraStream(VisionPortal visionPortal) {
+        if (visionPortal == null) return;
+        cameraStream = PanelsCameraStream.INSTANCE;
+        cameraStream.startStream(visionPortal, 30);
+        cameraStreamActive = true;
+    }
+
+    public void stopCameraStream() {
+        if (cameraStream != null) {
+            cameraStream.stopStream();
+            cameraStreamActive = false;
+        }
+    }
+
+    public boolean isCameraStreamActive() {
+        return cameraStreamActive;
+    }
+
+    // ==================== UPDATE ====================
+
+    public void update() {
+        draw();
+        joinedTelemetry.update();
+    }
+
+    // ==================== DRAWING ====================
 
     public void drawOnlyCurrent() {
         drawRobot(follower.getPose(), robotStyle);
@@ -50,49 +92,25 @@ public class PanelsFeatures {
                     )), robotStyle);
         }
         drawPoseHistory(follower.getPoseHistory(), historyStyle);
-        drawRobot(follower.getPose(), robotStyle); // always draw robot
+        drawRobot(follower.getPose(), robotStyle);
         field.update();
-    }
-
-    public void stopRobot() {
-        follower.startTeleopDrive(true);
-        follower.setTeleOpDrive(0, 0, 0, true);
-    }
-
-    public void log(String message) {
-        joinedTelemetry.addData("Debug", message);
-    }
-
-    public void logPose() {
-        joinedTelemetry.addData("x", follower.getPose().getX());
-        joinedTelemetry.addData("y", follower.getPose().getY());
-        joinedTelemetry.addData("heading", follower.getPose().getHeading());
-    }
-
-    public void update() {
-        draw();
-        joinedTelemetry.update();
     }
 
     private void drawRobot(Pose pose, Style style) {
         if (pose == null || Double.isNaN(pose.getX())
                 || Double.isNaN(pose.getY()) || Double.isNaN(pose.getHeading())) return;
 
-        // Robot dimensions
-        double halfW = (144 - 135.53125); // half width  = 8.46875
-        double halfH = 8.625;             // half height
-
+        double halfW = (144 - 135.53125);
+        double halfH = 8.625;
         double heading = pose.getHeading();
         double cosH = Math.cos(heading);
         double sinH = Math.sin(heading);
 
-        // Rotate a local point to field coords
-        // Local: x = forward, y = left
         double[][] localCorners = {
-                { halfH,  halfW},  // front-left
-                { halfH, -halfW},  // front-right
-                {-halfH, -halfW},  // back-right
-                {-halfH,  halfW},  // back-left
+                { halfH,  halfW},
+                { halfH, -halfW},
+                {-halfH, -halfW},
+                {-halfH,  halfW},
         };
 
         double[][] world = new double[4][2];
@@ -101,7 +119,6 @@ public class PanelsFeatures {
             world[i][1] = pose.getY() + localCorners[i][0] * sinH + localCorners[i][1] * cosH;
         }
 
-        // Draw rectangle
         field.setStyle(style);
         for (int i = 0; i < 4; i++) {
             int next = (i + 1) % 4;
@@ -109,21 +126,16 @@ public class PanelsFeatures {
             field.line(world[next][0], world[next][1]);
         }
 
-        // Arrow: from center back to front tip, with two winglets
         double tipX = pose.getX() + halfH * cosH;
         double tipY = pose.getY() + halfH * sinH;
-
         double midX = pose.getX();
         double midY = pose.getY();
-
-        // Winglet points (halfway up, offset sideways)
         double wingSize = halfW * 0.8;
-        double wingX1 = midX + (-wingSize) * (-sinH); // left wing
+        double wingX1 = midX + (-wingSize) * (-sinH);
         double wingY1 = midY + (-wingSize) * cosH;
-        double wingX2 = midX + wingSize * (-sinH);    // right wing
+        double wingX2 = midX + wingSize * (-sinH);
         double wingY2 = midY + wingSize * cosH;
 
-        // Draw arrow
         field.moveCursor(wingX1, wingY1);
         field.line(tipX, tipY);
         field.moveCursor(wingX2, wingY2);
