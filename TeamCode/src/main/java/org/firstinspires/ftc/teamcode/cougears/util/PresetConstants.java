@@ -34,6 +34,8 @@ public class PresetConstants {
     public static double Auton_gateOpenWait = 2500;//time to wait at gate
     public static double Auton_ballShootSequenceTime = 1100;//time from start shooting to end shooting
     public static double Auton_startShootingVelocityTolerance = 30;//wait until this velocity before starting to shoot
+    public static double Auton_gateWaitTime = 2000;
+
     public static double unstuckMovementAmount = 0.1;
     public static double xyPoseErrorPTM = 0.3;
     public static double headingPoseErrorPTM = Math.toRadians(3);
@@ -42,7 +44,10 @@ public class PresetConstants {
     public static int blueTag = 20;
     public static double ATBearingTolerance = 3;
 
-    public static double DIST_SENSOR_BALL_DISTANCE = 0;
+    public static double DIST_SENSOR_BALL_DISTANCE1 = 0;
+    public static double DIST_SENSOR_BALL_DISTANCE2 = 0;
+    public static double DIST_SENSOR_BALL_DISTANCE3 = 0;
+
 
     // NAMES
     public static String[] Names_motorNames = {"motorFL", "motorFR", "motorBL", "motorBR", "FW", "Intake, Transfer"};

@@ -41,11 +41,17 @@ public class PositionsAndPaths {
     public static Pose RedBallDepotStart1 = new Pose(94.325,  84.29,  Math.toRadians(0));
     public static Pose RedBallDepotStart2 = new Pose(94.325,  57.834,  Math.toRadians(0));
     public static Pose RedBallDepotStart3 = new Pose(94.325,  36.12,   Math.toRadians(0));
+    public static Pose RedBallDepotStart4 = new Pose(131.96,  23.38,   Math.toRadians(-45));
+
+
     //106.58,35.73/105.44,35.20/106.52,35.38/106.76,35.66/
     public static Pose RedBallDepotEnd1   = new Pose(120.1075, 83.29,  Math.toRadians(0));
     //127.21/128.12/128.10/129.000/
     public static Pose RedBallDepotEnd2   = new Pose(124.105, 57.834,  Math.toRadians(0));
     public static Pose RedBallDepotEnd3   = new Pose(125.105, 36.12,   Math.toRadians(0));
+    public static Pose RedBallDepotEnd4 = new Pose(135.64,  9.37,   Math.toRadians(-90));
+
+
     //132.9/131.26/133.06/131.2/
 
     // --- Gate, Park, and Utility ---
@@ -65,8 +71,8 @@ public class PositionsAndPaths {
 
     public static Pose RedHumanZone        = new Pose(40, 10.47, 0);
     public static Pose RedHumanZoneInit        = new Pose(40, 10.47, 0);
+    public static Pose RedWaitByHumanZone   = new Pose(95.25, 10.47,     Math.toRadians(90));
 
-    // 42.05,31.13/42.07,31.25/39.13,32.79/38.62,30.08
 
 // ==========================================================
     //             BLUE POSITIONS (Mirroring Red)
@@ -90,17 +96,21 @@ public class PositionsAndPaths {
     public static Pose BlueBallDepotStart1 = new Pose(41.20625, 84.29,  Math.toRadians(180));
     public static Pose BlueBallDepotStart2 = new Pose(41.20625, 56.834, Math.toRadians(180));
     public static Pose BlueBallDepotStart3 = new Pose(41.20625, 36.12,  Math.toRadians(180));
+    public static Pose BlueBallDepotStart4 = new Pose(135-131.96,  23.38,   Math.toRadians(-45));
+
 
     public static Pose BlueBallDepotEnd1   = new Pose(15.42375, 83.29,  Math.toRadians(180));
     public static Pose BlueBallDepotEnd2   = new Pose(11.42625, 56.834, Math.toRadians(180));
     public static Pose BlueBallDepotEnd3   = new Pose(10.42625, 36.12,  Math.toRadians(180));
+    public static Pose BlueBallDepotEnd4 = new Pose(135-135.64,  9.37,   Math.toRadians(-90));
+
 
     // --- Gate, Park, and Utility ---
     public static Pose BlueGateInit        = new Pose(18.13125, 57.834,  Math.toRadians(225.0));
+    public static Pose BlueGateOpen        = new Pose(14.93625, 61.7775, Math.toRadians(270));
     public static Pose Driver_BlueGateInit = new Pose(15.13625, 67.834,  Math.toRadians(270));
     public static Pose Driver_BlueGateOpen = new Pose(12.13125, 67.834,  Math.toRadians(270));
 
-    public static Pose BlueGateOpen        = new Pose(14.93625, 61.7775, Math.toRadians(270));
     public static Pose BlueGatePickupOpen  = new Pose(0.29025,  65.4,     Math.toRadians(145.03));
     public static Pose BlueGatePickupInit  = new Pose(6.10125,  61.78,    Math.toRadians(145.03));
 
@@ -108,8 +118,10 @@ public class PositionsAndPaths {
     public static Pose BlueBasicEndFar     = new Pose(20.0, 18.0,   Math.toRadians(90));
     public static Pose BluePark            = new Pose(90.88225, 17.33,   Math.toRadians(180));
 
-    public static Pose BlueHumanZone       = new Pose(95.25, 10.47,     Math.toRadians(0.0));
-    public static Pose BlueHumanZoneInit   = new Pose(95.25, 10.47,     Math.toRadians(0.0));
+    public static Pose BlueHumanZone       = new Pose(20, 10.47,     Math.toRadians(0.0));
+    public static Pose BlueHumanZoneInit   = new Pose(20, 10.47,     Math.toRadians(0.0));
+    public static Pose BlueWaitByHumanZone   = new Pose(20, 10.47,     Math.toRadians(90));
+
     // 85.30,30.63/87.22,30.95/87.29,31.92
 
 

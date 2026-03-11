@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.XMultiplier;
 import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.YMultiplier;
 import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.rotationMultiplier;
@@ -8,7 +7,6 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,20 +16,17 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager;
+import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
+import com.qualcomm.robotcore.hardware.LED;
 
 
-public class V3TeleOpBase extends BotBase {
-    PedroTeleOpManager PTM = new PedroTeleOpManager(HM);
-    //Initializing motors
+public class V3TeleOpBase extends BotBase { //Initializing motors
     public DcMotorEx FW, Intake, Transfer;
     public Servo Blocker;
-    public DistanceSensor distSensor;
 
 
     //initializing toggles
@@ -80,9 +75,6 @@ public class V3TeleOpBase extends BotBase {
 
             pinpoint = HM.get(GoBildaPinpointDriver.class, "pinpoint");
 
-            distSensor = HM.get(DistanceSensor.class, "DistSensor");
-
-
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
             tele.addData("ERROR MSG:", e);
@@ -130,11 +122,12 @@ public class V3TeleOpBase extends BotBase {
         IntakeSpinning = false; // So next time you press X it starts spinning in
     }
     //****** Transfer ******
-    public void startTransferSensor() {
-        if (distSensor.getDistance(DistanceUnit.MM) > DIST_SENSOR_BALL_DISTANCE) {
+    public void smartStartTransfer(Boolean ballDetected) {
+        if (ballDetected) {
             Transfer.setPower(Drive_baseTransferPower);
+        } else {
+            killTransfer();
         }
-
     }
     public void startTransfer() { Transfer.setPower(Drive_transferPower);}
     public void startTransferFar() { Transfer.setPower(Drive_transferPowerFar);}
@@ -142,10 +135,9 @@ public class V3TeleOpBase extends BotBase {
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}
 
-    //****** SHOOTING ******
+    //***SENSORs
 
-
-    //****** OTHER ******
+            //****** OTHER ******
     public void endTeleOp(){
         super.endTeleOp();
         FW.setPower(0);

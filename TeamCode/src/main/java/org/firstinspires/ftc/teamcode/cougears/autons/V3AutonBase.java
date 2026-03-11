@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.cougears.autons;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
+import android.hardware.Sensor;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.paths.PathBuilder;
@@ -15,6 +17,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 
 
@@ -25,10 +28,11 @@ public class V3AutonBase {
     //initializing toggles
     public boolean IntakeSpinning;
 
-    public Timer blockerTimer, shootSequenceTimer, gateIntakeTimer, openGateTimer, farTimer;
+    public Timer blockerTimer, shootSequenceTimer, gateIntakeTimer, openGateTimer, farTimer, gateWaitTimer;
 
     HardwareMap HM;
     Telemetry tele;
+    SensorFusionManager SFM;
 
     public V3AutonBase(HardwareMap HardwareMap, Telemetry Telemetry) {
         HM = HardwareMap;
@@ -38,7 +42,8 @@ public class V3AutonBase {
         gateIntakeTimer = new Timer();
         openGateTimer = new Timer();
         farTimer = new Timer();
-
+        gateWaitTimer = new Timer();
+        SFM = new SensorFusionManager(HM, tele);
     }
 
     public boolean botInit() {
@@ -219,6 +224,9 @@ public class V3AutonBase {
                             targetDepotStart = RedBallDepotStart3;
                             targetDepotEnd = RedBallDepotEnd3;
                             break;
+                        case 4:
+                            targetDepotStart = RedBallDepotStart4;
+                            targetDepotEnd = RedBallDepotEnd4;
                     }
                 } else {
                     switch (depotNum) {
@@ -234,6 +242,9 @@ public class V3AutonBase {
                             targetDepotStart = BlueBallDepotStart3;
                             targetDepotEnd = BlueBallDepotEnd3;
                             break;
+                        case 4:
+                            targetDepotStart = BlueBallDepotStart4;
+                            targetDepotEnd = BlueBallDepotEnd4;
                     }
                 }
                 pickUpBallsSavedStep = pickUpBalls.MOVE_TO_START;
@@ -398,7 +409,40 @@ public class V3AutonBase {
         }
         return false;
     }
-
+    public enum gateWait{
+        FIND_GATEWAIT,
+        GO_TO_GATEWAIT,
+        CHECK_TO_LEAVE
+    }
+    gateWait gateWaitSavedStep = gateWait.FIND_GATEWAIT;
+    Pose gateWaitPos;
+    public boolean handleGateWait(String autonColor, Follower follower, Telemetry tele){
+        tele.addData("Curr Step in gateWait:", "%s", gateWaitSavedStep);
+        switch (gateWaitSavedStep){
+            case FIND_GATEWAIT:
+                if (autonColor.equals("Red")){
+                    gateWaitPos = RedWaitByHumanZone;
+                } else {
+                    gateWaitPos = BlueWaitByHumanZone;
+                }
+                gateWaitSavedStep = gateWait.GO_TO_GATEWAIT;
+                break;
+            case GO_TO_GATEWAIT:
+                moveToPose(follower, gateWaitPos);
+                gateWaitTimer.resetTimer();
+                gateWaitSavedStep = gateWait.CHECK_TO_LEAVE;
+                break;
+            case CHECK_TO_LEAVE:
+                if (!(SFM.ballInPosition().equals(SensorFusionManager.ballState.NO_BALLS))){
+                    if (gateWaitTimer.getElapsedTime() > Auton_gateWaitTime){
+                        return true;
+                    }
+                    gateWaitSavedStep = gateWait.FIND_GATEWAIT;
+                    break;
+                }
+        }
+        return false;
+    }
     public void updateStoragePosition(Follower follower){
         Storage.Storage_endOfAutonPose = follower.getPose();
 

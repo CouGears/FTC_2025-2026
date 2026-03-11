@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.PanelsFeatures;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
-import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.SensorFusionManager;
+import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
 
 
 @TeleOp(name="V3Teleop", group="Drive")
@@ -34,7 +34,8 @@ public class V3TeleOpDrive extends LinearOpMode {
         bot.setTelemetry(panels.getTelemetry());
         telemetry = panels.getTelemetry();
 
-        boolean breakGoToShootingPos = true;
+        boolean resetGoToShootingPos = true;
+        boolean alignedRobot = false;
 
         while (!opModeIsActive()) {
             telemetry.addData("Status", "Initialized");
@@ -43,7 +44,6 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (gamepad1.xWasPressed())
                 Drive_switchedJoysticks = !Drive_switchedJoysticks;
             telemetry.update();
-
         }
 
         while (opModeIsActive()) {
@@ -52,7 +52,8 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
             if (bot.GPM_1.joystickInputFound()){
                 PTM.breakFollower();
-                breakGoToShootingPos = true;
+                resetGoToShootingPos = true;
+                alignedRobot = false;
                 SFM.resetStep();
             }
             if (!PTM.isBusy()) {
@@ -68,12 +69,13 @@ public class V3TeleOpDrive extends LinearOpMode {
 
             //****** AUTON MOVING ******
             if (bot.isPressed(1, Button.DPAD_DOWN) && !PTM.isBusy()){
-                breakGoToShootingPos = false;
+                resetGoToShootingPos = false;
             }
-            if (!breakGoToShootingPos){
+            if (!resetGoToShootingPos){
                 if (SFM.handFullShootPosAlignSequence(PTM)) {
-                    breakGoToShootingPos = true;
-                    SFM.resetStep();
+                    alignedRobot = true;
+                } else {
+                    alignedRobot = false;
                 }
             }
 
@@ -98,7 +100,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (bot.isPressed(1, Button.X)) {
                 bot.deleteTimer("RejectIntake");
                 if (!bot.IntakeSpinning) {
-                    bot.startTransferSensor();
+                    bot.smartStartTransfer(SFM.ballInPosition().equals(SensorFusionManager.ballState.ONE_BALL));
                     bot.startIntake();
                 } else {
                     bot.killTransfer();
@@ -124,7 +126,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("Flywheel", "AIMING FOR  vel %d", PTM.getClosestShootingPosition().getShootingVelocity());
 
             if (bot.timerExpired_Seconds("RejectIntake", 2)){
-                bot.startTransferSensor();
+                bot.smartStartTransfer(SFM.ballInPosition().equals(SensorFusionManager.ballState.ONE_BALL));
                 bot.startIntake();
                 bot.deleteTimer("RejectIntake");
             }
@@ -154,6 +156,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             bot.update();
             panels.update();
             sleep(10);
+            SFM.handleLEDS(PTM, alignedRobot);
         }
         bot.endTeleOp();
     }
