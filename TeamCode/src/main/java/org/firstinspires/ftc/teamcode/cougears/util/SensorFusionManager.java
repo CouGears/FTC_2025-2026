@@ -97,9 +97,9 @@ public class SensorFusionManager {
     }
 
     public boolean sensorDetectingBall(int position){
-        if (distSensor1.getDistance(DistanceUnit.CM) > DIST_SENSOR_BALL_DISTANCE1 && position == 1) return true;
-        if (distSensor2.getDistance(DistanceUnit.CM) > DIST_SENSOR_BALL_DISTANCE2 && position == 2) return true;
-        if (distSensor3.getDistance(DistanceUnit.CM) > DIST_SENSOR_BALL_DISTANCE3 && position == 3) return true;
+        if (distSensor1.getDistance(DistanceUnit.CM) < DIST_SENSOR_BALL_DISTANCE1 && position == 1) return true;
+        if (distSensor2.getDistance(DistanceUnit.CM) < DIST_SENSOR_BALL_DISTANCE2 && position == 2) return true;
+        if (distSensor3.getDistance(DistanceUnit.CM) < DIST_SENSOR_BALL_DISTANCE3 && position == 3) return true;
         return false;
     }
 
@@ -111,11 +111,14 @@ public class SensorFusionManager {
     }
 
     public ballState ballInPosition(){
-        if (sensorDetectingBall(1)&&sensorDetectingBall(2)&&sensorDetectingBall(3)){
+        boolean pos1 = sensorDetectingBall(1);
+        boolean pos2 = sensorDetectingBall(2);
+        boolean pos3 = sensorDetectingBall(3);
+        if (pos1&&pos2&&pos3){
             return ballState.THREE_BALLS;
-        } else if (sensorDetectingBall(1)&&sensorDetectingBall(2)&&!sensorDetectingBall(3)){
+        } else if (pos1 && pos2){
             return ballState.TWO_BALLS;
-        }else if (sensorDetectingBall(1)&&!sensorDetectingBall(2)&&!sensorDetectingBall(3)){
+        }else if (pos1 && !pos3){
             return ballState.ONE_BALL;
         } else {
             return ballState.NO_BALLS;
@@ -125,8 +128,8 @@ public class SensorFusionManager {
     //****** LED ******
     public void handleLEDS(PedroTeleOpManager PTM, Boolean botAligned) {
         FWVelLED(PTM, bot.FW.getVelocity());
-        ballPositionLED();
-        botAlignedLED(botAligned);
+        //ballPositionLED();
+        //botAlignedLED(botAligned);
     }
     public void FWVelLED(PedroTeleOpManager PTM, double FWVel) {
         double shootVelThirds = (double) (PTM.getClosestShootingPosition().getShootingVelocity() / 3);

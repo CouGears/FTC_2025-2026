@@ -44,9 +44,14 @@ public class PresetConstants {
     public static int blueTag = 20;
     public static double ATBearingTolerance = 3;
 
-    public static double DIST_SENSOR_BALL_DISTANCE1 = 0;
-    public static double DIST_SENSOR_BALL_DISTANCE2 = 0;
-    public static double DIST_SENSOR_BALL_DISTANCE3 = 0;
+    public static double DIST_SENSOR_BALL_DISTANCE1 = 14;
+    public static double DIST_SENSOR_BALL_DISTANCE2 = 14;
+    public static double DIST_SENSOR_BALL_DISTANCE3 = 14;
+
+    public static double driverHeadingCorrectionThreshhold = 5;
+    public static  double HEADING_kP = 0.002;
+    public static  double HEADING_MAX_CORRECTION = 0.08;
+
 
 
     // NAMES

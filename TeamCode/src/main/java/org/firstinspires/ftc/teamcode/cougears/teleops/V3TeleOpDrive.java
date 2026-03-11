@@ -49,6 +49,7 @@ public class V3TeleOpDrive extends LinearOpMode {
         while (opModeIsActive()) {
             //****** DRIVE (Controller 1)******
             PTM.updateStoragePosition();
+            //SensorFusionManager.ballState currentBallState = SFM.ballInPosition();
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
             if (bot.GPM_1.joystickInputFound()){
                 PTM.breakFollower();
@@ -72,11 +73,7 @@ public class V3TeleOpDrive extends LinearOpMode {
                 resetGoToShootingPos = false;
             }
             if (!resetGoToShootingPos){
-                if (SFM.handFullShootPosAlignSequence(PTM)) {
-                    alignedRobot = true;
-                } else {
-                    alignedRobot = false;
-                }
+                alignedRobot = SFM.handFullShootPosAlignSequence(PTM);
             }
 
             if (bot.isHeld(1, Button.DPAD_RIGHT) && !PTM.isBusy()){
@@ -100,7 +97,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (bot.isPressed(1, Button.X)) {
                 bot.deleteTimer("RejectIntake");
                 if (!bot.IntakeSpinning) {
-                    bot.smartStartTransfer(SFM.ballInPosition().equals(SensorFusionManager.ballState.ONE_BALL));
+                    bot.startTransfer();
                     bot.startIntake();
                 } else {
                     bot.killTransfer();
@@ -126,7 +123,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("Flywheel", "AIMING FOR  vel %d", PTM.getClosestShootingPosition().getShootingVelocity());
 
             if (bot.timerExpired_Seconds("RejectIntake", 2)){
-                bot.smartStartTransfer(SFM.ballInPosition().equals(SensorFusionManager.ballState.ONE_BALL));
+                bot.startTransfer();
                 bot.startIntake();
                 bot.deleteTimer("RejectIntake");
             }
@@ -156,7 +153,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             bot.update();
             panels.update();
             sleep(10);
-            SFM.handleLEDS(PTM, alignedRobot);
+            //SFM.handleLEDS(PTM, alignedRobot);
         }
         bot.endTeleOp();
     }
