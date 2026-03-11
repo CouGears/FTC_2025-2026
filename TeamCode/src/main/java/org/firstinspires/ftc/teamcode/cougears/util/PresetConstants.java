@@ -47,6 +47,7 @@ public class PresetConstants {
     public static double DIST_SENSOR_BALL_DISTANCE1 = 14;
     public static double DIST_SENSOR_BALL_DISTANCE2 = 14;
     public static double DIST_SENSOR_BALL_DISTANCE3 = 14;
+    public static double Sensor_distSensorWait = .500;
 
     public static double driverHeadingCorrectionThreshhold = 5;
     public static  double HEADING_kP = 0.002;

@@ -416,6 +416,7 @@ public class V3AutonBase {
     }
     gateWait gateWaitSavedStep = gateWait.FIND_GATEWAIT;
     Pose gateWaitPos;
+
     public boolean handleGateWait(String autonColor, Follower follower, Telemetry tele){
         tele.addData("Curr Step in gateWait:", "%s", gateWaitSavedStep);
         switch (gateWaitSavedStep){

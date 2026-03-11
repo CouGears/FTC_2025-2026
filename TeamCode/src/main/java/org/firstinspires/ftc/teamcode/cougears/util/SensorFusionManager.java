@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.cougears.util;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.LED;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -104,21 +105,31 @@ public class SensorFusionManager {
     }
 
     public enum ballState{
+        WAITING_TO_READ,
         NO_BALLS,
         ONE_BALL,
         TWO_BALLS,
         THREE_BALLS
     }
 
+    ElapsedTime distSensorrTimer = new ElapsedTime();
     public ballState ballInPosition(){
-        boolean pos1 = sensorDetectingBall(1);
-        boolean pos2 = sensorDetectingBall(2);
-        boolean pos3 = sensorDetectingBall(3);
-        if (pos1&&pos2&&pos3){
+        boolean pos1 = false;
+        boolean pos2 = false;
+        boolean pos3 = false;
+        if (distSensorrTimer.milliseconds() >= Sensor_distSensorWait) {
+            pos1 = sensorDetectingBall(1);
+            pos2 = sensorDetectingBall(2);
+            pos3 = sensorDetectingBall(3);
+            distSensorrTimer.reset();
+        } else {
+            return ballState.WAITING_TO_READ;
+        }
+        if (pos1 && pos2 && pos3) {
             return ballState.THREE_BALLS;
-        } else if (pos1 && pos2){
+        } else if (pos1 && pos2) {
             return ballState.TWO_BALLS;
-        }else if (pos1 && !pos3){
+        } else if (pos1 && !pos3) {
             return ballState.ONE_BALL;
         } else {
             return ballState.NO_BALLS;
