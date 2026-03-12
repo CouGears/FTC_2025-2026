@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.Driver_BlueGateInit_Backwards;
 import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.*;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
@@ -121,11 +122,21 @@ public class PedroTeleOpManager {
         Pose gateInit;
         Pose gateOpen;
         if (goal.equals("Red")){
-            gateInit = Driver_RedGateInit;
-            gateOpen = Driver_RedGateOpen;
+            if (follower.getPose().getHeading() < 0 && follower.getPose().getHeading() > -180 ){
+                gateInit = Driver_RedGateInit;
+                gateOpen = Driver_RedGateOpen;
+            } else {
+                gateInit = Driver_RedGateInit_Backwards;
+                gateOpen = Driver_RedGateOpen_Backwards;
+            }
         } else {
-            gateInit = Driver_BlueGateInit;
-            gateOpen = Driver_BlueGateOpen;
+            if (follower.getPose().getHeading() < 0 && follower.getPose().getHeading() > -180 ){
+                gateInit = Driver_BlueGateInit;
+                gateOpen = Driver_BlueGateOpen;
+            } else {
+                gateInit = Driver_BlueGateInit_Backwards;
+                gateOpen = Driver_BlueGateOpen_Backwards;
+            }
         }
         moveToPose(follower, gateInit, gateOpen);
     }
