@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.cougears.teleops;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
+import static java.sql.Types.NULL;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -51,7 +53,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             PTM.updateStoragePosition();
             //SensorFusionManager.ballState currentBallState = SFM.ballInPosition();
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
-            if (bot.GPM_1.joystickInputFound()){
+            if (bot.GPM_1 != null && bot.GPM_1.joystickInputFound()){
                 if (PTM.isBusy()) {
                     PTM.breakFollower();
                 }
@@ -76,6 +78,10 @@ public class V3TeleOpDrive extends LinearOpMode {
             }
             if (!resetGoToShootingPos){
                 alignedRobot = SFM.handFullShootPosAlignSequence(PTM);
+                if (alignedRobot) {
+                    SFM.resetStep();
+                    resetGoToShootingPos = true;
+                }
             }
 
             if (bot.isHeld(1, Button.DPAD_RIGHT) && !PTM.isBusy()){
@@ -151,7 +157,7 @@ public class V3TeleOpDrive extends LinearOpMode {
                 bot.killTransfer();
             }
 
-
+            telemetry.addLine(SFM.getTagData());
             bot.update();
             panels.update();
             sleep(10);

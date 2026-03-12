@@ -84,11 +84,10 @@ public class SensorFusionManager {
                 if (tag == null) return false;
                 ATbearing = tag.ftcPose.bearing;
                 if (Math.abs(ATbearing) <= ATBearingTolerance) {
-                    fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.FIND_TAG_ID;
                     return true;
                 }
-                rotatePower = ATbearing * 0.05;
-                bot.manualMove(0, 0, -rotatePower);
+                rotatePower = ATbearing * Auton_ATAlignemntPower;
+                bot.manualMove(0, 0, rotatePower);
             return false;
         }
         return false;
@@ -148,10 +147,10 @@ public class SensorFusionManager {
             greenLED1.on();
             redLED1.off();
         } else if (FWVel > shootVelThirds * 2 - Auton_startShootingVelocityTolerance) {
-            greenLED1.off();
+            greenLED1.on();
             redLED1.on();
         } else if (FWVel > shootVelThirds - Auton_startShootingVelocityTolerance) {
-            greenLED1.on();
+            greenLED1.off();
             redLED1.on();
         } else {
             greenLED1.off();
@@ -182,6 +181,25 @@ public class SensorFusionManager {
             greenLED3.off();
             redLED3.on();
         }
+    }
+
+    public String getTagData(){
+        AprilTagDetection tag;
+        String returnMsg = "RED | Blue Bearings \n";
+        AprilTagDetection RedTag = ATB.scanForAT(redTag);
+        AprilTagDetection BlueTag = ATB.scanForAT(blueTag);
+        if (RedTag != null){
+            returnMsg += " " + RedTag.ftcPose.bearing;
+        } else {
+            returnMsg += "NO RED TAG | ";
+        }
+        if (BlueTag != null){
+            returnMsg += " " + BlueTag.ftcPose.bearing;
+        } else {
+            returnMsg += "NO BLUE TAG";
+        }
+        return returnMsg;
+
     }
 
 }
