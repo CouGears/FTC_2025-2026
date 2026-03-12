@@ -52,7 +52,9 @@ public class V3TeleOpDrive extends LinearOpMode {
             //SensorFusionManager.ballState currentBallState = SFM.ballInPosition();
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
             if (bot.GPM_1.joystickInputFound()){
-                PTM.breakFollower();
+                if (PTM.isBusy()) {
+                    PTM.breakFollower();
+                }
                 resetGoToShootingPos = true;
                 alignedRobot = false;
                 SFM.resetStep();
@@ -153,7 +155,7 @@ public class V3TeleOpDrive extends LinearOpMode {
             bot.update();
             panels.update();
             sleep(10);
-            //SFM.handleLEDS(PTM, alignedRobot);
+            SFM.handleLEDS(PTM, alignedRobot);
         }
         bot.endTeleOp();
     }
