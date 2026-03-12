@@ -38,6 +38,7 @@ public class V3TeleOpDrive extends LinearOpMode {
 
         boolean resetGoToShootingPos = true;
         boolean alignedRobot = false;
+        boolean intakeOn = false;
 
         while (!opModeIsActive()) {
             telemetry.addData("Status", "Initialized");
@@ -51,7 +52,7 @@ public class V3TeleOpDrive extends LinearOpMode {
         while (opModeIsActive()) {
             //****** DRIVE (Controller 1)******
             PTM.updateStoragePosition();
-            //SensorFusionManager.ballState currentBallState = SFM.ballInPosition();
+            SensorFusionManager.ballState currentBallState = SFM.ballInPosition();
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
             if (bot.GPM_1 != null && bot.GPM_1.joystickInputFound()){
                 if (PTM.isBusy()) {
@@ -105,20 +106,25 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (bot.isPressed(1, Button.X)) {
                 bot.deleteTimer("RejectIntake");
                 if (!bot.IntakeSpinning) {
-                    bot.startTransfer();
-                    bot.startIntake();
+                    intakeOn = true;
                 } else {
-                    bot.killTransfer();
                     bot.killIntake();
+                    intakeOn = false;
                 }
             }
+            bot.transferSmart(currentBallState, intakeOn);
 
-            //****** FLYWHEEL (Controller 2)******
+            if (bot.isPressed(1, Button.Y)) {
+                PTM.handleGateIntake();
+            }
+
+                //****** FLYWHEEL (Controller 2)******
             // BUTTONS: L_TRIGGER, L_BUMPER, R_TRIGGER, R_BUMPER
             if (bot.isHeld(2, Button.L_TRIGGER)) {
                 bot.FWSpinTo(PTM.getClosestShootingPosition().getShootingVelocity());
             }
             else if (bot.isHeld(2, Button.L_BUMPER)) {
+                intakeOn = false;
                 bot.ejectFW();
                 bot.ejectTransfer();
                 bot.ejectIntake();
@@ -133,12 +139,16 @@ public class V3TeleOpDrive extends LinearOpMode {
             if (bot.timerExpired_Seconds("RejectIntake", 2)){
                 bot.startTransfer();
                 bot.startIntake();
+                intakeOn = true;
                 bot.deleteTimer("RejectIntake");
             }
 
             //****** SHOOT SEQUENCE (Controller 2)******
             if (bot.isHeld(2, Button.R_TRIGGER)) {
-                if (!bot.isHeld(2, Button.R_BUMPER)) {bot.killTransfer();}
+                if (!bot.isHeld(2, Button.R_BUMPER)) {
+                    bot.killTransfer();
+                    intakeOn = false;
+                }
                 bot.openBlocker();
             } else {
                 bot.closeBlocker();
@@ -149,12 +159,15 @@ public class V3TeleOpDrive extends LinearOpMode {
                 if (PTM.getClosestShootingPosition().equals(redShootingPosHashMap.get("RedFar"))){
                     bot.startTransferFar();
                     bot.startIntake();
+                    intakeOn = false;
                 } else {
                     bot.startTransfer();
                     bot.startIntake();
+                    intakeOn = false;
                 }
             } else if (!bot.IntakeSpinning) {
                 bot.killTransfer();
+                intakeOn = false;
             }
 
             telemetry.addLine(SFM.getTagData());

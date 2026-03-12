@@ -122,15 +122,18 @@ public class V3TeleOpBase extends BotBase { //Initializing motors
         IntakeSpinning = false; // So next time you press X it starts spinning in
     }
     //****** Transfer ******
-    public void smartStartTransfer(Boolean ballDetected) {
-        if (ballDetected) {
-            Transfer.setPower(Drive_baseTransferPower);
-        } else {
-            killTransfer();
-        }
-    }
+
     public void startTransfer() { Transfer.setPower(Drive_transferPower);}
     public void startTransferFar() { Transfer.setPower(Drive_transferPowerFar);}
+    public void transferSmart(SensorFusionManager.ballState ballNum, Boolean toggleIntake) {
+        if (toggleIntake) {
+            if (!(ballNum.equals(SensorFusionManager.ballState.NO_BALLS))) {
+                startTransfer();
+            } else {
+                killTransfer();
+            }
+        }
+    }
 
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}

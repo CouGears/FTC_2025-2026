@@ -118,6 +118,19 @@ public class PedroTeleOpManager {
             moveToPos(BluePark);
         }
     }
+
+    public void handleGateIntake(){
+        Pose gateInit;
+        Pose gateOpen;
+        if (goal.equals("Red")){
+            gateInit = RedGatePickupInit;
+            gateOpen = RedGatePickupOpen;
+        } else {
+            gateInit = BlueGatePickupInit;
+            gateOpen = BlueGatePickupOpen;
+        }
+        moveToPose(follower, gateInit, gateOpen);
+    }
     public void openGate(){
         Pose gateInit;
         Pose gateOpen;

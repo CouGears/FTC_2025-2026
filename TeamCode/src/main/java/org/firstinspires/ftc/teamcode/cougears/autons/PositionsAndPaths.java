@@ -66,8 +66,8 @@ public class PositionsAndPaths {
 
     public static Pose RedGateOpen        = new Pose(120.195, 61.7775,   Math.toRadians(-90));
     //120.50/119.95/117.78/118.55/
-    public static Pose RedGatePickupOpen  = new Pose(135.241, 65.4,  Math.toRadians(34.97));
-    public static Pose RedGatePickupInit  = new Pose(129.43, 61.78,  Math.toRadians(34.97));
+    public static Pose RedGatePickupOpen  = new Pose(127.07, 57.428,  Math.toRadians(35.83));
+    public static Pose RedGatePickupInit  = new Pose(119.495, 53.28,  Math.toRadians(38.6));
     public static Pose RedBasicEndClose   = new Pose(105,  77.15, Math.toRadians(45));
     public static Pose RedBasicEndFar     = new Pose(100,  10.5, Math.toRadians(90));
     public static Pose RedPark            = new Pose(38.149, 29.33, Math.toRadians(0));
