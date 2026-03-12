@@ -41,16 +41,16 @@ public class PositionsAndPaths {
     public static Pose RedBallDepotStart1 = new Pose(94.325,  84.29,  Math.toRadians(0));
     public static Pose RedBallDepotStart2 = new Pose(94.325,  57.834,  Math.toRadians(0));
     public static Pose RedBallDepotStart3 = new Pose(94.325,  36.12,   Math.toRadians(0));
-    public static Pose RedBallDepotStart4 = new Pose(131.96,  23.38,   Math.toRadians(-45));
-
+    public static Pose RedBallDepotStart4 = new Pose(124.97333333,  15.29,   Math.toRadians(-27.29));
+    //122.8,14.4,-26.9/125.67,15.68,-28.97/126.45,15.79,-26
 
     //106.58,35.73/105.44,35.20/106.52,35.38/106.76,35.66/
     public static Pose RedBallDepotEnd1   = new Pose(120.1075, 83.29,  Math.toRadians(0));
     //127.21/128.12/128.10/129.000/
     public static Pose RedBallDepotEnd2   = new Pose(124.105, 57.834,  Math.toRadians(0));
     public static Pose RedBallDepotEnd3   = new Pose(125.105, 36.12,   Math.toRadians(0));
-    public static Pose RedBallDepotEnd4 = new Pose(135.64,  9.37,   Math.toRadians(-90));
-
+    public static Pose RedBallDepotEnd4 = new Pose(124.97333333,  9.22,   Math.toRadians(-27.29));
+    //8.8/9.11/9.75
 
     //132.9/131.26/133.06/131.2/
 
@@ -71,7 +71,7 @@ public class PositionsAndPaths {
 
     public static Pose RedHumanZone        = new Pose(40, 10.47, 0);
     public static Pose RedHumanZoneInit        = new Pose(40, 10.47, 0);
-    public static Pose RedWaitByHumanZone   = new Pose(95.25, 10.47,     Math.toRadians(90));
+    public static Pose RedWaitByHumanZone   = new Pose(119.5, 10.47,     Math.toRadians(90));
 
 
 // ==========================================================

@@ -429,6 +429,7 @@ public class V3AutonBase {
                 gateWaitSavedStep = gateWait.GO_TO_GATEWAIT;
                 break;
             case GO_TO_GATEWAIT:
+                startTransfer();
                 moveToPose(follower, gateWaitPos);
                 gateWaitTimer.resetTimer();
                 gateWaitSavedStep = gateWait.CHECK_TO_LEAVE;
@@ -436,6 +437,7 @@ public class V3AutonBase {
             case CHECK_TO_LEAVE:
                 if (!(SFM.ballInPosition().equals(SensorFusionManager.ballState.NO_BALLS))){
                     if (gateWaitTimer.getElapsedTime() > Auton_gateWaitTime){
+                        killTransfer();
                         return true;
                     }
                     gateWaitSavedStep = gateWait.FIND_GATEWAIT;

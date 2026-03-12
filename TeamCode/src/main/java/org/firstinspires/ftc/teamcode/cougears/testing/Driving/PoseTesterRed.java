@@ -50,9 +50,11 @@ public class PoseTesterRed extends LinearOpMode {
         targetPositions.add(new NamedPose("Red BD1 Start", RedBallDepotStart1));
         targetPositions.add(new NamedPose("Red BD2 Start", RedBallDepotStart2));
         targetPositions.add(new NamedPose("Red BD3 Start", RedBallDepotStart3));
+        targetPositions.add(new NamedPose("Red BD4 Start", RedBallDepotStart4));
         targetPositions.add(new NamedPose("Red BD1 End", RedBallDepotEnd1));
         targetPositions.add(new NamedPose("Red BD2 End", RedBallDepotEnd2));
         targetPositions.add(new NamedPose("Red BD3 End", RedBallDepotEnd3));
+        targetPositions.add(new NamedPose("Red BD4 End", RedBallDepotEnd4));
 
         targetPositions.add(new NamedPose("Red Gate Init (Auton)", RedGateInit));
         targetPositions.add(new NamedPose("Red Gate Init (Driver)", Driver_RedGateInit));
