@@ -92,6 +92,14 @@ public class SensorFusionManager {
         }
         return false;
     }
+
+    public boolean withinTolerance(){
+        AprilTagDetection tag = ATB.scanForAT(targetTag);
+        if (tag == null) return false;
+        ATbearing = tag.ftcPose.bearing;
+        return Math.abs(ATbearing) <= ATBearingTolerance;
+    }
+
     public void resetStep(){
         fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.FIND_TAG_ID;
     }
@@ -104,31 +112,28 @@ public class SensorFusionManager {
     }
 
     public enum ballState{
-        WAITING_TO_READ,
         NO_BALLS,
         ONE_BALL,
         TWO_BALLS,
         THREE_BALLS
     }
 
+    boolean lastReadBallState_pos1 = false;
+    boolean lastReadBallState_pos2 = false;
+    boolean lastReadBallState_pos3 = false;
     ElapsedTime distSensorrTimer = new ElapsedTime();
     public ballState ballInPosition(){
-        boolean pos1 = false;
-        boolean pos2 = false;
-        boolean pos3 = false;
         if (distSensorrTimer.milliseconds() >= Sensor_distSensorWait) {
-            pos1 = sensorDetectingBall(1);
-            pos2 = sensorDetectingBall(2);
-            pos3 = sensorDetectingBall(3);
+            lastReadBallState_pos1 = sensorDetectingBall(1);
+            lastReadBallState_pos2 = sensorDetectingBall(2);
+            lastReadBallState_pos3 = sensorDetectingBall(3);
             distSensorrTimer.reset();
-        } else {
-            return ballState.WAITING_TO_READ;
         }
-        if (pos1 && pos2 && pos3) {
+        if (lastReadBallState_pos1 && lastReadBallState_pos2 && lastReadBallState_pos3) {
             return ballState.THREE_BALLS;
-        } else if (pos1 && pos2) {
+        } else if (lastReadBallState_pos1 && lastReadBallState_pos2) {
             return ballState.TWO_BALLS;
-        } else if (pos1 && !pos3) {
+        } else if (lastReadBallState_pos1 && !lastReadBallState_pos3) {
             return ballState.ONE_BALL;
         } else {
             return ballState.NO_BALLS;
@@ -136,10 +141,10 @@ public class SensorFusionManager {
     }
 
     //****** LED ******
-    public void handleLEDS(PedroTeleOpManager PTM, Boolean botAligned) {
+    public void handleLEDS(PedroTeleOpManager PTM) {
         FWVelLED(PTM, bot.FW.getVelocity());
-        //ballPositionLED();
-        //botAlignedLED(botAligned);
+        ballPositionLED();
+        botAlignedLED();
     }
     public void FWVelLED(PedroTeleOpManager PTM, double FWVel) {
         double shootVelThirds = (double) (PTM.getClosestShootingPosition().getShootingVelocity() / 3);
@@ -173,8 +178,8 @@ public class SensorFusionManager {
         }
     }
 
-    public void botAlignedLED(Boolean botAligned){
-        if (botAligned) {
+    public void botAlignedLED(){
+        if (withinTolerance()) {
             greenLED3.on();
             redLED3.off();
         } else {
@@ -183,7 +188,7 @@ public class SensorFusionManager {
         }
     }
 
-    public String getTagData(){
+    public void printTagData(){
         AprilTagDetection tag;
         String returnMsg = "RED | Blue Bearings \n";
         AprilTagDetection RedTag = ATB.scanForAT(redTag);
@@ -198,7 +203,7 @@ public class SensorFusionManager {
         } else {
             returnMsg += "NO BLUE TAG";
         }
-        return returnMsg;
+        telemetry.addLine(returnMsg);
 
     }
 

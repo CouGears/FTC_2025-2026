@@ -127,7 +127,7 @@ public class V3TeleOpBase extends BotBase { //Initializing motors
     public void startTransferFar() { Transfer.setPower(Drive_transferPowerFar);}
     public void transferSmart(SensorFusionManager.ballState ballNum, Boolean toggleIntake) {
         if (toggleIntake) {
-            if (!(ballNum.equals(SensorFusionManager.ballState.NO_BALLS))) {
+            if (!(ballNum == SensorFusionManager.ballState.NO_BALLS)) {
                 startTransfer();
             } else {
                 killTransfer();

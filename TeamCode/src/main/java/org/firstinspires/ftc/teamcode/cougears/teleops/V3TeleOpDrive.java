@@ -170,11 +170,10 @@ public class V3TeleOpDrive extends LinearOpMode {
                 intakeOn = false;
             }
 
-            telemetry.addLine(SFM.getTagData());
             bot.update();
             panels.update();
             sleep(10);
-            SFM.handleLEDS(PTM, alignedRobot);
+            SFM.handleLEDS(PTM);
         }
         bot.endTeleOp();
     }
