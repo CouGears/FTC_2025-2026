@@ -27,6 +27,7 @@ public class RedFar_GateRecycle extends OpMode {
 
     public enum pathStep {
         SHOOT_BALLS,
+        PICKUP_BALLS,
         GATE_RECYCLE,
         SHOOTPOS_BASICENDFAR,
         END
@@ -42,11 +43,17 @@ public class RedFar_GateRecycle extends OpMode {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry, true)) {
                     if(!preloadsShot){
-                        setPathStep(pathStep.GATE_RECYCLE);
+                        setPathStep(pathStep.PICKUP_BALLS);
                         preloadsShot = true;
                     } else {
                         setPathStep(pathStep.SHOOTPOS_BASICENDFAR);
                     }
+                }
+                break;
+            case PICKUP_BALLS:
+                // Now we only move on if the method returns true
+                if (bot.handlePickupFarBalls("Red", follower, telemetry)) {
+                    setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
             case GATE_RECYCLE:
@@ -88,7 +95,7 @@ public class RedFar_GateRecycle extends OpMode {
 
     @Override
     public void start() {
-        bot.startIntake();
+        bot.startIntakeFast();
         opModeTimer.resetTimer();
         setPathStep(pathStep.SHOOT_BALLS);
     }

@@ -105,7 +105,7 @@ public class RedFar extends OpMode {
 
     @Override
     public void start() {
-        bot.startIntake();
+        bot.startIntakeFast();
         opModeTimer.resetTimer();
         setPathStep(pathStep.SHOOT_BALLS);
     }

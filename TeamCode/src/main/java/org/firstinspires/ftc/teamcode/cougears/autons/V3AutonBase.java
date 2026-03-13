@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.cougears.autons;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
-import android.hardware.Sensor;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.paths.PathBuilder;
@@ -15,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
@@ -101,8 +100,12 @@ public class V3AutonBase {
     public boolean blockerIsOpen() {return Blocker.getPosition() > Servo_blockerPos[1] - .05; }
 
     //****** INTAKE ******
-    public void startIntake() {
-        Intake.setPower(Drive_intakePower);
+    public void startIntakeFast() {
+        Intake.setPower(Drive_intakePowerFast);
+        IntakeSpinning = true;
+    }
+    public void startIntakeSlow() {
+        Intake.setPower(Drive_intakePowerSlow);
         IntakeSpinning = true;
     }
     public void killIntake() {
@@ -152,6 +155,7 @@ public class V3AutonBase {
 
     public enum shootingSequence {
         GO_TO_POSITION,
+        ALIGN_AT,
         OPEN_BLOCKER,
         SHOOT,
         END
@@ -166,6 +170,8 @@ public class V3AutonBase {
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
                 moveToPose(follower, shootPos.getShootingPose());
                 shootingSequenceSavedStep = shootingSequence.OPEN_BLOCKER;
+                break;
+            case ALIGN_AT:
                 break;
             case OPEN_BLOCKER:
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
@@ -182,7 +188,7 @@ public class V3AutonBase {
                 } else {
                     startTransfer();
                 }
-                startIntake();
+                startIntakeFast();
                 shootingSequenceSavedStep = shootingSequence.END;
                 shootSequenceTimer.resetTimer();
                 break;
@@ -255,7 +261,7 @@ public class V3AutonBase {
                 pickUpBallsSavedStep = pickUpBalls.PICK_UP_BALLS;
                 break;
             case PICK_UP_BALLS:
-                startIntake();
+                startIntakeFast();
                 startTransfer();
                 if (follower.isBusy()) return false;
                 moveToPose(follower, targetDepotEnd);
@@ -325,7 +331,7 @@ public class V3AutonBase {
             case PICK_UP_BALLS:
                 if (follower.isBusy()) return false;
                 startTransfer();
-                startIntake();
+                startIntakeFast();
                 if (!wentToGateOpen) {
                     moveToPose(follower, gateOpen);
                     wentToGateOpen = true;
@@ -355,15 +361,20 @@ public class V3AutonBase {
         OPEN_GATE,
         RETURN_TO_INIT,
         RETURN_TO_PREINIT
-
-        }
+    }
     gateOpenSequence gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
     int unstuckDirection = 0;
+    ElapsedTime unstuckTimer = new ElapsedTime();
+    ElapsedTime handleOpenGateStepTimer = new ElapsedTime();
+    boolean wentToPreInit = false; // <-- ADD THIS
+
     public boolean handleOpenGate(String autonColor, Follower follower, boolean goToPreinit, Telemetry tele){
         tele.addData("Curr Step in handleOpenGate:", "%s", gateOpenSequenceSavedStep);
         switch (gateOpenSequenceSavedStep) {
             case FIND_GATE:
                 wentToGateOpen = false;
+                wentToPreInit = false; // Reset our new flag
+
                 if (autonColor.equals("Red")){
                     gateInit = RedGateInit;
                     gateOpen = RedGateOpen;
@@ -374,24 +385,34 @@ public class V3AutonBase {
                     gateOpen = BlueGateOpen;
                     preInit = BlueBallDepotStart2;
                     unstuckDirection = 1;
-
                 }
                 unstuckPose = gateOpen;
                 gateOpenSequenceSavedStep = gateOpenSequence.OPEN_GATE;
                 openGateTimer.resetTimer();
+                unstuckTimer.reset();
+                handleOpenGateStepTimer.reset();
                 break;
+
             case OPEN_GATE:
+                tele.addData("going to ", unstuckPose);
+                tele.addData("bot pos ", follower.getPose());
+
+                // 1. Command the initial gate push path ONLY ONCE
                 if (!wentToGateOpen) {
                     moveToPose(follower, gateInit, gateOpen);
                     wentToGateOpen = true;
                     openGateTimer.resetTimer();
                 }
-                moveToPose(follower, gateOpen);
-                if (follower.isRobotStuck()) {
-                    unstuckPose = new Pose(unstuckPose.getX()+unstuckDirection*unstuckMovementAmount, unstuckPose.getY(), unstuckPose.getHeading());
-                    moveToPose(follower, unstuckPose);
+
+                // 2. FIX: Only command the unstuck path IF the timer expires.
+                // Do NOT command this every loop tick!
+                if (unstuckTimer.seconds() >= 1 && handleOpenGateStepTimer.seconds() > 3) {
+                    unstuckPose = new Pose(unstuckPose.getX() + unstuckDirection, unstuckPose.getY(), unstuckPose.getHeading());
+                    moveToPose(follower, unstuckPose); // <-- Moved inside the IF block
+                    unstuckTimer.reset();
                     return false;
                 }
+
                 if (openGateTimer.getElapsedTime() < Auton_gateOpenWait) return false;
 
                 if (!goToPreinit) {
@@ -401,14 +422,81 @@ public class V3AutonBase {
                     gateOpenSequenceSavedStep = gateOpenSequence.RETURN_TO_PREINIT;
                     break;
                 }
+
+
+
             case RETURN_TO_PREINIT:
-                if (follower.isBusy()) return false;
-                moveToPose(follower, preInit);
-                gateIntakeSavedStep = gateIntake.FIND_GATE;
+                tele.addData("going to ", preInit);
+                tele.addData("bot pos ", follower.getPose());
+
+                // FIX: Command it to move ONCE, then wait until it finishes driving!
+                if (!wentToPreInit) {
+                    moveToPose(follower, preInit);
+                    wentToPreInit = true;
+                }
+
+                if (follower.isBusy()) return false; // Don't return true until actually there
+
+                // FIX: Used to be gateIntakeSavedStep. Must be gateOpenSequenceSavedStep!
+                gateOpenSequenceSavedStep = gateOpenSequence.FIND_GATE;
                 return true;
         }
         return false;
     }
+
+    public enum pickupFarBallsSequence{
+        FIND_POSES,
+        GO_TO_START,
+        GO_TO_END,
+        WAIT_FOR_END
+    }
+    pickupFarBallsSequence pickupFarBallsSequenceSavedStep = pickupFarBallsSequence.FIND_POSES;
+    Pose farPickupStartPose = null;
+    Pose farPickupEndPose = null;
+
+    public boolean handlePickupFarBalls(String autonColor, Follower follower, Telemetry tele) {
+        // FIX: Replaced gateOpenSequenceSavedStep with the correct enum variable
+        tele.addData("Curr Step in handlePickupFarBalls:", "%s", pickupFarBallsSequenceSavedStep);
+
+        switch (pickupFarBallsSequenceSavedStep) {
+            case FIND_POSES:
+                if (autonColor.equals("Red")){
+                    farPickupStartPose = RedBallDepotStart4;
+                    farPickupEndPose = RedBallDepotEnd4;
+                } else {
+                    farPickupStartPose = BlueBallDepotStart4;
+                    farPickupEndPose = BlueBallDepotEnd4;
+                }
+                pickupFarBallsSequenceSavedStep = pickupFarBallsSequence.GO_TO_START;
+                break;
+
+            case GO_TO_START:
+                if (follower.isBusy()) return false; // Ensure we are ready to move
+                moveToPose(follower, farPickupStartPose);
+                pickupFarBallsSequenceSavedStep = pickupFarBallsSequence.GO_TO_END;
+                break;
+
+            case GO_TO_END:
+                if (follower.isBusy()) return false; // WAIT until we reach the start pose!
+
+                // Turn on intake and transfer to grab the balls as we drive
+                startIntakeFast();
+                startTransfer();
+
+                moveToPose(follower, farPickupEndPose);
+                pickupFarBallsSequenceSavedStep = pickupFarBallsSequence.WAIT_FOR_END;
+                break;
+
+            case WAIT_FOR_END:
+                if (follower.isBusy()) return false; // WAIT until we finish driving through the balls!
+
+                // FIX: Reset the sequence so it can run again later if needed
+                pickupFarBallsSequenceSavedStep = pickupFarBallsSequence.FIND_POSES;
+                return true; // Tell the OpMode we are finished!
+        }
+        return false; // Still running...
+    }
+
     public enum gateWait{
         FIND_GATEWAIT,
         GO_TO_GATEWAIT,

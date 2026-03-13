@@ -118,7 +118,7 @@ public class PoseTesterBlue extends LinearOpMode {
             }
             if (bot.isHeld(1, GamepadManager.Button.R_BUMPER)){
                 bot.startTransfer();
-                bot.startIntake();
+                bot.startIntakeSlow();
             } else {
                 bot.killTransfer();
                 bot.killIntake();

@@ -13,7 +13,9 @@ to import
 public class PresetConstants {
     // DRIVE
     public static double Drive_slowMultiplier = .25;
-    public static double Drive_intakePower = .6;
+    public static double Drive_intakePowerSlow = .3;
+    public static double Drive_intakePowerFast = .5;
+
     public static double Drive_baseTransferPower = .5;
     public static double Drive_transferPower = 0.80 ;
     public static double Drive_transferPowerFar = 0.7 ;
@@ -32,7 +34,7 @@ public class PresetConstants {
     public static double Auton_blockerWait = 200; //time to open gate before shooting
     public static double Auton_gateIntakeWait = 3500;//time to stay at autonGateIntake
     public static double Auton_gateOpenWait = 2500;//time to wait at gate
-    public static double Auton_ballShootSequenceTime = 1100;//time from start shooting to end shooting
+    public static double Auton_ballShootSequenceTime = 1500;//time from start shooting to end shooting
     public static double Auton_startShootingVelocityTolerance = 30;//wait until this velocity before starting to shoot
     public static double Auton_gateWaitTime = 2000;
     public static double Auton_ATAlignemntPower = .02;

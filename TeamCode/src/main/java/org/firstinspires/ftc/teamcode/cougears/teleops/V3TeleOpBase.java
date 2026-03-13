@@ -7,7 +7,6 @@ import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -15,13 +14,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.cougears.util.BotBase;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
-import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
-import com.qualcomm.robotcore.hardware.LED;
 
 
 public class V3TeleOpBase extends BotBase { //Initializing motors
@@ -109,8 +105,12 @@ public class V3TeleOpBase extends BotBase { //Initializing motors
     public boolean blockerIsOpen() {return Blocker.getPosition() > Servo_blockerPos[1] - .05; }
 
     //****** INTAKE ******
-    public void startIntake() {
-        Intake.setPower(Drive_intakePower);
+    public void startIntakeSlow() {
+        Intake.setPower(Drive_intakePowerSlow);
+        IntakeSpinning = true;
+    }
+    public void startIntakeFast() {
+        Intake.setPower(Drive_intakePowerFast);
         IntakeSpinning = true;
     }
     public void killIntake() {

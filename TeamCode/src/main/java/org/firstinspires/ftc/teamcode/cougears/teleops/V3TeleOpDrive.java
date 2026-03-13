@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.cougears.teleops;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
 
-import static java.sql.Types.NULL;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,7 +11,6 @@ import org.firstinspires.ftc.teamcode.cougears.util.GamepadManager.Button;
 import org.firstinspires.ftc.teamcode.cougears.util.PanelsFeatures;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
-
 
 @TeleOp(name="V3Teleop", group="Drive")
 
@@ -102,79 +99,86 @@ public class V3TeleOpDrive extends LinearOpMode {
             telemetry.addData("BotPos", "Positioned at Heading %.2f", Math.toDegrees(PTM.getCurrPos().getHeading()));
 
 
-            //****** INTAKE ******
+            //****** INTAKE & TRANSFER SENSORS ******
+            boolean ballAtTop = SFM.sensorDetectingBall(1);
+            boolean isShooting = bot.isHeld(2, Button.R_BUMPER);
+            boolean isEjecting = bot.isHeld(2, Button.L_BUMPER);
+
+            // Toggle Intake state with X
             if (bot.isPressed(1, Button.X)) {
                 bot.deleteTimer("RejectIntake");
-                if (!bot.IntakeSpinning) {
-                    intakeOn = true;
-                } else {
-                    bot.killIntake();
-                    intakeOn = false;
-                }
+                intakeOn = !intakeOn;
             }
-            bot.transferSmart(currentBallState, intakeOn);
-
             if (bot.isPressed(1, Button.Y)) {
                 PTM.handleGateIntake();
             }
 
-                //****** FLYWHEEL (Controller 2)******
-            // BUTTONS: L_TRIGGER, L_BUMPER, R_TRIGGER, R_BUMPER
+            //****** FLYWHEEL (Controller 2) ******
             if (bot.isHeld(2, Button.L_TRIGGER)) {
                 bot.FWSpinTo(PTM.getClosestShootingPosition().getShootingVelocity());
-            }
-            else if (bot.isHeld(2, Button.L_BUMPER)) {
-                intakeOn = false;
-                bot.ejectFW();
-                bot.ejectTransfer();
-                bot.ejectIntake();
-                telemetry.addData("Flywheel", "AIMING FOR  vel %.2f", FW_ejectionVel);
-                bot.createTimer("RejectIntake");
-            } else {
+            } else if (!isEjecting) {
                 bot.killFW();
             }
-            telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
-            telemetry.addData("Flywheel", "AIMING FOR  vel %d", PTM.getClosestShootingPosition().getShootingVelocity());
-
-            if (bot.timerExpired_Seconds("RejectIntake", 2)){
-                bot.startTransfer();
-                bot.startIntake();
-                intakeOn = true;
-                bot.deleteTimer("RejectIntake");
-            }
-
-            //****** SHOOT SEQUENCE (Controller 2)******
+            // Flywheel Blocker / Gate
             if (bot.isHeld(2, Button.R_TRIGGER)) {
-                if (!bot.isHeld(2, Button.R_BUMPER)) {
-                    bot.killTransfer();
-                    intakeOn = false;
-                }
                 bot.openBlocker();
             } else {
                 bot.closeBlocker();
             }
 
-
-            if (bot.isHeld(2, Button.R_BUMPER)){
-                if (PTM.getClosestShootingPosition().equals(redShootingPosHashMap.get("RedFar"))){
-                    bot.startTransferFar();
-                    bot.startIntake();
-                    intakeOn = false;
-                } else {
-                    bot.startTransfer();
-                    bot.startIntake();
-                    intakeOn = false;
-                }
-            } else if (!bot.IntakeSpinning) {
-                bot.killTransfer();
+            //****** CONSOLIDATED INTAKE & TRANSFER PRIORITY LOGIC ******
+            /*
+            4 "States" listed by priority:
+            1. Ejecting (controlled via L bumper and set to turn off via a timer when let go)
+            2. Shooting (controlled via R bumper. Will always turn on intake & transfer)
+            3. Normally Intaking (Controlled via X, turns on intake and trnasfer (as long as no ball at top where it turns transfer off))
+            4. All off
+             */
+            if (isEjecting) {
                 intakeOn = false;
+                bot.ejectFW();
+                bot.ejectTransfer();
+                bot.ejectIntake();
+                bot.createTimer("RejectIntake");
+                telemetry.addData("Flywheel", "AIMING FOR vel %.2f", FW_ejectionVel);
+            } else {
+                if (bot.timerExpired_Seconds("RejectIntake", 2)) {
+                    intakeOn = true;
+                    bot.deleteTimer("RejectIntake");
+                }
+                if (isShooting) {
+                    bot.startIntakeFast();
+                    if (PTM.getClosestShootingPosition().equals(redShootingPosHashMap.get("RedFar"))) {
+                        bot.startTransferFar();
+                    } else {
+                        bot.startTransfer();
+                    }
+                } else if (intakeOn) {
+                    if (SFM.sensorDetectingBall(2)) {
+                        bot.startIntakeSlow();
+                    } else {
+                        bot.startIntakeFast();
+                    }
+                    if (ballAtTop) {
+                        bot.killTransfer();
+                    } else {
+                        bot.startTransfer();
+                    }
+                } else {
+                    bot.killIntake();
+                    bot.killTransfer();
+                }
             }
+
+            telemetry.addData("Flywheel", "RUNNING at vel %.2f", bot.FW.getVelocity());
+            telemetry.addData("Flywheel", "AIMING FOR vel %d", PTM.getClosestShootingPosition().getShootingVelocity());
 
             bot.update();
             panels.update();
             sleep(10);
-            SFM.handleLEDS(PTM);
+            SFM.handleLEDS(PTM); // (Make sure parameters match your latest SFM.java)
         }
         bot.endTeleOp();
     }
 }
+

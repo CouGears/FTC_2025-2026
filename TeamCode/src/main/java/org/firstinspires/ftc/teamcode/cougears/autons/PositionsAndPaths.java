@@ -38,9 +38,9 @@ public class PositionsAndPaths {
     //75.51,11.77/73.35,12.61,66.08/76.90,12.09,66.11/77.66,11.55,67.38/
 
     // --- Ball Depot Poses (Pickup & Scoring) ---
-    public static Pose RedBallDepotStart1 = new Pose(94.325,  84.29,  Math.toRadians(0));
-    public static Pose RedBallDepotStart2 = new Pose(94.325,  57.834,  Math.toRadians(0));
-    public static Pose RedBallDepotStart3 = new Pose(94.325,  36.12,   Math.toRadians(0));
+    public static Pose RedBallDepotStart1 = new Pose(92.325,  84.29,  Math.toRadians(0));
+    public static Pose RedBallDepotStart2 = new Pose(92.325,  57.834,  Math.toRadians(0));
+    public static Pose RedBallDepotStart3 = new Pose(92.325,  36.12,   Math.toRadians(0));
     public static Pose RedBallDepotStart4 = new Pose(124.97333333,  15.29,   Math.toRadians(-27.29));
     //122.8,14.4,-26.9/125.67,15.68,-28.97/126.45,15.79,-26
 
@@ -96,9 +96,9 @@ public class PositionsAndPaths {
     public static Pose BlueShootFar           = new Pose(49.52375, 28.3925, Math.toRadians(112.35));
 
     // --- Ball Depot Poses (Pickup & Scoring) ---
-    public static Pose BlueBallDepotStart1 = new Pose(41.20625, 84.29,  Math.toRadians(180));
-    public static Pose BlueBallDepotStart2 = new Pose(41.20625, 56.834, Math.toRadians(180));
-    public static Pose BlueBallDepotStart3 = new Pose(41.20625, 36.12,  Math.toRadians(180));
+    public static Pose BlueBallDepotStart1 = new Pose(43.20625, 84.29,  Math.toRadians(180));
+    public static Pose BlueBallDepotStart2 = new Pose(43.20625, 56.834, Math.toRadians(180));
+    public static Pose BlueBallDepotStart3 = new Pose(43.20625, 36.12,  Math.toRadians(180));
     public static Pose BlueBallDepotStart4 = new Pose(135-131.96,  23.38,   Math.toRadians(-45));
 
 
