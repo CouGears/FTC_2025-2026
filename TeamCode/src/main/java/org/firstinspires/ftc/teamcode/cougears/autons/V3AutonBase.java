@@ -18,7 +18,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
-import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 
 
@@ -126,6 +125,21 @@ public class V3AutonBase {
 
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}
+
+    ElapsedTime pulseTimer = new ElapsedTime();
+    boolean shooting = false;
+    public void pulseTransfer() {
+        if (pulseTimer.milliseconds() >= Auton_transferPulseWaitMS){
+            if (!shooting) {
+                startTransfer();
+                shooting = true;
+            } else {
+                killTransfer();
+                shooting = false;
+            }
+            pulseTimer.reset();
+        }
+    }
 
     //****** AUTON ******
     public void moveToPose(Follower f, Pose targetPose){
@@ -548,7 +562,6 @@ public class V3AutonBase {
     }
     public void updateStoragePosition(Follower follower){
         Storage.Storage_endOfAutonPose = follower.getPose();
-
     }
 
     //****** OTHER ******

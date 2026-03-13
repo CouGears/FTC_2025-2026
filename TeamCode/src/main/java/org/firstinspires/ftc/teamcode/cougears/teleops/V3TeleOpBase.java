@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -134,7 +135,20 @@ public class V3TeleOpBase extends BotBase { //Initializing motors
             }
         }
     }
-
+    ElapsedTime pulseTimer = new ElapsedTime();
+    boolean shooting = false;
+    public void pulseTransfer() {
+        if (pulseTimer.milliseconds() >= Auton_transferPulseWaitMS){
+            if (!shooting) {
+                startTransfer();
+                shooting = true;
+            } else {
+                killTransfer();
+                shooting = false;
+            }
+            pulseTimer.reset();
+        }
+    }
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}
 
