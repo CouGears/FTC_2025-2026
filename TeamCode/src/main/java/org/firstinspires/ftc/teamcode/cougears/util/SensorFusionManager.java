@@ -109,7 +109,7 @@ public class SensorFusionManager {
         return false;
     }
 
-    public boolean handFullShootPosAlignSequence(Follower follower, ShootingPosition shootingPose, V3AutonBase bot) {
+    public boolean handFullShootPosAlignSequence(Follower follower, ShootingPosition shootingPose, V3AutonBase bot, boolean farShot) {
         telemetry.addData("Curr Step in handFullShootPosAlignSequence:", "%s", fullShootPosAlignSequenceSavedStep);
         switch (fullShootPosAlignSequenceSavedStep) {
             case FIND_TAG_ID:
@@ -127,7 +127,7 @@ public class SensorFusionManager {
                 AprilTagDetection tag = ATB.scanForAT(targetTag);
                 if (tag == null) return false;
                 ATbearing = tag.ftcPose.bearing;
-                if (Math.abs(ATbearing) <= ATBearingTolerance) {
+                if (Math.abs(ATbearing+farShotAdjustment) <= ATBearingTolerance) {
                     return true;
                 }
                 rotatePower = ATbearing * Auton_ATAlignemntPower;

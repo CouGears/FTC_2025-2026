@@ -19,6 +19,10 @@ public class PresetConstants {
     public static double Drive_baseTransferPower = .5;
     public static double Drive_transferPower = 0.80 ;
     public static double Drive_transferPowerFar = 0.7 ;
+    public static double Auton_transferPowerFar = 0.8 ;
+    public static double farShotAdjustment = -1.5;
+
+
 
     public static boolean Drive_switchedJoysticks = false;
 
@@ -36,11 +40,11 @@ public class PresetConstants {
     public static double Auton_gateOpenWait = 2500;//time to wait at gate
     public static double Auton_ballShootSequenceTime = 1500;//time from start shooting to end shooting
     public static double Auton_ballShootSequenceTimeFar = 3000;
-    public static double Auton_startShootingVelocityTolerance = 30;//wait until this velocity before starting to shoot
+    public static double Auton_startShootingVelocityTolerance = 20.0;//wait until this velocity before starting to shoot
     public static double Auton_gateWaitTime = 2000;
-    public static double Auton_ATAlignemntPower = .02;
-    public static double Auton_transferPulseWaitMS = 500; //How long we wait for each pulse
-    public static double Auton_transferPulseTotalTimeWaitMS = 6*Auton_transferPulseWaitMS; //How much total time we allow for pulsing
+    public static double Auton_ATAlignemntPower = 0.05;
+    public static double Auton_transferPulseWaitMS = 350; //How long we wait for each pulse
+    public static double Auton_BD4pickupSpeed = 0.5;
 
     public static double unstuckMovementAmount = 0.1;
     public static double xyPoseErrorPTM = 0.3;
@@ -48,12 +52,12 @@ public class PresetConstants {
 
     public static int redTag = 24;
     public static int blueTag = 20;
-    public static double ATBearingTolerance = 3;
+    public static double ATBearingTolerance = 2.5;
 
     public static double DIST_SENSOR_BALL_DISTANCE1 = 14;
     public static double DIST_SENSOR_BALL_DISTANCE2 = 14;
     public static double DIST_SENSOR_BALL_DISTANCE3 = 14;
-    public static double Sensor_distSensorWait = 3000;
+    public static double Sensor_distSensorWait = 4000;
 
     public static double driverHeadingCorrectionThreshhold = 5;
     public static  double HEADING_kP = 0.002;

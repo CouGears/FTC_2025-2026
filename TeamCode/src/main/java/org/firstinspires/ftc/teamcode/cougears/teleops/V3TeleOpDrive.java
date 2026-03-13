@@ -27,7 +27,6 @@ public class V3TeleOpDrive extends LinearOpMode {
         ATB.initAprilTag();
 
         SensorFusionManager SFM = new SensorFusionManager(hardwareMap, telemetry, ATB, bot);
-
         PanelsFeatures panels = new PanelsFeatures(PTM.follower, telemetry);
         panels.startCameraStream(ATB.visionPortal);
         bot.setTelemetry(panels.getTelemetry());

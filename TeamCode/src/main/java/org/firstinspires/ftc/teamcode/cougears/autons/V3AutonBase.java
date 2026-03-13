@@ -128,29 +128,10 @@ public class V3AutonBase {
     }
     //****** Transfer ******
     public void startTransfer() { Transfer.setPower(Drive_transferPower);}
-    public void startTransferFar() { Transfer.setPower(Drive_transferPowerFar);}
+    public void startTransferFar() { Transfer.setPower(Auton_transferPowerFar);}
 
     public void killTransfer() { Transfer.setPower(0);}
     public void ejectTransfer() { Transfer.setPower(-1);}
-
-    ElapsedTime pulseTimer = new ElapsedTime();
-    boolean shooting = false;
-    public boolean pulseTransfer(double timeShooting) {
-        if (timeShooting < Auton_ballShootSequenceTimeFar) {
-            if (pulseTimer.milliseconds() >= Auton_transferPulseWaitMS) {
-                if (!shooting) {
-                    startTransfer();
-                    shooting = true;
-                } else {
-                    killTransfer();
-                    shooting = false;
-                }
-                pulseTimer.reset();
-            }
-            return false;
-        }
-        return true;
-    }
 
     //****** AUTON ******
     public void moveToPose(Follower f, Pose targetPose){
@@ -160,6 +141,15 @@ public class V3AutonBase {
                         .setLinearHeadingInterpolation(f.getHeading(), targetPose.getHeading())
                         .build()
         );
+    }
+
+    public void moveToPose(Follower f, Pose targetPose, double speedMultiplier){
+        f.followPath(
+                f.pathBuilder()
+                        .addPath(new BezierLine(f.getPose(), targetPose))
+                        .setLinearHeadingInterpolation(f.getHeading(), targetPose.getHeading())
+                        .build()
+        , speedMultiplier, false);
     }
     public boolean isNotNear(Follower follower, Pose target) {
         double botX = follower.getPose().getX();
@@ -184,22 +174,23 @@ public class V3AutonBase {
 
     public enum shootingSequence {
         GO_TO_POSITION,
-        ALIGN_AT,
         OPEN_BLOCKER,
+        SHOOT_WAIT, // <-- Added this to cleanly track time
         SHOOT,
         END
-
     }
     shootingSequence shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
     ElapsedTime timeSpentShooting = new ElapsedTime();
+
     public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower, Telemetry tele, Boolean farShoot, boolean aprilTag){
         tele.addData("Curr Step in handleShootingSequence:", "%s", shootingSequenceSavedStep);
         switch (shootingSequenceSavedStep) {
             case GO_TO_POSITION:
                 FWSpinTo(shootPos.getShootingVelocity()); // Make sure we are up to vel
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
+
                 if (aprilTag){
-                    if (!SFM.handFullShootPosAlignSequence(follower, shootPos, this)){
+                    if (!SFM.handFullShootPosAlignSequence(follower, shootPos, this, farShoot)){
                         return false;
                     }
                 } else {
@@ -207,31 +198,66 @@ public class V3AutonBase {
                 }
                 shootingSequenceSavedStep = shootingSequence.OPEN_BLOCKER;
                 break;
+
             case OPEN_BLOCKER:
-                if (follower.isBusy()) return false; //Cant move past this until we get to pos
+                if (follower.isBusy()) return false;
                 if (!(FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance))) return false;
+
                 openBlocker();
                 blockerTimer.resetTimer();
-                shootingSequenceSavedStep = shootingSequence.SHOOT;
-                timeSpentShooting.reset();
+                shootingSequenceSavedStep = shootingSequence.SHOOT_WAIT;
                 break;
-            case SHOOT:
+
+            case SHOOT_WAIT:
+                // Wait for blocker to physically open before we start feeding balls
                 if (blockerTimer.getElapsedTime() < Auton_blockerWait) return false;
-                if (!(FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance))) return false;
-                startIntakeFast();
+
+                timeSpentShooting.reset(); // Start our pulse clock perfectly at 0
+                shootingSequenceSavedStep = shootingSequence.SHOOT;
+                break;
+
+            case SHOOT:
+                startIntakeFast(); // Keep intake spinning
+
                 if (farShoot) {
-                    if (!pulseTransfer(timeSpentShooting.milliseconds())){
+                    // Check if the entire 3-second sequence is completely done
+                    if (timeSpentShooting.milliseconds() >= Auton_ballShootSequenceTimeFar) {
+                        killTransfer();
+                        closeBlocker();
+                        shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
+                        return true; // We are done!
+                    }
+
+                    // IF FLYWHEEL DIPS: Instantly stop transfer so it doesn't jam!
+                    if (!FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance)) {
+                        killTransfer();
+                    } else {
+                        // Math-based pulsing (If time is between 0-500ms, run. If 500-1000ms, pause)
+                        long timeInPulse = (long)timeSpentShooting.milliseconds() % (long)(Auton_transferPulseWaitMS * 2);
+                        if (timeInPulse < Auton_transferPulseWaitMS && (FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance))) {
+                            startTransferFar(); // Use the FAR power
+                        } else {
+                            killTransfer();
+                        }
+                    }
+                    return false; // Stay in SHOOT case until time is up
+
+                } else {
+                    // --- Normal Close Shooting (Dump them all in at once) ---
+                    if (!FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance)) {
+                        killTransfer();
                         return false;
                     }
-                } else {
+
                     startTransfer();
+                    shootingSequenceSavedStep = shootingSequence.END;
+                    shootSequenceTimer.resetTimer();
                 }
-                shootingSequenceSavedStep = shootingSequence.END;
-                shootSequenceTimer.resetTimer();
                 break;
+
             case END:
-                if (!farShoot && shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
-                if (farShoot && shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTimeFar) return false;
+                // Normal close shooting waits here to finish pushing balls
+                if (shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
 
                 killTransfer();
                 closeBlocker();
@@ -251,6 +277,7 @@ public class V3AutonBase {
     pickUpBalls pickUpBallsSavedStep = pickUpBalls.FIND_DEPOT;
     Pose targetDepotStart = null;
     Pose targetDepotEnd = null;
+    double speedMultiplier = 0;
     public boolean handlePickUpBalls(String autonColor, int depotNum, boolean returnToStart, Follower follower, Telemetry tele) {
         tele.addData("Curr Step in handlePickUpBalls:", "%s", pickUpBallsSavedStep);
         switch (pickUpBallsSavedStep) {
@@ -260,36 +287,49 @@ public class V3AutonBase {
                         case 1:
                             targetDepotStart = RedBallDepotStart1;
                             targetDepotEnd = RedBallDepotEnd1;
+                            speedMultiplier = 1;
                             break;
                         case 2:
                             targetDepotStart = RedBallDepotStart2;
                             targetDepotEnd = RedBallDepotEnd2;
+                            speedMultiplier = 1;
                             break;
                         case 3:
                             targetDepotStart = RedBallDepotStart3;
                             targetDepotEnd = RedBallDepotEnd3;
+                            speedMultiplier = 1;
+
                             break;
                         case 4:
                             targetDepotStart = RedBallDepotStart4;
                             targetDepotEnd = RedBallDepotEnd4;
+                            speedMultiplier = Auton_BD4pickupSpeed;
+
                     }
                 } else {
                     switch (depotNum) {
                         case 1:
                             targetDepotStart = BlueBallDepotStart1;
                             targetDepotEnd = BlueBallDepotEnd1;
+                            speedMultiplier = 1;
+
                             break;
                         case 2:
                             targetDepotStart = BlueBallDepotStart2;
                             targetDepotEnd = BlueBallDepotEnd2;
+                            speedMultiplier = 1;
+
                             break;
                         case 3:
                             targetDepotStart = BlueBallDepotStart3;
                             targetDepotEnd = BlueBallDepotEnd3;
+                            speedMultiplier = 1;
+
                             break;
                         case 4:
                             targetDepotStart = BlueBallDepotStart4;
                             targetDepotEnd = BlueBallDepotEnd4;
+                            speedMultiplier = Auton_BD4pickupSpeed;
                     }
                 }
                 pickUpBallsSavedStep = pickUpBalls.MOVE_TO_START;
@@ -303,7 +343,7 @@ public class V3AutonBase {
                 startIntakeFast();
                 startTransfer();
                 if (follower.isBusy()) return false;
-                moveToPose(follower, targetDepotEnd);
+                moveToPose(follower, targetDepotEnd, speedMultiplier);
                 pickUpBallsSavedStep = pickUpBalls.MOVE_BACK_TO_START;
                 break;
             case MOVE_BACK_TO_START:
