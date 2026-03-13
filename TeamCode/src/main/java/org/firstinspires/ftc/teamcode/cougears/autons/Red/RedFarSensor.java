@@ -43,10 +43,10 @@ public class RedFarSensor extends OpMode {
         }
         switch (currStep) {
             case SHOOT_BALLS:
-                if (!pickedUpBD && bot.handleShootingSequence(shootPos, follower, telemetry, true)) {
+                if (!pickedUpBD && bot.handleShootingSequence(shootPos, follower, telemetry, true, true)) {
                     setPathStep(pathStep.BD_PICKUP_4);
                     pickedUpBD = false;
-                } else if (endAuton && bot.handleShootingSequence(shootPos, follower, telemetry, true)){
+                } else if (endAuton && bot.handleShootingSequence(shootPos, follower, telemetry, true, true)){
                     setPathStep(pathStep.GO_TO_END_AUTON_POS);
                 } else {
                     setPathStep(pathStep.WAIT_BY_GATE);

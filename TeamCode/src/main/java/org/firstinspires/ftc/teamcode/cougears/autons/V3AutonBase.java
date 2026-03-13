@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 
 
@@ -162,13 +163,19 @@ public class V3AutonBase {
 
     }
     shootingSequence shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
-    public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower, Telemetry tele, Boolean farShoot){
+    public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower, Telemetry tele, Boolean farShoot, boolean aprilTag){
         tele.addData("Curr Step in handleShootingSequence:", "%s", shootingSequenceSavedStep);
         switch (shootingSequenceSavedStep) {
             case GO_TO_POSITION:
                 FWSpinTo(shootPos.getShootingVelocity()); // Make sure we are up to vel
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
-                moveToPose(follower, shootPos.getShootingPose());
+                if (aprilTag){
+                    if (SFM.handFullShootPosAlignSequence(follower, shootPos, this)){
+                        return false;
+                    };
+                } else {
+                    moveToPose(follower, shootPos.getShootingPose());
+                }
                 shootingSequenceSavedStep = shootingSequence.OPEN_BLOCKER;
                 break;
             case ALIGN_AT:

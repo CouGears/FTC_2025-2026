@@ -41,7 +41,7 @@ public class BlueFar extends OpMode {
         }
         switch (currStep) {
             case SHOOT_BALLS:
-                if (bot.handleShootingSequence(shootPos, follower, telemetry, true)) {
+                if (bot.handleShootingSequence(shootPos, follower, telemetry, true, true)) {
                     if (BDCounter > 4 - numBDToPickup) {
                         setPathStep(pathStep.BD_PICKUP);
                         decrimentedBDCounter = false;

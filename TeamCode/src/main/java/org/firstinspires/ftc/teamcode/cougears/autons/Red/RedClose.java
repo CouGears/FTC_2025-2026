@@ -41,7 +41,7 @@ public class RedClose extends OpMode {
         }
         switch (currStep) {
             case SHOOT_BALLS:
-                if (bot.handleShootingSequence(shootPos, follower, telemetry, false)) {
+                if (bot.handleShootingSequence(shootPos, follower, telemetry, false, false)) {
                     if (BDCounter < numBDToPickup) {
                         setPathStep(pathStep.BD_PICKUP);
                         incrimentedBDCounter = false;

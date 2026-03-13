@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.cougears.util;
 
+import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.LED;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
+import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.cougears.teleops.V3TeleOpBase;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
@@ -89,6 +91,34 @@ public class SensorFusionManager {
                 rotatePower = ATbearing * Auton_ATAlignemntPower;
                 bot.manualMove(0, 0, rotatePower);
             return false;
+        }
+        return false;
+    }
+
+    public boolean handFullShootPosAlignSequence(Follower follower, ShootingPosition shootingPose, V3AutonBase bot) {
+        telemetry.addData("Curr Step in handFullShootPosAlignSequence:", "%s", fullShootPosAlignSequenceSavedStep);
+        switch (fullShootPosAlignSequenceSavedStep) {
+            case FIND_TAG_ID:
+                targetTag = Storage_endOfAutonColor.equals("Blue") ? blueTag : redTag;
+                fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.GO_TO_POS;
+                ATbearing = 0.0;
+                rotatePower = 0.0;
+                break;
+            case GO_TO_POS:
+                bot.moveToPose(follower, shootingPose.getShootingPose());
+                fullShootPosAlignSequenceSavedStep = fullShootPosAlignSequence.ALIGN_TO_TAG;
+                break;
+            case ALIGN_TO_TAG:
+                if (follower.isBusy()) return false;
+                AprilTagDetection tag = ATB.scanForAT(targetTag);
+                if (tag == null) return false;
+                ATbearing = tag.ftcPose.bearing;
+                if (Math.abs(ATbearing) <= ATBearingTolerance) {
+                    return true;
+                }
+                rotatePower = ATbearing * Auton_ATAlignemntPower;
+                follower.setTeleOpDrive(0, 0, rotatePower);
+                return false;
         }
         return false;
     }
