@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
 import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
@@ -33,6 +34,7 @@ public class V3AutonBase {
     HardwareMap HM;
     Telemetry tele;
     SensorFusionManager SFM;
+    AprilTagBase ATB;
 
     public V3AutonBase(HardwareMap HardwareMap, Telemetry Telemetry) {
         HM = HardwareMap;
@@ -43,7 +45,8 @@ public class V3AutonBase {
         openGateTimer = new Timer();
         farTimer = new Timer();
         gateWaitTimer = new Timer();
-        SFM = new SensorFusionManager(HM, tele);
+        ATB = new AprilTagBase(HM, tele);
+        SFM = new SensorFusionManager(HM, tele, ATB);
     }
 
     public boolean botInit() {
@@ -65,7 +68,7 @@ public class V3AutonBase {
 
             Blocker = HM.get(Servo.class, "Blocker");
             Blocker.setPosition(Servo_blockerPos[0]);
-
+            ATB.initAprilTag();
 
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");
@@ -170,9 +173,9 @@ public class V3AutonBase {
                 FWSpinTo(shootPos.getShootingVelocity()); // Make sure we are up to vel
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
                 if (aprilTag){
-                    if (SFM.handFullShootPosAlignSequence(follower, shootPos, this)){
+                    if (!SFM.handFullShootPosAlignSequence(follower, shootPos, this)){
                         return false;
-                    };
+                    }
                 } else {
                     moveToPose(follower, shootPos.getShootingPose());
                 }
@@ -200,7 +203,9 @@ public class V3AutonBase {
                 shootSequenceTimer.resetTimer();
                 break;
             case END:
-                if (shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
+                if (!farShoot && shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTime) return false;
+                if (farShoot && shootSequenceTimer.getElapsedTime() < Auton_ballShootSequenceTimeFar) return false;
+
                 killTransfer();
                 closeBlocker();
                 shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;

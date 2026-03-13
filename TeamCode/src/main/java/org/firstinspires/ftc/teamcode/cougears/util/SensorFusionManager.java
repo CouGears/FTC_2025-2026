@@ -43,6 +43,20 @@ public class SensorFusionManager {
         distSensor3 = HM.get(DistanceSensor.class, "DistSensor3");
     }
 
+    public SensorFusionManager(HardwareMap HM, Telemetry telemetry, AprilTagBase ATB) {
+        this.telemetry = telemetry;
+        redLED1 = HM.get(LED.class, "redLED1");
+        greenLED1 = HM.get(LED.class, "greenLED1");
+        redLED2 = HM.get(LED.class, "redLED2");
+        greenLED2 = HM.get(LED.class, "greenLED2");
+        redLED3 = HM.get(LED.class, "redLED3");
+        greenLED3 = HM.get(LED.class, "greenLED3");
+        distSensor1 = HM.get(DistanceSensor.class, "DistSensor1");
+        distSensor2 = HM.get(DistanceSensor.class, "DistSensor2");
+        distSensor3 = HM.get(DistanceSensor.class, "DistSensor3");
+        this.ATB = ATB;
+    }
+
     public SensorFusionManager(HardwareMap HM, Telemetry telemetry) {
         this.telemetry = telemetry;
         redLED1 = HM.get(LED.class, "redLED1");

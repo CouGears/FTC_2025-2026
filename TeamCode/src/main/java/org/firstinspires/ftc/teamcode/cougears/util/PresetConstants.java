@@ -35,6 +35,7 @@ public class PresetConstants {
     public static double Auton_gateIntakeWait = 3500;//time to stay at autonGateIntake
     public static double Auton_gateOpenWait = 2500;//time to wait at gate
     public static double Auton_ballShootSequenceTime = 1500;//time from start shooting to end shooting
+    public static double Auton_ballShootSequenceTimeFar = 3000;
     public static double Auton_startShootingVelocityTolerance = 30;//wait until this velocity before starting to shoot
     public static double Auton_gateWaitTime = 2000;
     public static double Auton_ATAlignemntPower = .02;
