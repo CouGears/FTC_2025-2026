@@ -135,17 +135,21 @@ public class V3AutonBase {
 
     ElapsedTime pulseTimer = new ElapsedTime();
     boolean shooting = false;
-    public void pulseTransfer() {
-        if (pulseTimer.milliseconds() >= Auton_transferPulseWaitMS){
-            if (!shooting) {
-                startTransfer();
-                shooting = true;
-            } else {
-                killTransfer();
-                shooting = false;
+    public boolean pulseTransfer(double timeShooting) {
+        if (timeShooting < Auton_ballShootSequenceTimeFar) {
+            if (pulseTimer.milliseconds() >= Auton_transferPulseWaitMS) {
+                if (!shooting) {
+                    startTransfer();
+                    shooting = true;
+                } else {
+                    killTransfer();
+                    shooting = false;
+                }
+                pulseTimer.reset();
             }
-            pulseTimer.reset();
+            return false;
         }
+        return true;
     }
 
     //****** AUTON ******
@@ -187,6 +191,7 @@ public class V3AutonBase {
 
     }
     shootingSequence shootingSequenceSavedStep = shootingSequence.GO_TO_POSITION;
+    ElapsedTime timeSpentShooting = new ElapsedTime();
     public boolean handleShootingSequence(ShootingPosition shootPos, Follower follower, Telemetry tele, Boolean farShoot, boolean aprilTag){
         tele.addData("Curr Step in handleShootingSequence:", "%s", shootingSequenceSavedStep);
         switch (shootingSequenceSavedStep) {
@@ -202,24 +207,25 @@ public class V3AutonBase {
                 }
                 shootingSequenceSavedStep = shootingSequence.OPEN_BLOCKER;
                 break;
-            case ALIGN_AT:
-                break;
             case OPEN_BLOCKER:
                 if (follower.isBusy()) return false; //Cant move past this until we get to pos
                 if (!(FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance))) return false;
                 openBlocker();
                 blockerTimer.resetTimer();
                 shootingSequenceSavedStep = shootingSequence.SHOOT;
+                timeSpentShooting.reset();
                 break;
             case SHOOT:
                 if (blockerTimer.getElapsedTime() < Auton_blockerWait) return false;
                 if (!(FWUpToSpeed(shootPos.getShootingVelocity() - Auton_startShootingVelocityTolerance))) return false;
+                startIntakeFast();
                 if (farShoot) {
-                    startTransferFar();
+                    if (!pulseTransfer(timeSpentShooting.milliseconds())){
+                        return false;
+                    }
                 } else {
                     startTransfer();
                 }
-                startIntakeFast();
                 shootingSequenceSavedStep = shootingSequence.END;
                 shootSequenceTimer.resetTimer();
                 break;

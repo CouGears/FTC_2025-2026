@@ -39,7 +39,8 @@ public class PresetConstants {
     public static double Auton_startShootingVelocityTolerance = 30;//wait until this velocity before starting to shoot
     public static double Auton_gateWaitTime = 2000;
     public static double Auton_ATAlignemntPower = .02;
-    public static double Auton_transferPulseWaitMS = 500;
+    public static double Auton_transferPulseWaitMS = 500; //How long we wait for each pulse
+    public static double Auton_transferPulseTotalTimeWaitMS = 6*Auton_transferPulseWaitMS; //How much total time we allow for pulsing
 
     public static double unstuckMovementAmount = 0.1;
     public static double xyPoseErrorPTM = 0.3;

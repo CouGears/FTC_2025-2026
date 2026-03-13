@@ -137,7 +137,7 @@ public class V3TeleOpBase extends BotBase { //Initializing motors
     }
     ElapsedTime pulseTimer = new ElapsedTime();
     boolean shooting = false;
-    public void pulseTransfer() {
+    public void pulseTransfer(double MSToCycle) {
         if (pulseTimer.milliseconds() >= Auton_transferPulseWaitMS){
             if (!shooting) {
                 startTransfer();

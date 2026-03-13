@@ -41,7 +41,7 @@ public class RedFar_GateRecycle extends OpMode {
         }
         switch (currStep) {
             case SHOOT_BALLS:
-                if (bot.handleShootingSequence(shootPos, follower, telemetry, true, true)) {
+                if (bot.handleShootingSequence(shootPos, follower, telemetry, true, false)) {
                     if(!preloadsShot){
                         setPathStep(pathStep.PICKUP_BALLS);
                         preloadsShot = true;
