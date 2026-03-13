@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.cougears.util.AprilTag.AprilTagBase;
+import org.firstinspires.ftc.teamcode.cougears.util.PanelsFeatures;
 import org.firstinspires.ftc.teamcode.cougears.util.SensorFusionManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.PedroTeleOpManager;
 import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
@@ -35,6 +36,7 @@ public class V3AutonBase {
     Telemetry tele;
     SensorFusionManager SFM;
     AprilTagBase ATB;
+    PanelsFeatures panels;
 
     public V3AutonBase(HardwareMap HardwareMap, Telemetry Telemetry) {
         HM = HardwareMap;
@@ -47,6 +49,8 @@ public class V3AutonBase {
         gateWaitTimer = new Timer();
         ATB = new AprilTagBase(HM, tele);
         SFM = new SensorFusionManager(HM, tele, ATB);
+        panels = new PanelsFeatures(tele);
+
     }
 
     public boolean botInit() {
@@ -69,6 +73,9 @@ public class V3AutonBase {
             Blocker = HM.get(Servo.class, "Blocker");
             Blocker.setPosition(Servo_blockerPos[0]);
             ATB.initAprilTag();
+
+            panels.startCameraStream(ATB.visionPortal);
+
 
         } catch (Exception e) {
             tele.addData("ERROR", "COULD NOT INIT");

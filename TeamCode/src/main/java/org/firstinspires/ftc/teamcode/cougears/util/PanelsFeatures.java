@@ -37,6 +37,10 @@ public class PanelsFeatures {
         joinedTelemetry = new JoinedTelemetry(PanelsTelemetry.INSTANCE.getFtcTelemetry(), telemetry);
         field.setOffsets(PanelsField.INSTANCE.getPresets().getPEDRO_PATHING());
     }
+    public PanelsFeatures(Telemetry telemetry) {
+        joinedTelemetry = new JoinedTelemetry(PanelsTelemetry.INSTANCE.getFtcTelemetry(), telemetry);
+        field.setOffsets(PanelsField.INSTANCE.getPresets().getPEDRO_PATHING());
+    }
 
     // ==================== TELEMETRY ====================
 
