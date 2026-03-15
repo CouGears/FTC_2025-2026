@@ -22,6 +22,9 @@ public class PresetConstants {
     public static double Auton_transferPowerFar = 0.8 ;
     public static double farShotAdjustment = -1.5;
 
+    public static double Drive_XMultiplier = 1;
+    public static double Drive_YMultiplier = 1;
+    public static double Drive_rotationMultiplier = .8;
 
 
     public static boolean Drive_switchedJoysticks = false;
@@ -37,12 +40,12 @@ public class PresetConstants {
     //Autons
     public static double Auton_blockerWait = 200; //time to open gate before shooting
     public static double Auton_gateIntakeWait = 3500;//time to stay at autonGateIntake
-    public static double Auton_gateOpenWait = 2500;//time to wait at gate
-    public static double Auton_ballShootSequenceTime = 1500;//time from start shooting to end shooting
+    public static double Auton_gateOpenWait = 3000;//time to wait at gate
+    public static double Auton_ballShootSequenceTime = 1250;//time from start shooting to end shooting
     public static double Auton_ballShootSequenceTimeFar = 3000;
     public static double Auton_startShootingVelocityTolerance = 20.0;//wait until this velocity before starting to shoot
     public static double Auton_gateWaitTime = 2000;
-    public static double Auton_ATAlignemntPower = 0.05;
+    public static double Auton_ATAlignemntPower = 0.02;
     public static double Auton_transferPulseWaitMS = 350; //How long we wait for each pulse
     public static double Auton_BD4pickupSpeed = 0.5;
 

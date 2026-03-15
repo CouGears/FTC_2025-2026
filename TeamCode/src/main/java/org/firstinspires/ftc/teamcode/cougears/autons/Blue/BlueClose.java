@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.B
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.BlueStartPos;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.blueShootingPosHashMap;
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.buildPaths;
+import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.Storage_endOfAutonColor;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -86,6 +87,8 @@ public class BlueClose extends OpMode {
 
     @Override
     public void init() {
+        Storage_endOfAutonColor = "Blue";
+
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);

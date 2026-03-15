@@ -10,6 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
+import static    org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.*;
+
+import org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous (group = "Blue")
@@ -100,6 +103,7 @@ public class BlueCloseFullAuton extends OpMode {
 
     @Override
     public void init() {
+        Storage_endOfAutonColor = "Blue";
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);

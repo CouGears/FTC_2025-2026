@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.cougears.autons.Blue;
 
 import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.BlueStartPos;
+import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.Storage_endOfAutonColor;
 
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;

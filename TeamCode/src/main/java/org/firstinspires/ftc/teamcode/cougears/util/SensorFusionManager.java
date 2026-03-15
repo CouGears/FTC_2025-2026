@@ -187,23 +187,31 @@ public class SensorFusionManager {
     //****** LED ******
     public void handleLEDS(PedroTeleOpManager PTM) {
         FWVelLED(PTM, bot.FW.getVelocity());
-        ballPositionLED();
-        botAlignedLED();
+//        ballPositionLED();
+//        botAlignedLED();
     }
     public void FWVelLED(PedroTeleOpManager PTM, double FWVel) {
         double shootVelThirds = (double) (PTM.getClosestShootingPosition().getShootingVelocity() / 3);
         if (FWVel > shootVelThirds * 3 - Auton_startShootingVelocityTolerance) {
-            greenLED1.on();
-            redLED1.off();
+//            greenLED1.on();
+//            redLED1.off();
+            greenLED3.on();
+            redLED3.off();
         } else if (FWVel > shootVelThirds * 2 - Auton_startShootingVelocityTolerance) {
-            greenLED1.on();
-            redLED1.on();
+//            greenLED1.on();
+//            redLED1.on();
+            greenLED3.on();
+            redLED3.on();
         } else if (FWVel > shootVelThirds - Auton_startShootingVelocityTolerance) {
-            greenLED1.off();
-            redLED1.on();
+//            greenLED1.off();
+//            redLED1.on();
+            greenLED3.off();
+            redLED3.on();
         } else {
-            greenLED1.off();
-            redLED1.off();
+//            greenLED1.off();
+//            redLED1.off();
+            greenLED3.off();
+            redLED3.off();
         }
     }
     public void ballPositionLED(){

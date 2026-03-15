@@ -48,7 +48,7 @@ public class V3TeleOpDrive extends LinearOpMode {
         while (opModeIsActive()) {
             //****** DRIVE (Controller 1)******
             PTM.updateStoragePosition();
-            SensorFusionManager.ballState currentBallState = SFM.ballInPosition();
+//            SensorFusionManager.ballState currentBallState = SFM.ballInPosition();
             telemetry.addData("Is PedroBusy?", "%b", PTM.follower.isBusy());
             if (bot.GPM_1 != null && bot.GPM_1.joystickInputFound()){
                 if (PTM.isBusy()) {
@@ -63,7 +63,8 @@ public class V3TeleOpDrive extends LinearOpMode {
                 if (bot.isPressed(1, Button.B)) {
                     bot.toggleSlow();
                 }
-                bot.RafiDrive(gamepad1, Drive_switchedJoysticks);
+//                bot.RafiDrive(gamepad1, Drive_switchedJoysticks);
+                bot.SimpleDrive(gamepad1);
                 telemetry.addData("Slowed", "%b", bot.slowed);
             }
 

@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.cougears.teleops;
 
-import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.XMultiplier;
-import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.YMultiplier;
-import static org.firstinspires.ftc.teamcode.cougears.util.DriveAdjustmentConstants.rotationMultiplier;
 import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -180,9 +177,9 @@ public class V3TeleOpBase extends BotBase { //Initializing motors
         double forward, strafe, turnInput;
         // --- Driver inputs ---
         if (!switchSticks) {
-            forward = gamepad1.right_stick_y * speedMultiplier * YMultiplier;
-            strafe = gamepad1.right_stick_x * speedMultiplier * XMultiplier;
-            turnInput = gamepad1.left_stick_x * speedMultiplier * rotationMultiplier;
+            forward = gamepad1.right_stick_y * speedMultiplier * Drive_YMultiplier;
+            strafe = gamepad1.right_stick_x * speedMultiplier * Drive_XMultiplier;
+            turnInput = gamepad1.left_stick_x * speedMultiplier * Drive_rotationMultiplier;
         } else {
             forward = gamepad1.left_stick_y * speedMultiplier;
             strafe = gamepad1.left_stick_x * speedMultiplier;
@@ -248,5 +245,45 @@ public class V3TeleOpBase extends BotBase { //Initializing motors
         motorFR.setPower(frontRightPower);
         motorBL.setPower(backLeftPower);
         motorBR.setPower(backRightPower);
+    }
+
+    public void SimpleDrive(Gamepad gamepad1){
+//        double drive = -gamepad1.left_stick_y;    // Forward/backward
+//        double strafe = gamepad1.left_stick_x;    // Left/right
+//        double rotate = gamepad1.right_stick_x;   // Rotation
+
+        double drive = -gamepad1.right_stick_y * speedMultiplier * Drive_YMultiplier;
+        double strafe = gamepad1.right_stick_x * speedMultiplier * Drive_XMultiplier;
+        double rotate = gamepad1.left_stick_x * speedMultiplier * Drive_rotationMultiplier;
+
+        // Calculate motor powers using mecanum formula
+        double frontLeftPower = drive + strafe + rotate;
+        double frontRightPower = drive - strafe - rotate;
+        double backLeftPower = drive - strafe + rotate;
+        double backRightPower = drive + strafe - rotate;
+
+        // Normalize motor powers to ensure they don't exceed MAX_SPEED
+        double maxPower = Math.max(Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower)),
+                Math.max(Math.abs(backLeftPower), Math.abs(backRightPower)));
+
+        if (maxPower > 1.0) {
+            frontLeftPower /= maxPower;
+            frontRightPower /= maxPower;
+            backLeftPower /= maxPower;
+            backRightPower /= maxPower;
+        }
+
+        // Clip motor powers to ensure they're within valid range
+        frontLeftPower = Range.clip(frontLeftPower, -1, 1);
+        frontRightPower = Range.clip(frontRightPower, -1, 1);
+        backLeftPower = Range.clip(backLeftPower, -1, 1);
+        backRightPower = Range.clip(backRightPower, -1, 1);
+
+        // Set motor powers
+        motorFL.setPower(frontLeftPower);
+        motorFR.setPower(frontRightPower);
+        motorBL.setPower(backLeftPower);
+        motorBR.setPower(backRightPower);
+
     }
 }

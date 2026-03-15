@@ -1,7 +1,10 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Blue;
+package org.firstinspires.ftc.teamcode.cougears.autons.Red;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
-import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.Storage_endOfAutonColor;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEndFar;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPosFar;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.buildPaths;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.redShootingPosHashMap;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.Auton_ballShootSequenceTime;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -9,31 +12,29 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.cougears.autons.Blue.BlueFarFullAuton;
 import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous (group = "Blue")
-public class BlueFar extends OpMode {
+@Autonomous (group = "Red")
+public class RedFarFullAuton extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V3AutonBase bot;
 
-    public Pose startPos   = BlueStartPosFar;
-    public ShootingPosition shootPos = blueShootingPosHashMap.get("BlueFar");
-    public Pose endPos   = BlueBasicEndFar;
-
-    public int BDCounter = 4;
-    public  int numBDToPickup = 0;
-    public boolean decrimentedBDCounter = false;
-
+    public Pose startPos   = RedStartPosFar;
+    public ShootingPosition shootPos = redShootingPosHashMap.get("RedFar");
+    public Pose endPos   = RedBasicEndFar;
 
     public enum pathStep {
         SHOOT_BALLS,
-        BD_PICKUP,
-        CLOSETRIANGLE_BASICENDFAR,
+        PICKUP_BALLS,
+        GATE_RECYCLE,
+        SHOOTPOS_BASICENDFAR,
         END
     }
+    public boolean preloadsShot = false;
     pathStep currStep = pathStep.SHOOT_BALLS;
 
     public void stepUpdate() {
@@ -43,25 +44,29 @@ public class BlueFar extends OpMode {
         switch (currStep) {
             case SHOOT_BALLS:
                 if (bot.handleShootingSequence(shootPos, follower, telemetry, true, false)) {
-                    if (BDCounter > 4 - numBDToPickup) {
-                        setPathStep(pathStep.BD_PICKUP);
-                        decrimentedBDCounter = false;
+                    if(!preloadsShot){
+                        setPathStep(pathStep.PICKUP_BALLS);
+                        preloadsShot = true;
                     } else {
-                        setPathStep(pathStep.CLOSETRIANGLE_BASICENDFAR);
+                        setPathStep(pathStep.SHOOTPOS_BASICENDFAR);
                     }
                 }
                 break;
-            case BD_PICKUP:
-                if (!decrimentedBDCounter){
-                    BDCounter--;
-                    decrimentedBDCounter = true;
+            case PICKUP_BALLS:
+                if (stepTimer.getElapsedTime() >= Auton_ballShootSequenceTime + 3000) {
+                    setPathStep(pathStep.SHOOT_BALLS);
                 }
-
-                if (bot.handlePickUpBalls(shootPos.getShootingColor(), BDCounter, true, follower, telemetry)){
+                // Now we only move on if the method returns true
+                if (bot.handlePickupFarBalls("Red", follower, telemetry)) {
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
-            case CLOSETRIANGLE_BASICENDFAR:
+            case GATE_RECYCLE:
+                if (bot.handleGateWait(shootPos.getShootingColor(), follower, telemetry)){
+                    setPathStep(pathStep.SHOOT_BALLS);
+                }
+                break;
+            case SHOOTPOS_BASICENDFAR:
                 bot.moveToPose(follower, endPos);
                 setPathStep(pathStep.END);
                 break;
@@ -94,20 +99,7 @@ public class BlueFar extends OpMode {
     }
 
     @Override
-    public void init_loop() {
-        telemetry.addData("NumBDToPickup", "%d", numBDToPickup);
-        if(gamepad1.dpadUpWasPressed() && numBDToPickup != 3){
-            numBDToPickup++;
-        } else if (gamepad1.dpadDownWasPressed() && numBDToPickup != 0){
-            numBDToPickup--;
-        }
-        telemetry.update();
-    }
-
-    @Override
     public void start() {
-        Storage_endOfAutonColor = "Blue";
-
         bot.startIntakeFast();
         opModeTimer.resetTimer();
         setPathStep(pathStep.SHOOT_BALLS);

@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.cougears.autons.Red;
+package org.firstinspires.ftc.teamcode.cougears.autons.Blue;
 
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedBasicEndFar;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.RedStartPosFar;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.buildPaths;
-import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.redShootingPosHashMap;
+import static org.firstinspires.ftc.teamcode.cougears.autons.PositionsAndPaths.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.PresetConstants.*;
+import static org.firstinspires.ftc.teamcode.cougears.util.Teleop_Auton.Storage.Storage_endOfAutonColor;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -15,15 +14,15 @@ import org.firstinspires.ftc.teamcode.cougears.autons.ShootingPosition;
 import org.firstinspires.ftc.teamcode.cougears.autons.V3AutonBase;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous (group = "Red")
-public class RedFar_GateRecycle extends OpMode {
+@Autonomous (group = "Blue")
+public class BlueFarFullAuton extends OpMode {
     public Follower follower;
     public Timer stepTimer, opModeTimer;
     public V3AutonBase bot;
 
-    public Pose startPos   = RedStartPosFar;
-    public ShootingPosition shootPos = redShootingPosHashMap.get("RedFar");
-    public Pose endPos   = RedBasicEndFar;
+    public Pose startPos   = BlueStartPosFar;
+    public ShootingPosition shootPos = blueShootingPosHashMap.get("BlueFar");
+    public Pose endPos   = BlueBasicEndFar;
 
     public enum pathStep {
         SHOOT_BALLS,
@@ -51,8 +50,11 @@ public class RedFar_GateRecycle extends OpMode {
                 }
                 break;
             case PICKUP_BALLS:
+                if (stepTimer.getElapsedTime() >= Auton_ballShootSequenceTime + 3000) {
+                    setPathStep(pathStep.SHOOT_BALLS);
+                }
                 // Now we only move on if the method returns true
-                if (bot.handlePickupFarBalls("Red", follower, telemetry)) {
+                if (bot.handlePickupFarBalls("Blue", follower, telemetry)) {
                     setPathStep(pathStep.SHOOT_BALLS);
                 }
                 break;
@@ -84,6 +86,8 @@ public class RedFar_GateRecycle extends OpMode {
 
     @Override
     public void init() {
+        Storage_endOfAutonColor = "Blue";
+
         stepTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
